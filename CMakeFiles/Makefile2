@@ -141,9 +141,9 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 # Target rules for target CMakeFiles/polyg.dir
 
 # All Build rule for target.
-CMakeFiles/polyg.dir/all: includes/graphics/CMakeFiles/graphics.dir/all
 CMakeFiles/polyg.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
 CMakeFiles/polyg.dir/all: includes/utils/CMakeFiles/utils.dir/all
+CMakeFiles/polyg.dir/all: includes/graphics/CMakeFiles/graphics.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=15,16 "Built target polyg"
