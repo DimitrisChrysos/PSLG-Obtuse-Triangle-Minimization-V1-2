@@ -985,8 +985,13 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /usr/include/c++/11/iostream
+  /usr/include/c++/11/iostream \
+  /usr/include/c++/11/list \
+  /usr/include/c++/11/bits/stl_list.h \
+  /usr/include/c++/11/bits/list.tcc
 
+
+/usr/include/c++/11/list:
 
 /usr/include/c++/11/bits/fstream.tcc:
 
@@ -1777,6 +1782,8 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/include/c++/11/ext/concurrence.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/gthr-default.h:
+
+/usr/include/c++/11/bits/list.tcc:
 
 /usr/local/include/boost/core/enable_if.hpp:
 
@@ -2857,6 +2864,8 @@ ex.cpp:
 /usr/local/include/boost/property_tree/detail/exception_implementation.hpp:
 
 /usr/include/c++/11/cwctype:
+
+/usr/include/c++/11/bits/stl_list.h:
 
 /usr/local/include/boost/mpl/advance_fwd.hpp:
 

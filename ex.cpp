@@ -2,6 +2,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <iostream>
 #include <string>
+#include <list>
 
 int main() {
   
@@ -22,7 +23,7 @@ int main() {
   std::cout << "Num_points: " << num_points << std::endl;
 
   // Read points_x
-  std::vector<int> points_x;
+  std::list<int> points_x;
   for (pt::ptree::value_type &point_x : root.get_child("points_x")) {
     points_x.push_back(point_x.second.get_value<int>());
   }
@@ -34,7 +35,7 @@ int main() {
   std::cout << std::endl;
 
   // Read points_y
-  std::vector<int> points_y;
+  std::list<int> points_y;
   for (pt::ptree::value_type &point_y : root.get_child("points_y")) {
     points_y.push_back(point_y.second.get_value<int>());
   }
@@ -46,7 +47,7 @@ int main() {
   std::cout << std::endl;
 
   // Read region_boundary
-  std::vector<int> region_boundary;
+  std::list<int> region_boundary;
   for (pt::ptree::value_type &temp : root.get_child("region_boundary")) {
     region_boundary.push_back(temp.second.get_value<int>());
   }
@@ -57,12 +58,12 @@ int main() {
   }
   std::cout << std::endl;
 
- // Read num_constraints
+  // Read num_constraints
   std::string num_constraints = root.get<std::string>("num_constraints");
   std::cout << std::endl << "Num_constraints: " << num_constraints << std::endl;
 
   // Read the additional_constraints
-  std::vector<std::pair<int, int>> additional_constraints;
+  std::list<std::pair<int, int>> additional_constraints;
   for (pt::ptree::value_type &row : root.get_child("additional_constraints")) {
     auto it = row.second.begin();
     int first = it->second.get_value<int>();
