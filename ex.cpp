@@ -3,6 +3,45 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <CGAL/draw_triangulation_2.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
+
+typedef CGAL:: Exact_predicates_inexact_constructions_kernel K;
+typedef CGAL:: Exact_predicates_tag Itag;
+typedef CGAL:: Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+typedef CDT::Point Point;
+typedef CDT::Edge Edge;
+
+CDT make_cdt(
+              std::list<int> points_x, 
+              std::list<int> points_y, 
+              std::list<std::pair<int, int>> additional_constraints
+              ) {
+  // Initialize the Constrained Delaunay Triangulation (CDT) 
+  CDT cdt;
+
+  // Define the points from the PSLG (x, y coordinates) and insert them into the CDT
+  std::vector<Point> points = {};
+  auto it_y = points_y.begin();
+  for (const auto& p : points_x) {
+    int point_x = p;
+    int point_y = *it_y;
+    points.push_back(Point(point_x, point_y));
+    cdt.insert(Point(point_x, point_y));
+    it_y++;
+  }
+
+  // Add the constrained edges from additional_constraints
+  for (const auto &constraint : additional_constraints) {
+    cdt.insert_constraint(points[constraint.first], points[constraint.second]);
+  }
+
+  // Draw the triangulation using CGAL's draw function
+  CGAL::draw(cdt);
+  
+  return cdt;
+}
 
 int main() {
   
@@ -10,9 +49,6 @@ int main() {
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
   pt::read_json("input.json", root); // read the json file
-  
-  // // Print the json file
-  // pt::write_json(std::cout, root);
 
   // Read instance_uid
   std::string instance_uid = root.get<std::string>("instance_uid");
@@ -76,6 +112,10 @@ int main() {
   for (const auto &constraint : additional_constraints) {
     std::cout << constraint.first << " " << constraint.second << std::endl;
   }
+
+  // Create the Constrained Delaunay Triangulation (CDT)
+  CDT cdt = make_cdt(points_x, points_y, additional_constraints);
+
 
   return 0;
 }
