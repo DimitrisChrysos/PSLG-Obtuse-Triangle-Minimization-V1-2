@@ -1,3 +1,13 @@
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <iostream>
+#include <string>
+#include <list>
+#include <CGAL/draw_triangulation_2.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
+
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS // optional in native ubuntu, removes a warning in wsl
 #ifndef CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
 
 #define CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
@@ -74,23 +84,24 @@ public:
 
     }
 
+    bool my_is_flippable(const typename Base::Edge& e) {
+      Face_handle f1 = e.first; 
+      int i = e.second; 
+      Face_handle f2 = f1->neighbor(i);
+
+      if (this->is_infinite(f1) || this->is_infinite(f2)) {
+        return false;
+      }
+      else if (this->is_constrained(e)) {
+        return false;
+      }
+
+      return true;
+    }
+
 };
 
-
-
 #endif // CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
-
-
-
-
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <iostream>
-#include <string>
-#include <list>
-#include <CGAL/draw_triangulation_2.h>
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Constrained_Delaunay_triangulation_2.h>
 
 
 typedef CGAL:: Exact_predicates_inexact_constructions_kernel K;
@@ -150,75 +161,66 @@ int count_obtuse_triangles(CDT cdt) {
       count++;
     }
   }
-
   return count;
 }
 
 void make_flips(CDT& cdt) {
-  int count=0;
+  CDT copy = cdt;
   for (const Edge& e : cdt.finite_edges()) {
+
+    // Get the 2 triangles
     CDT::Face_handle f1 = e.first; // The face of the edge
     int i = e.second; // The index of the edge in the face
     CDT::Face_handle f2 = f1->neighbor(i); // The face of the neighbor of the edge
 
-    std::cout << "Coords of f1" << std::endl;
-
-    for (int i = 0; i < 3; ++i) {
-        Point p = f1->vertex(i)->point();
-        std::cout << "Vertex " << i << ": (" << p.x() << ", " << p.y() << ")\n";
-    }
-
-    std::cout << "Coords of f2" << std::endl;
-
-    for (int i = 0; i < 3; ++i) {
-        Point p = f2->vertex(i)->point();
-        std::cout << "Vertex " << i << ": (" << p.x() << ", " << p.y() << ")\n";
-    }
-
-    // Print face handles
-    std::cout << "Face handle f1: " << &(*f1) << std::endl;
-    std::cout << "Face handle f2: " << &(*f2) << std::endl;
-
-    // // Check if the edge in on the boundary
-    // if (cdt.is_infinite(f1) || cdt.is_infinite(f2)) {
-    //   continue;
-    // }
-
-    // // Check if the edge is constrained
-    // if (cdt.is_constrained(e)) {
-    //   continue;
-    // }
-
-
-    CDT::Face_handle ni = f1->neighbor(i);
-    if (cdt.is_infinite(f1) || cdt.is_infinite(ni)) continue;
-    if (f1->is_constrained(i)) continue;
+    // Check if the edge is flippable
+    if (!cdt.my_is_flippable(e)) continue;
 
     // Check if the triangles formed by the edge have obtuse angles
-    if (has_obtuse_angle(f1) || has_obtuse_angle(f2)) {
-      std::cout << count << " Geia sou!\n";
-      // if (count == 17) {
-      // }
-      CGAL::draw(cdt);
-      cdt.tds().flip(f1, i);  // Perform a flip
-      std::cout << count << " Bye!\n";
+    int obt = 0;
+    if (has_obtuse_angle(f1)) obt++;
+    if (has_obtuse_angle(f2)) obt++;
+
+    // If triangles have obtuse angles, make the flip
+    if (obt) {
+      // Make the flip
+      cdt.tds().flip(f1, i);
+      std::cout << "Made a flip" << std::endl;
+
+      // Check if the triangles formed by the edge have obtuse angles after the flip
+      int obt2 = 0;
+      if (has_obtuse_angle(f1)) obt2++;
+      if (has_obtuse_angle(f2)) obt2++;
+
+      // If the number of obtuse angles is the same or more, undo the flip
+      if (obt2 >= obt) {
+        cdt = copy;
+        std::cout << "Undid a flip" << std::endl;
+      }
     }
-    count++;
-
-
   }
 }
 
+void Steiner_insertion(CDT& cdt) {
+  int obt_count = count_obtuse_triangles(cdt);
+  CDT copy = cdt;
+  for (const Edge& e : cdt.finite_edges()) {
+    CDT::Face_handle f1 = e.first; // The face of the edge
+    if (has_obtuse_angle(f1)) {
+      Point a = f1->vertex(0)->point();
+      Point b = f1->vertex(1)->point();
+      Point c = f1->vertex(2)->point();
 
-    // if (!cdt.is_flipable(f1, i)) {
-    //   continue;
-    // }
-    // if (has_obtuse_angle(f1) || has_obtuse_angle(f2)) {
-    //   count++;
-    //   std::cout << "I made " << count << " flips\n";
-    //   cdt.tds().flip(f1, i);  // Perform a flip
-    // }
+      Point pericenter = CGAL::circumcenter(a, b, c);
 
+      cdt.insert_no_flip(pericenter);
+    }
+  }
+  int new_obt_count = count_obtuse_triangles(cdt);
+  if (new_obt_count >= obt_count) {
+    cdt = copy;
+  }
+}
 
 int main() {
   
@@ -299,6 +301,7 @@ int main() {
   
   // Make flips
   make_flips(cdt);
+  // Steiner_insertion(cdt);
 
   // Count the obtuse triangles
   obtuse_angles = count_obtuse_triangles(cdt);
