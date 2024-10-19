@@ -3061,8 +3061,20 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
   /usr/local/include/CGAL/Qt/init_ogl_context.h \
   /usr/include/x86_64-linux-gnu/qt5/QtGui/QSurfaceFormat \
   /usr/include/x86_64-linux-gnu/qt5/QtCore/QCoreApplication \
-  /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h
+  /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h \
+  /usr/local/include/CGAL/Exact_predicates_exact_constructions_kernel.h \
+  /usr/local/include/CGAL/Lazy_kernel.h \
+  /usr/local/include/CGAL/Static_filtered_predicate.h \
+  /usr/local/include/CGAL/Epic_converter.h \
+  /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_2.h \
+  /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_3.h
 
+
+/usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_2.h:
+
+/usr/local/include/CGAL/Epic_converter.h:
+
+/usr/local/include/CGAL/Exact_predicates_exact_constructions_kernel.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/QCoreApplication:
 
@@ -4643,6 +4655,8 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/predef/os.h:
 
 /usr/local/include/boost/multi_index/ordered_index_fwd.hpp:
+
+/usr/local/include/CGAL/Lazy_kernel.h:
 
 /usr/local/include/CGAL/Cartesian/Ray_3.h:
 
@@ -6359,6 +6373,8 @@ ex.cpp:
 /usr/local/include/boost/predef/os/bsd.h:
 
 /usr/local/include/boost/bind/arg.hpp:
+
+/usr/local/include/CGAL/Static_filtered_predicate.h:
 
 /usr/local/include/boost/mpl/aux_/config/compiler.hpp:
 
@@ -8265,6 +8281,8 @@ ui_ImageInterface.h:
 /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
 
 /usr/local/include/CGAL/user_classes.h:
+
+/usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_3.h:
 
 /usr/local/include/boost/fusion/view/joint_view/detail/deref_impl.hpp:
 

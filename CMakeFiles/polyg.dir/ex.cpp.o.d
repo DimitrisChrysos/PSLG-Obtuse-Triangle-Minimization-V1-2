@@ -2950,4 +2950,10 @@ CMakeFiles/polyg.dir/ex.cpp.o: \
  /usr/local/include/CGAL/Qt/init_ogl_context.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/QSurfaceFormat \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QCoreApplication \
- /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h
+ /usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h \
+ /usr/local/include/CGAL/Exact_predicates_exact_constructions_kernel.h \
+ /usr/local/include/CGAL/Lazy_kernel.h \
+ /usr/local/include/CGAL/Static_filtered_predicate.h \
+ /usr/local/include/CGAL/Epic_converter.h \
+ /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_2.h \
+ /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_3.h
