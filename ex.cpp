@@ -116,33 +116,6 @@ typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT
 typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
-CDT make_cdt(
-              std::list<int> points_x, 
-              std::list<int> points_y, 
-              std::list<std::pair<int, int>> additional_constraints
-              ) {
-  // Initialize the Constrained Delaunay Triangulation (CDT) 
-  CDT cdt;
-
-  // Define the points from the PSLG (x, y coordinates) and insert them into the CDT
-  std::vector<Point> points = {};
-  auto it_y = points_y.begin();
-  for (const auto& p : points_x) {
-    int point_x = p;
-    int point_y = *it_y;
-    points.push_back(Point(point_x, point_y));
-    cdt.insert(Point(point_x, point_y));
-    it_y++;
-  }
-
-  // Add the constrained edges from additional_constraints
-  for (const auto &constraint : additional_constraints) {
-    cdt.insert_constraint(points[constraint.first], points[constraint.second]);
-  }
-
-  return cdt;
-}
-
 bool has_obtuse_angle(CDT::Face_handle face) {
   // Get the vertices of the triangle
   Point p1 = face->vertex(0)->point();
@@ -244,42 +217,47 @@ void Steiner_insertion(CDT& cdt) {
   }
 }
 
-int main() {
-  
-  // Read the json file
-  namespace pt = boost::property_tree; // namespace alias
-  pt::ptree root; // create a root node
-  pt::read_json("input.json", root); // read the json file
 
-  // Read instance_uid
-  std::string instance_uid = root.get<std::string>("instance_uid");
+// Read JSON functions
+std::string get_instance_uid(boost::property_tree::ptree root) {
+  return root.get<std::string>("instance_uid");
+}
 
-  // Read num_points
-  int num_points = root.get<int>("num_points", 0);
+int get_num_points(boost::property_tree::ptree root) {
+  return root.get<int>("num_points", 0);;
+}
 
-  // Read points_x and points_y
+std::list<int> get_points_x(boost::property_tree::ptree root) {
   std::list<int> points_x;
-  for (pt::ptree::value_type &point_x : root.get_child("points_x")) {
+  for (boost::property_tree::ptree::value_type &point_x : root.get_child("points_x")) {
     points_x.push_back(point_x.second.get_value<int>());
   }
+  return points_x;
+}
+
+std::list<int> get_points_y(boost::property_tree::ptree root) {
   std::list<int> points_y;
-  for (pt::ptree::value_type &point_y : root.get_child("points_y")) {
+  for (boost::property_tree::ptree::value_type &point_y : root.get_child("points_y")) {
     points_y.push_back(point_y.second.get_value<int>());
   }
+  return points_y;
+}
 
-  // Read region_boundary
+std::list<int> get_region_boundary(boost::property_tree::ptree root) {
   std::list<int> region_boundary;
-  for (pt::ptree::value_type &temp : root.get_child("region_boundary")) {
+  for (boost::property_tree::ptree::value_type &temp : root.get_child("region_boundary")) {
     region_boundary.push_back(temp.second.get_value<int>());
   }
+  return region_boundary;
+}
 
-  // Read num_constraints
-  std::string num_constraints = root.get<std::string>("num_constraints");
-  std::cout << std::endl << "Num_constraints: " << num_constraints << std::endl;
+std::string get_num_constraints(boost::property_tree::ptree root) {
+  return root.get<std::string>("num_constraints");
+}
 
-  // Read the additional_constraints
+std::list<std::pair<int, int>> get_additional_constraints(boost::property_tree::ptree root, std::list<int> region_boundary) {
   std::list<std::pair<int, int>> additional_constraints;
-  for (pt::ptree::value_type &row : root.get_child("additional_constraints")) {
+  for (boost::property_tree::ptree::value_type &row : root.get_child("additional_constraints")) {
     auto it = row.second.begin();
     int first = it->second.get_value<int>();
     ++it;
@@ -304,11 +282,25 @@ int main() {
   std::cout << "prev: " << prev << " | first: " << first << std::endl;
   additional_constraints.push_back(std::make_pair(prev, first));
 
+  return additional_constraints;
+}
+
+int main() {
+  
+  // Read the json file
+  namespace pt = boost::property_tree; // namespace alias
+  pt::ptree root; // create a root node
+  pt::read_json("input.json", root); // read the json file
+  std::string instance_uid = get_instance_uid(root);
+  int num_points = get_num_points(root);
+  std::list<int> points_x = get_points_x(root);
+  std::list<int> points_y = get_points_y(root);
+  std::list<int> region_boundary = get_region_boundary(root);
+  std::string num_constraints = get_num_constraints(root);
+  std::list<std::pair<int, int>> additional_constraints = get_additional_constraints(root, region_boundary);
+
+
   // Create the Constrained Delaunay Triangulation (CDT)
-
-  // CDT cdt = make_cdt(points_x, points_y, additional_constraints);
-  // CGAL::draw(cdt);
-
   CDT cdt;
 
   // Define the points from the PSLG (x, y coordinates) and insert them into the CDT
