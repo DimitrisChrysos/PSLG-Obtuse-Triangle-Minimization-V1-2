@@ -218,37 +218,50 @@ void make_flips(CDT& cdt) {
   std::cout << "Made " << count << " total successful flips" << std::endl;
 }
 
+void insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
+  // calculate the circumcenter of the triangle
+  Point a = f1->vertex(0)->point();
+  Point b = f1->vertex(1)->point();
+  Point c = f1->vertex(2)->point();
+  
+  // std::cout << "a.x -> " << a.x() << "| a.y -> " << a.y() << std::endl;
+  // std::cout << "b.x -> " << b.x() << "| b.y -> " << b.y() << std::endl;
+  // std::cout << "c.x -> " << c.x() << "| c.y -> " << c.y() << std::endl;
+
+  Point pericenter = CGAL::circumcenter(a, b, c);
+  
+  // std::cout << "pericenter.x -> " << pericenter.x() << "| pericenter.y -> " << pericenter.y() << std::endl;
+
+
+
+  CDT::Face_handle located_face;
+  int index;
+
+
+
+
+  // Check if the inserted vertex is inside the convex hull, if not remove it
+  CDT::Vertex_handle inserted = cdt.insert_no_flip(pericenter);
+  if (cdt.is_infinite(inserted)) {
+    cdt.remove(inserted);
+  }
+}
+
 void steiner_insertion(CDT& cdt) {
-  int obt_count = count_obtuse_triangles(cdt);
-  std::cout << "Initial obtuse count: " << obt_count << std::endl;
-  CDT copy = cdt;
+  std::cout << "Initial obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
+  CDT copy(cdt);
   for (const Edge& e : cdt.finite_edges()) {
     CDT::Face_handle f1 = e.first; // The face of the edge
+
+    // If the triangle has an obtuse angle
     if (has_obtuse_angle(f1)) {
-      Point a = f1->vertex(0)->point();
-      Point b = f1->vertex(1)->point();
-      Point c = f1->vertex(2)->point();
-      
-      std::cout << "before\n";
 
-      std::cout << "a.x -> " << a.x() << "| a.y -> " << a.y() << std::endl;
-      std::cout << "b.x -> " << b.x() << "| b.y -> " << b.y() << std::endl;
-      std::cout << "c.x -> " << c.x() << "| c.y -> " << c.y() << std::endl;
-
-      Point pericenter = CGAL::circumcenter(a, b, c);
-      
-      std::cout << "pericenter.x -> " << pericenter.x() << "| pericenter.y -> " << pericenter.y() << std::endl;
-
-      std::cout << "after\n";
-
-      cdt.insert_no_flip(pericenter);
-      break;
+      // Insert the circumcenter if possible
+      insert_circumcenter(cdt, f1);
     }
   }
   int new_obt_count = count_obtuse_triangles(cdt);
-  if (new_obt_count >= obt_count) {
-    cdt = copy;
-  }
+  std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
 }
 
 
@@ -358,20 +371,16 @@ int main() {
   // }
 
   // Count the obtuse triangles
-  int obtuse_angles = count_obtuse_triangles(cdt);
-  std::cout << "Number of obtuse triangles before the flips: " << obtuse_angles << std::endl;
+  std::cout << "Number of obtuse triangles before the flips: " << count_obtuse_triangles(cdt) << std::endl;
   
   // Make flips
   make_flips(cdt);
-  // CGAL::draw(cdt);
 
   // Insert Steiner points
-  // CGAL::draw(cdt);
   steiner_insertion(cdt);
 
   // Count the obtuse triangles
-  obtuse_angles = count_obtuse_triangles(cdt);
-  std::cout << "Number of obtuse triangles after the flips: " << obtuse_angles << std::endl;
+  std::cout << "Number of obtuse triangles after the flips: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Draw the triangulation using CGAL's draw function
   CGAL::draw(cdt);
