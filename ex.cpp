@@ -89,7 +89,6 @@ public:
       int i = e.second; 
       Face_handle f2 = f1->neighbor(i);
 
-
       // Check if the edge is a boundary or constrained to mark it as not flippable
       // //
       // // Check if v1 and v2 are valid
@@ -141,10 +140,6 @@ CDT make_cdt(
     cdt.insert_constraint(points[constraint.first], points[constraint.second]);
   }
 
-  // Debugging information
-  std::cout << "CDT created with " << cdt.number_of_vertices() << " vertices and " << cdt.number_of_faces() << " faces." << std::endl;
-
-  
   return cdt;
 }
 
@@ -178,52 +173,41 @@ int count_obtuse_triangles(CDT cdt) {
 void make_flips(CDT& cdt) {
   int count = 0;
   CDT copy = cdt;
-  bool continue_flips = true;
-  while (continue_flips == true) {
-    int save_cout = count;
-    for (const Edge& e : cdt.finite_edges()) {
+  for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
 
-      if (count > save_cout) {
-        break;
+    // Get the 2 triangles
+    CDT::Face_handle f1 = e->first; // The face of the edge
+    int i = e->second; // The index of the edge in the face
+    CDT::Face_handle f2 = f1->neighbor(i); // The face of the neighbor of the edge
+
+    // Check if the edge is flippable
+    if (!cdt.my_is_flippable(*e)) continue;
+
+    // Check if the triangles formed by the edge have obtuse angles
+    int obt = 0;
+    if (has_obtuse_angle(f1)) obt++;
+    if (has_obtuse_angle(f2)) obt++;
+
+    // If triangles have obtuse angles, make the flip
+    if (obt) {
+      // Make the flip
+      cdt.tds().flip(f1, i);
+      count++;
+      std::cout << "Made a flip" << std::endl;
+
+      // Check if the triangles formed by the edge have obtuse angles after the flip
+      int obt2 = 0;
+      if (has_obtuse_angle(f1)) obt2++;
+      if (has_obtuse_angle(f2)) obt2++;
+
+      // If the number of obtuse angles is the same or more, undo the flip
+      if (obt2 >= obt) {
+        cdt = copy;
+        std::cout << "Undid a flip" << std::endl;
+        count--;
       }
-
-      // Get the 2 triangles
-      CDT::Face_handle f1 = e.first; // The face of the edge
-      int i = e.second; // The index of the edge in the face
-      CDT::Face_handle f2 = f1->neighbor(i); // The face of the neighbor of the edge
-
-      // Check if the edge is flippable
-      if (!cdt.my_is_flippable(e)) continue;
-
-      // Check if the triangles formed by the edge have obtuse angles
-      int obt = 0;
-      if (has_obtuse_angle(f1)) obt++;
-      if (has_obtuse_angle(f2)) obt++;
-
-      // If triangles have obtuse angles, make the flip
-      if (obt) {
-        // Make the flip
-        cdt.tds().flip(f1, i);
-        count++;
-        std::cout << "Made a flip" << std::endl;
-
-        // Check if the triangles formed by the edge have obtuse angles after the flip
-        int obt2 = 0;
-        if (has_obtuse_angle(f1)) obt2++;
-        if (has_obtuse_angle(f2)) obt2++;
-
-        // If the number of obtuse angles is the same or more, undo the flip
-        if (obt2 >= obt) {
-          cdt = copy;
-          std::cout << "Undid a flip" << std::endl;
-          count--;
-        }
-      }
-      std::cout << "Made " << count << " total flips" << std::endl;
     }
-    if (count == save_cout) {
-      continue_flips = false;
-    }
+    std::cout << "Made " << count << " total flips" << std::endl;
   }
 }
 
@@ -321,8 +305,29 @@ int main() {
   additional_constraints.push_back(std::make_pair(prev, first));
 
   // Create the Constrained Delaunay Triangulation (CDT)
-  CDT cdt = make_cdt(points_x, points_y, additional_constraints);
+
+  // CDT cdt = make_cdt(points_x, points_y, additional_constraints);
   // CGAL::draw(cdt);
+
+  CDT cdt;
+
+  // Define the points from the PSLG (x, y coordinates) and insert them into the CDT
+  std::vector<Point> points = {};
+  auto it_y = points_y.begin();
+  for (const auto& p : points_x) {
+    int point_x = p;
+    int point_y = *it_y;
+    points.push_back(Point(point_x, point_y));
+    cdt.insert(Point(point_x, point_y));
+    it_y++;
+  }
+
+  // Add the constrained edges from additional_constraints
+  for (const auto &constraint : additional_constraints) {
+    cdt.insert_constraint(points[constraint.first], points[constraint.second]);
+  }
+
+  
 
   // // Print all edges
   // for (CDT::Finite_edges_iterator eit = cdt.finite_edges_begin(); eit != cdt.finite_edges_end(); eit++) {
@@ -335,7 +340,7 @@ int main() {
   
   // Make flips
   make_flips(cdt);
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
 
   // Insert Steiner points
   // CGAL::draw(cdt);
