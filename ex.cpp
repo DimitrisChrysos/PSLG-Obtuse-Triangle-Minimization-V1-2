@@ -213,12 +213,11 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
     Point p1_point = p1->point();
     Point p2_point = p2->point();
 
-    if (v1.x() == p1_point.x() && v1.y() == p1_point.y() && v2.x() == p2_point.x() && v2.y() == p2_point.y()) {
-      std::cout << "Found the edge: (" << p1->point() << ") - (" << p2->point() << ")" << std::endl;
-    }
-
-    else 
+    if (!(v1.x() == p1_point.x() && v1.y() == p1_point.y() && v2.x() == p2_point.x() && v2.y() == p2_point.y())) {
       continue;
+    }
+    else 
+      std::cout << "Found the edge: (" << p1->point() << ") - (" << p2->point() << ")" << std::endl;
 
     // Check if the edge is flippable
     if (!copy.my_is_flippable(*e)) return false;
