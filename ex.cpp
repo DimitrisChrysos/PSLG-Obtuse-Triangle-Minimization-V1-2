@@ -143,63 +143,6 @@ int count_obtuse_triangles(CDT cdt) {
   return count;
 }
 
-// void make_flips(CDT& cdt) {
-//   int count = 0;
-//   int save_count;
-//   bool flag = true;
-//   while (flag) {
-//     std::cout << "Irtha edw geiaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
-//     count = 0;
-//     save_count = count;
-//     CDT copy(cdt);
-//     for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
-
-//       std::cout << "Now, we have " << count_obtuse_triangles(cdt) << "obtuse triangles\n";
-//       // if (count > save_count) break;
-
-//       // Get the 2 triangles
-//       CDT::Face_handle f1 = e->first; // The face of the edge
-//       int i = e->second; // The index of the edge in the face
-//       CDT::Face_handle f2 = f1->neighbor(i); // The face of the neighbor of the edge
-
-//       // Check if the edge is flippable
-//       if (!cdt.my_is_flippable(*e)) continue;
-
-//       // Check if the triangles formed by the edge have obtuse angles
-//       int obt = 0;
-//       if (has_obtuse_angle(f1)) obt++;
-//       if (has_obtuse_angle(f2)) obt++;
-
-//       // If triangles have obtuse angles, make the flip
-//       if (obt) {
-//         // Make the flip
-//         cdt.tds().flip(f1, i);
-//         count++;
-
-//         // Check if the triangles formed by the edge have obtuse angles after the flip
-//         int obt2 = 0;
-//         if (has_obtuse_angle(f1)) obt2++;
-//         if (has_obtuse_angle(f2)) obt2++;
-
-//         // If the number of obtuse angles is the same or more, undo the flip
-//         if (obt2 >= obt) {
-//           // std::cout << "obt2: " << obt2 << " | obt: " << obt << std::endl;
-//           cdt = copy;
-//           count--;
-//         }
-//         else {
-//           std::cout << "obt2: " << obt2 << " | obt: " << obt << std::endl;
-//           break;
-//           // std::cout << "Now, we have " << count_obtuse_triangles(cdt) << "obtuse triangles\n";
-//         }
-//       }
-//       std::cout << "LOCA LOCA LOCAAAAAA\n";
-//     }
-//     // std::cout << "Made " << count << " total successful flips" << std::endl;
-//     if (count == save_count) flag = false;
-//   }
-// }
-
 bool test_the_flip(CDT& cdt, Point v1, Point v2) {
   CDT copy(cdt);
   for (CDT::Finite_edges_iterator e = copy.finite_edges_begin(); e != copy.finite_edges_end(); e++) {
@@ -275,53 +218,7 @@ void make_flips(CDT& cdt) {
   std::cout << "Made " << count << " total successful flips" << std::endl;
 }
 
-// void make_flips(CDT& cdt) {
-//   int count = 0;
-//   CDT copy = cdt;
-//   for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
-
-//     std::cout << "Now, we have " << count_obtuse_triangles(cdt) << "obtuse triangles\n";
-
-//     // Get the 2 triangles
-//     CDT::Face_handle f1 = e->first; // The face of the edge
-//     int i = e->second; // The index of the edge in the face
-//     CDT::Face_handle f2 = f1->neighbor(i); // The face of the neighbor of the edge
-
-//     // Check if the edge is flippable
-//     if (!cdt.my_is_flippable(*e)) continue;
-
-//     // Check if the triangles formed by the edge have obtuse angles
-//     int obt = 0;
-//     if (has_obtuse_angle(f1)) obt++;
-//     if (has_obtuse_angle(f2)) obt++;
-
-//     // If triangles have obtuse angles, make the flip
-//     if (obt) {
-//       // Make the flip
-//       cdt.tds().flip(f1, i);
-//       count++;
-
-//       // Check if the triangles formed by the edge have obtuse angles after the flip
-//       int obt2 = 0;
-//       if (has_obtuse_angle(f1)) obt2++;
-//       if (has_obtuse_angle(f2)) obt2++;
-
-//       // If the number of obtuse angles is the same or more, undo the flip
-//       if (obt2 >= obt) {
-//         // std::cout << "obt2: " << obt2 << " | obt: " << obt << std::endl;
-//         cdt = copy;
-//         count--;
-//       }
-//       else {
-//         std::cout << "obt2: " << obt2 << " | obt: " << obt << std::endl;
-//         // std::cout << "Now, we have " << count_obtuse_triangles(cdt) << "obtuse triangles\n";
-//       }
-//     }
-//   }
-//   std::cout << "Made " << count << " total successful flips" << std::endl;
-// }
-
-void Steiner_insertion(CDT& cdt) {
+void steiner_insertion(CDT& cdt) {
   int obt_count = count_obtuse_triangles(cdt);
   std::cout << "Initial obtuse count: " << obt_count << std::endl;
   CDT copy = cdt;
@@ -470,7 +367,7 @@ int main() {
 
   // Insert Steiner points
   // CGAL::draw(cdt);
-  // Steiner_insertion(cdt);
+  steiner_insertion(cdt);
 
   // Count the obtuse triangles
   obtuse_angles = count_obtuse_triangles(cdt);
