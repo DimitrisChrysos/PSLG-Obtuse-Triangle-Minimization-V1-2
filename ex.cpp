@@ -123,11 +123,11 @@ bool has_obtuse_angle(CDT::Face_handle face) {
   Point p3 = face->vertex(2)->point();
 
   // Check if any angle of the triangle is obtuse
-    if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE ||
-        CGAL::angle(p2,p3,p1) == CGAL::OBTUSE ||
-        CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
-      return true;
-    }
+  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE ||
+      CGAL::angle(p2,p3,p1) == CGAL::OBTUSE ||
+      CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
+    return true;
+  }
   return false;
 }
 
@@ -218,50 +218,143 @@ void make_flips(CDT& cdt) {
   std::cout << "Made " << count << " total successful flips" << std::endl;
 }
 
-void insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
-  // calculate the circumcenter of the triangle
+int insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
+  CDT copy(cdt);
+
+  // Calculate the circumcenter of the triangle
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
   Point c = f1->vertex(2)->point();
-  
-  // std::cout << "a.x -> " << a.x() << "| a.y -> " << a.y() << std::endl;
-  // std::cout << "b.x -> " << b.x() << "| b.y -> " << b.y() << std::endl;
-  // std::cout << "c.x -> " << c.x() << "| c.y -> " << c.y() << std::endl;
-
   Point pericenter = CGAL::circumcenter(a, b, c);
-  
-  // std::cout << "pericenter.x -> " << pericenter.x() << "| pericenter.y -> " << pericenter.y() << std::endl;
+
+  // Check if the inserted vertex is inside the convex hull
+  CDT::Face_handle located_face = copy.locate(pericenter);
+  if (!copy.is_infinite(located_face)) {
+    copy.insert_no_flip(pericenter);
+  }
+
+  return count_obtuse_triangles(copy);
+}
+
+int insert_centroid(CDT& cdt, CDT::Face_handle f1) {
+  CDT copy(cdt);
+
+  // Calculate the centroid of the triangle
+  Point a = f1->vertex(0)->point();
+  Point b = f1->vertex(1)->point();
+  Point c = f1->vertex(2)->point();
+  Point centroid = CGAL::centroid(a, b, c);
+
+  // Insert the centroid
+  copy.insert_no_flip(centroid);
+
+  return count_obtuse_triangles(copy);
+}
+
+int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
+  CDT copy(cdt);
+
+  // Get the vertices of the triangle
+  Point p1 = f1->vertex(0)->point();
+  Point p2 = f1->vertex(1)->point();
+  Point p3 = f1->vertex(2)->point();
+
+  // Check if the neighbors of the triangle are obtuse and merge the obtuse triangles
+  CDT::Face_handle neigh1 = f1->neighbor(0);
+  CDT::Face_handle neigh2 = f1->neighbor(1);
+  CDT::Face_handle neigh3 = f1->neighbor(2);
+
+  // Check if the neighbors are obtuse
+  bool obt1 = has_obtuse_angle(neigh1);
+
+  if (has_obtuse_angle(neigh1)) {
+    CGAL::draw(copy);
+    int i = f1->index(neigh1);
+    
+
+    // DEN EXO IDEA POS NA KANO MERGE TA TRIGONA
+
+
+    // Get the point that is exactly in the center of the shared edge
+    CDT::Vertex_handle v1 = f1->vertex((i + 1) % 3);
+    CDT::Vertex_handle v2 = f1->vertex((i + 2) % 3);
+
+    // Calculate the midpoint of the shared edge
+    Point midpoint = CGAL::midpoint(v1->point(), v2->point());
+    std::cout << "Midpoint of the shared edge: " << midpoint << std::endl;
+    copy.insert_no_flip(midpoint);
+    CGAL::draw(copy);
+  }
 
 
 
-  CDT::Face_handle located_face;
-  int index;
+  return count_obtuse_triangles(copy);
+}
 
 
+int insert_mid(CDT& cdt, CDT::Face_handle f1, int mode) {
+  CDT copy(cdt);
 
+  // Calculate the circumcenter of the triangle
+  Point a = f1->vertex(0)->point();
+  Point b = f1->vertex(1)->point();
+  Point c = f1->vertex(2)->point();
+  Point mid;
 
-  // Check if the inserted vertex is inside the convex hull, if not remove it
-  CDT::Vertex_handle inserted = cdt.insert_no_flip(pericenter);
-  if (cdt.is_infinite(inserted)) {
-    cdt.remove(inserted);
+  K::FT l0 = CGAL::squared_distance(a, b);
+  K::FT l1 = CGAL::squared_distance(a, c);
+  K::FT l2 = CGAL::squared_distance(b, c);
+
+  // Calculate the midpoint of edge with the longest length
+  Point midpoint;
+  if (l0 >= l1 && l0 >= l2) {
+    midpoint = CGAL::midpoint(a, b);
+  }
+  else if (l1 >= l2) {
+    Point midpoint = CGAL::midpoint(a, c);
+  }
+  else {
+    Point midpoint = CGAL::midpoint(b, c);
+  }
+
+  // If mode is 0, insert the midpoint in the copy and return the count of the obtuse triangles
+  // Else, insert the midpoint in the original cdt
+  if (mode == 0) {
+    copy.insert_no_flip(midpoint);
+    return count_obtuse_triangles(copy);
+  }
+  else {
+    cdt.insert_no_flip(midpoint);
+    return 0;
   }
 }
 
 void steiner_insertion(CDT& cdt) {
-  std::cout << "Initial obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
-  CDT copy(cdt);
-  for (const Edge& e : cdt.finite_edges()) {
-    CDT::Face_handle f1 = e.first; // The face of the edge
+  int init_obtuse_count = count_obtuse_triangles(cdt);
+  std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
 
-    // If the triangle has an obtuse angle
-    if (has_obtuse_angle(f1)) {
+  // Iterate the faces of the cdt
+  for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
 
+    // //
+    // Point p1 = f->vertex(0)->point();
+    // Point p2 = f->vertex(1)->point();
+    // Point p3 = f->vertex(2)->point();
+    // std::cout << "Triangle inside has obtuse: (" << p1 << ") - (" << p2 << ") - (" << p3 << ")" << std::endl;
+    // //
+
+    if (has_obtuse_angle(f)) {
+      
       // Insert the circumcenter if possible
-      insert_circumcenter(cdt, f1);
+      int calc_insert_mid = insert_mid(cdt, f, 1);
+      std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(cdt) << std::endl;
+      // int calc_circumcenter = insert_circumcenter(cdt, f);
+      // int calc_centroid = insert_centroid(cdt, f);
+      // int calc_merge_obtuse = merge_obtuse(cdt, f);
     }
   }
-  int new_obt_count = count_obtuse_triangles(cdt);
-  std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
+
+  // std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
 }
 
 
@@ -377,6 +470,7 @@ int main() {
   make_flips(cdt);
 
   // Insert Steiner points
+  std::cout << "\n\n\nSteiner points insertion:\n";
   steiner_insertion(cdt);
 
   // Count the obtuse triangles
