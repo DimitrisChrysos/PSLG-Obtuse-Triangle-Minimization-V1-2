@@ -231,8 +231,7 @@ void make_flips(CDT& cdt) {
   std::cout << "Made " << count << " total successful flips" << std::endl;
 }
 
-int insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
-  CDT copy(cdt);
+obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
   // Calculate the circumcenter of the triangle
   Point a = f1->vertex(0)->point();
@@ -241,16 +240,17 @@ int insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   Point pericenter = CGAL::circumcenter(a, b, c);
 
   // Check if the inserted vertex is inside the convex hull
-  CDT::Face_handle located_face = copy.locate(pericenter);
-  if (!copy.is_infinite(located_face)) {
-    copy.insert_no_flip(pericenter);
+  CDT::Face_handle located_face = cdt.locate(pericenter);
+  if (!cdt.is_infinite(located_face)) {
+    cdt.insert_no_flip(pericenter);
   }
 
-  return count_obtuse_triangles(copy);
+  // return count_obtuse_triangles(copy);
+  obt_point ret(count_obtuse_triangles(cdt), pericenter);
+  return ret;
 }
 
-int insert_centroid(CDT& cdt, CDT::Face_handle f1) {
-  CDT copy(cdt);
+obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
 
   // Calculate the centroid of the triangle
   Point a = f1->vertex(0)->point();
@@ -259,9 +259,12 @@ int insert_centroid(CDT& cdt, CDT::Face_handle f1) {
   Point centroid = CGAL::centroid(a, b, c);
 
   // Insert the centroid
-  copy.insert_no_flip(centroid);
+  cdt.insert_no_flip(centroid);
 
-  return count_obtuse_triangles(copy);
+
+  // count_obtuse_triangles(copy);
+  obt_point ret(count_obtuse_triangles(cdt), centroid);
+  return ret;
 }
 
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
@@ -305,7 +308,7 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 }
 
 
-obt_point insert_mid(CDT& cdt, CDT::Face_handle f1, int mode) {
+obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   CDT copy(cdt);
 
   // Calculate the circumcenter of the triangle
@@ -330,22 +333,11 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1, int mode) {
     midpoint = CGAL::midpoint(b, c);
   }
 
-  // If mode is 0, insert the midpoint in the copy and return the count of the obtuse triangles
-  // Else, insert the midpoint in the original cdt
-
-
-  if (mode == 0) {
-    copy.insert_no_flip(midpoint);
-    // return count_obtuse_triangles(copy);
-  }
-  else {
-    // CGAL::draw(cdt);
-    cdt.insert_no_flip(midpoint);
-    int obt = count_obtuse_triangles(cdt);
-    obt_point ret = obt_point(obt, midpoint);
-    // CGAL::draw(cdt);
-    return ret;
-  }
+  // std::cout << "midpoint: " << midpoint << " | points: a:" << a << " b: " << b << std::endl;
+  cdt.insert_no_flip(midpoint);
+  int obt = count_obtuse_triangles(cdt);
+  obt_point ret = obt_point(obt, midpoint);
+  return ret;
 }
 
 void steiner_insertion(CDT& cdt) {
@@ -361,52 +353,42 @@ void steiner_insertion(CDT& cdt) {
       
       CDT copy(cdt);
       // Insert the circumcenter if possible
-      obt_point calc_insert_mid = insert_mid(copy, f, 1);
-      if (best_steiner.obt_count > calc_insert_mid.obt_count && best_steiner.obt_count != -1) {
+      obt_point calc_insert_mid = insert_mid(copy, f);
+      if (best_steiner.obt_count == -1) {
         best_steiner = calc_insert_mid;
       }
-      std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(cdt) << std::endl;
-      // int calc_circumcenter = insert_circumcenter(cdt, f);
-      // int calc_centroid = insert_centroid(cdt, f);
-      // int calc_merge_obtuse = merge_obtuse(cdt, f);
+      else if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+        best_steiner = calc_insert_mid;
+      }
+      // std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(copy) << std::endl;
+
+      CDT copy1(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_centr = insert_centroid(copy1, f);
+      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+        best_steiner = calc_insert_centr;
+      }
+      // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
+
+      CDT copy2(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_circ = insert_circumcenter(copy2, f);
+      if (best_steiner.obt_count > calc_insert_circ.obt_count) {
+        best_steiner = calc_insert_circ;
+      }
+      // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
     
     }
   }
-  if (best_steiner.obt_count > -1) {
-    cdt.insert_no_flip(best_steiner.insrt_pt);
-  }
+  // if (best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
+  // CGAL::draw(cdt);
+  std::cout << "largest edge midpoint: " << best_steiner.insrt_pt << std::endl;
+  cdt.insert_no_flip(best_steiner.insrt_pt);
+  // CGAL::draw(cdt);
+  // }
 
-  // std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
 }
-
-// void steiner_insertion(CDT& cdt) {
-//   int init_obtuse_count = count_obtuse_triangles(cdt);
-//   std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
-
-//   // Iterate the faces of the cdt
-//   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
-
-//     // //
-//     // Point p1 = f->vertex(0)->point();
-//     // Point p2 = f->vertex(1)->point();
-//     // Point p3 = f->vertex(2)->point();
-//     // std::cout << "Triangle inside has obtuse: (" << p1 << ") - (" << p2 << ") - (" << p3 << ")" << std::endl;
-//     // //
-
-//     if (has_obtuse_angle(f)) {
-      
-//       // Insert the circumcenter if possible
-//       int calc_insert_mid = insert_mid(cdt, f, 1);
-//       std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(cdt) << std::endl;
-//       // int calc_circumcenter = insert_circumcenter(cdt, f);
-//       // int calc_centroid = insert_centroid(cdt, f);
-//       // int calc_merge_obtuse = merge_obtuse(cdt, f);
-    
-//     }
-//   }
-
-//   // std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
-// }
 
 
 // Read JSON functions
@@ -522,11 +504,9 @@ int main() {
 
   // Insert Steiner points
   std::cout << "\n\n\nSteiner points insertion:\n";
-  steiner_insertion(cdt);
-  steiner_insertion(cdt);
-  steiner_insertion(cdt);
-  steiner_insertion(cdt);
-  steiner_insertion(cdt);
+  for (int i = 0 ; i < 200 ; i++) {
+    steiner_insertion(cdt);
+  }
 
   // Count the obtuse triangles
   std::cout << "Number of obtuse triangles after the flips: " << count_obtuse_triangles(cdt) << std::endl;

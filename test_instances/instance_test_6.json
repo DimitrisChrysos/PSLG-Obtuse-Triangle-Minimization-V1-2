@@ -1,0 +1,31 @@
+{
+    "instance_uid": "test_6",
+    "num_points": 7,
+    "points_x": [
+        192,
+        384,
+        320,
+        272,
+        192,
+        230,
+        320
+    ],
+    "points_y": [
+        512,
+        512,
+        560,
+        576,
+        576,
+        530,
+        522
+    ],
+    "region_boundary": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "num_constraints": 0,
+    "additional_constraints": []
+}
