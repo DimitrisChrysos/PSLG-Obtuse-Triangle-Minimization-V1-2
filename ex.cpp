@@ -215,12 +215,12 @@ void make_flips(CDT& cdt) {
     CDT::Face_handle f2 = f1->neighbor(i);
     auto v1 = f1->vertex((i+1)%3);
     auto v2 = f1->vertex((i+2)%3);
-    std::cout << "\nEdge points: (" << v1->point() << ") - (" << v2->point() << ")" << std::endl;
+    // std::cout << "\nEdge points: (" << v1->point() << ") - (" << v2->point() << ")" << std::endl;
 
     // Test is the flip possible or if it is worth doing
     bool do_flip = test_the_flip(cdt, v1->point(), v2->point());
 
-    std::cout << "Now, we have " << count_obtuse_triangles(cdt) << " obtuse triangles\n";
+    // std::cout << "Now, we have " << count_obtuse_triangles(cdt) << " obtuse triangles\n";
 
     // If the flip is possible and worth it, do it
     if (do_flip) {
@@ -228,7 +228,33 @@ void make_flips(CDT& cdt) {
       count++;
     }
   }
-  std::cout << "Made " << count << " total successful flips" << std::endl;
+  // std::cout << "Made " << count << " total successful flips" << std::endl;
+}
+
+Point compute_incenter(CDT::Face_handle f) {
+  // Get the vertices of the face
+  Point A = f->vertex(0)->point();
+  Point B = f->vertex(1)->point();
+  Point C = f->vertex(2)->point();
+
+  // Calculate the lengths of the sides
+  K::FT a = CGAL::squared_distance(B, C); // Side opposite to A
+  K::FT b = CGAL::squared_distance(A, C); // Side opposite to B
+  K::FT c = CGAL::squared_distance(A, B); // Side opposite to C
+
+  // Calculate the incenter using the weighted average formula
+  K::FT sum = a + b + c;
+  Point incenter = CGAL::barycenter(A, a, B, b, C, c);
+
+  return incenter;
+}
+
+obt_point insert_incenter(CDT& cdt, CDT::Face_handle f1) {
+  Point incenter = compute_incenter(f1);
+  cdt.insert_no_flip(incenter);
+
+  obt_point ret(count_obtuse_triangles(cdt), incenter);
+  return ret;
 }
 
 obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
@@ -284,7 +310,7 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   bool obt1 = has_obtuse_angle(neigh1);
 
   if (has_obtuse_angle(neigh1)) {
-    CGAL::draw(copy);
+    // CGAL::draw(copy);
     int i = f1->index(neigh1);
     
 
@@ -299,7 +325,7 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     Point midpoint = CGAL::midpoint(v1->point(), v2->point());
     std::cout << "Midpoint of the shared edge: " << midpoint << std::endl;
     copy.insert_no_flip(midpoint);
-    CGAL::draw(copy);
+    // CGAL::draw(copy);
   }
 
 
@@ -344,7 +370,7 @@ void steiner_insertion(CDT& cdt) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
   std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
   Point a;
-  obt_point best_steiner(-1, a);
+  obt_point best_steiner(9999, a);
 
   // Iterate the faces of the cdt
   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
@@ -354,10 +380,7 @@ void steiner_insertion(CDT& cdt) {
       CDT copy(cdt);
       // Insert the circumcenter if possible
       obt_point calc_insert_mid = insert_mid(copy, f);
-      if (best_steiner.obt_count == -1) {
-        best_steiner = calc_insert_mid;
-      }
-      else if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
         best_steiner = calc_insert_mid;
       }
       // std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(copy) << std::endl;
@@ -377,12 +400,19 @@ void steiner_insertion(CDT& cdt) {
         best_steiner = calc_insert_circ;
       }
       // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
-    
+
+
+      CDT copy3(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_inc = insert_incenter(copy3, f);
+      if (best_steiner.obt_count > calc_insert_inc.obt_count) {
+        best_steiner = calc_insert_inc;
+      }
     }
   }
   // if (best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
   // CGAL::draw(cdt);
-  std::cout << "largest edge midpoint: " << best_steiner.insrt_pt << std::endl;
+  // std::cout << "largest edge midpoint: " << best_steiner.insrt_pt << std::endl;
   cdt.insert_no_flip(best_steiner.insrt_pt);
   // CGAL::draw(cdt);
   // }
@@ -506,13 +536,14 @@ int main() {
   std::cout << "\n\n\nSteiner points insertion:\n";
   for (int i = 0 ; i < 200 ; i++) {
     steiner_insertion(cdt);
+    make_flips(cdt);
   }
 
   // Count the obtuse triangles
   std::cout << "Number of obtuse triangles after the flips: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Draw the triangulation using CGAL's draw function
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
 
   return 0;
 }
