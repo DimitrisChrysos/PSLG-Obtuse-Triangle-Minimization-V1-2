@@ -356,8 +356,67 @@ obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-void remove_points(CDT& cdt, CDT::Face_handle face, Edge e) {
+void remove_points(CDT& cdt, Edge e, std::vector<Point>& removed_points, std::vector<Edge>& edges_made_constrained) {
+  // Get the points of the edge
+  CDT::Vertex_handle v1 = e.first->vertex((e.second+1)%3);
+  CDT::Vertex_handle v2 = e.first->vertex((e.second+2)%3);
+  Point p1 = v1->point();
+  Point p2 = v2->point();
 
+  // Check if the points are part of a constraint edge
+  bool p1_constrained = false;
+  bool p2_constrained = false;
+  std::vector<Edge> edges_with_p1;
+  std::vector<Edge> edges_with_p2;
+  for (const Edge& e : cdt.finite_edges()) {
+    CDT::Face_handle face = e.first;
+    int index = e.second;
+    Point edge_point1 = face->vertex((index + 1) % 3)->point();
+    Point edge_point2 = face->vertex((index + 2) % 3)->point();
+
+      if (edge_point1 == p1 || edge_point2 == p1) {
+        edges_with_p1.push_back(e);
+        if (cdt.is_constrained(e)) {
+          p1_constrained = true;
+        }
+      }
+      if (edge_point1 == p2 || edge_point2 == p2) {
+        edges_with_p2.push_back(e);
+        if (cdt.is_constrained(e)) {
+          p2_constrained = true;
+        }
+      }
+  }
+
+  // Remove points that are not part of a constraint edge
+  if (!p1_constrained) {
+
+    // Remove the points
+    removed_points.push_back(p1);
+    cdt.remove(v1);
+
+    // Make the edges that the removed point was part of constrained
+    for (const Edge& e : edges_with_p1) {
+      if (!cdt.is_constrained(e)) {
+        edges_made_constrained.push_back(e);
+        cdt.insert_constraint(e.first->vertex((e.second+1)%3)->point(), e.first->vertex((e.second+2)%3)->point());
+      }
+    }
+  }
+  if (!p2_constrained) {
+
+    // Remove the points
+    removed_points.push_back(p2);
+    cdt.remove(v2);
+
+    // Make the edges that the removed point was part of constrained
+    for (const Edge& e : edges_with_p2) {
+      if (!cdt.is_constrained(e)) {
+        edges_made_constrained.push_back(e);
+        cdt.insert_constraint(e.first->vertex((e.second+1)%3)->point(), e.first->vertex((e.second+2)%3)->point());
+      }
+    }
+  }
 }
 
 Edge get_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
@@ -382,6 +441,7 @@ Edge get_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
 }
 
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
+
   CDT copy(cdt);
 
   // Get the vertices of the triangle
@@ -401,22 +461,26 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
 
 
-  // Check if the neighbors are obtuse
+  // Check if the neighbors are obtuse and the shared edges are not constrained
   bool check_neigh1 = has_obtuse_angle(neigh1) && !cdt.is_constrained(e1);
   bool check_neigh2 = has_obtuse_angle(neigh2) && !cdt.is_constrained(e2);
   bool check_neigh3 = has_obtuse_angle(neigh3) && !cdt.is_constrained(e3);
 
   // If the neighbors are obtuse, replace the (non constrained from edges) points
   // with constrained edges, where needed, to keep the formation of the polygon
+  std::vector<Point> removed_points;
+  std::vector<Edge> edges_made_constrained;
   if (check_neigh1) {
-    remove_points(cdt, neigh1, e1);
+    remove_points(cdt, e1, removed_points, edges_made_constrained);
   }
   if (check_neigh2) {
-    remove_points(cdt, neigh2, e2);
+    remove_points(cdt, e2, removed_points, edges_made_constrained);
+
   }
   if (check_neigh3) {
-    remove_points(cdt, neigh3, e3);
+    remove_points(cdt, e3, removed_points, edges_made_constrained);
   }
+
 
   // Add the centroid (or mean point) of the polygon
 
@@ -592,7 +656,8 @@ int main() {
   // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
-  pt::read_json("input.json", root); // read the json file
+  // pt::read_json("input.json", root); // read the json file
+  pt::read_json("test_instances/instance_test_4.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -634,11 +699,12 @@ int main() {
   // Make flips
   make_flips(cdt);
 
+  CGAL::draw(cdt);
+
   // Insert Steiner points
   std::cout << "\n\n\nSteiner points insertion:\n";
   for (int i = 0 ; i < 1 ; i++) {
     steiner_insertion(cdt);
-    make_flips(cdt);
   }
 
   // Count the obtuse triangles
