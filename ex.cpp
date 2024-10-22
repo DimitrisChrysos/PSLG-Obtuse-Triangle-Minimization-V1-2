@@ -113,6 +113,10 @@ public:
 typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
 typedef CGAL:: Exact_predicates_tag Itag;
 typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+
+// typedef K::Point_2 Point;
+typedef K::Segment_2 Segment;
+
 typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
@@ -156,6 +160,24 @@ int count_obtuse_triangles(CDT cdt) {
   return count;
 }
 
+int find_obtuse_vertex_id(CDT::Face_handle face) {
+  Point p1 = face->vertex(0)->point();
+  Point p2 = face->vertex(1)->point();
+  Point p3 = face->vertex(2)->point();
+
+  // Check if any angle of the triangle is obtuse
+  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE) {
+    return 1;
+  }
+  else if (CGAL::angle(p2,p3,p1) == CGAL::OBTUSE) {
+    return 2;
+  }
+  else if (CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
+    return 0;
+  }
+  return -1;
+}
+
 bool test_the_flip(CDT& cdt, Point v1, Point v2) {
   CDT copy(cdt);
   for (CDT::Finite_edges_iterator e = copy.finite_edges_begin(); e != copy.finite_edges_end(); e++) {
@@ -173,7 +195,7 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
       continue;
     }
     else 
-      std::cout << "Found the edge: (" << p1->point() << ") - (" << p2->point() << ")" << std::endl;
+      // std::cout << "Found the edge: (" << p1->point() << ") - (" << p2->point() << ")" << std::endl;
 
     // Check if the edge is flippable
     if (!copy.my_is_flippable(*e)) return false;
@@ -229,6 +251,47 @@ void make_flips(CDT& cdt) {
     }
   }
   // std::cout << "Made " << count << " total successful flips" << std::endl;
+}
+
+Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
+    // Get the vertices of the face
+    Point A = f->vertex(0)->point();
+    Point B = f->vertex(1)->point();
+    Point C = f->vertex(2)->point();
+    
+    Point obtuse_vertex, vertex1, vertex2;
+    
+    // Identify which vertex has the obtuse angle
+    if (obtuse_vertex_idx == 0) {
+        obtuse_vertex = A;
+        vertex1 = B;
+        vertex2 = C;
+    } else if (obtuse_vertex_idx == 1) {
+        obtuse_vertex = B;
+        vertex1 = A;
+        vertex2 = C;
+    } else {
+        obtuse_vertex = C;
+        vertex1 = A;
+        vertex2 = B;
+    }
+
+    // Project the obtuse vertex onto the opposite edge (vertex1, vertex2)
+    Segment opposite_edge(vertex1, vertex2);
+
+    // Project the obtuse vertex onto the opposite edge
+    Point projection = opposite_edge.supporting_line().projection(obtuse_vertex);
+
+    return projection;
+}
+
+obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
+  int obt_id = find_obtuse_vertex_id(f1);
+  Point projection = find_perpendicular_projection(f1, obt_id);
+  cdt.insert_no_flip(projection);
+
+  obt_point ret(count_obtuse_triangles(cdt), projection);
+  return ret;
 }
 
 Point compute_incenter(CDT::Face_handle f) {
@@ -293,6 +356,42 @@ obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
+void remove_points(CDT& cdt, CDT::Face_handle face, Edge e) {
+
+}
+
+Edge get_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
+  // Get the index of the shared edge
+  int edge_index = f1->index(neigh);
+
+  // Get the vertices of the shared edge
+  Point p1 = f1->vertex((edge_index + 1) % 3)->point();
+  Point p2 = f1->vertex((edge_index + 2) % 3)->point();
+  // std::cout << "1. Edge: " << p1 << " - " << p2 << std::endl;
+
+  for (const Edge& e : cdt.finite_edges()) {
+    CDT::Face_handle face = e.first;
+    int index = e.second;
+    Point edgeP1 = face->vertex((index + 1) % 3)->point();
+    Point edgeP2 = face->vertex((index + 2) % 3)->point();
+
+    if ((edgeP1 == p1 && edgeP2 == p2) || (edgeP1 == p2 && edgeP2 == p1)) {
+      return e;
+    }
+  }
+}
+
+bool shared_edge_constrained(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
+  // Get the index of the shared edge
+  int edge_index = f1->index(neigh);
+
+  // Get the vertices of the shared edge
+  Point p1 = f1->vertex((edge_index + 1) % 3)->point();
+  Point p2 = f1->vertex((edge_index + 2) % 3)->point();
+
+  return cdt.is_constrained(Point(p1.x()), p2);
+}
+
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   CDT copy(cdt);
 
@@ -301,32 +400,36 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   Point p2 = f1->vertex(1)->point();
   Point p3 = f1->vertex(2)->point();
 
-  // Check if the neighbors of the triangle are obtuse and merge the obtuse triangles
+  // Get the neighbors of the triangle
   CDT::Face_handle neigh1 = f1->neighbor(0);
   CDT::Face_handle neigh2 = f1->neighbor(1);
   CDT::Face_handle neigh3 = f1->neighbor(2);
 
+  // Get the shared edges of the triangle
+  // Edge e1 = get_edge(copy, f1, neigh1);
+  // Edge e2 = get_edge(copy, f1, neigh2);
+  // Edge e3 = get_edge(copy, f1, neigh3);
+  // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
+
+
   // Check if the neighbors are obtuse
-  bool obt1 = has_obtuse_angle(neigh1);
+  bool check_neigh1 = has_obtuse_angle(neigh1) && !cdt.is_constrained(e1);
+  bool check_neigh2 = has_obtuse_angle(neigh2) && !cdt.is_constrained(e2);
+  bool check_neigh3 = has_obtuse_angle(neigh3) && !cdt.is_constrained(e3);
 
-  if (has_obtuse_angle(neigh1)) {
-    // CGAL::draw(copy);
-    int i = f1->index(neigh1);
-    
-
-    // DEN EXO IDEA POS NA KANO MERGE TA TRIGONA lol
-
-
-    // Get the point that is exactly in the center of the shared edge
-    CDT::Vertex_handle v1 = f1->vertex((i + 1) % 3);
-    CDT::Vertex_handle v2 = f1->vertex((i + 2) % 3);
-
-    // Calculate the midpoint of the shared edge
-    Point midpoint = CGAL::midpoint(v1->point(), v2->point());
-    std::cout << "Midpoint of the shared edge: " << midpoint << std::endl;
-    copy.insert_no_flip(midpoint);
-    // CGAL::draw(copy);
+  // If the neighbors are obtuse, replace the (non constrained from edges) points
+  // with constrained edges, where needed, to keep the formation of the polygon
+  if (check_neigh1) {
+    remove_points(cdt, neigh1, e1);
   }
+  if (check_neigh2) {
+    remove_points(cdt, neigh2, e2);
+  }
+  if (check_neigh3) {
+    remove_points(cdt, neigh3, e3);
+  }
+
+  // Add the centroid (or mean point) of the polygon
 
 
 
@@ -377,37 +480,47 @@ void steiner_insertion(CDT& cdt) {
 
     if (has_obtuse_angle(f)) {
       
-      CDT copy(cdt);
-      // Insert the circumcenter if possible
-      obt_point calc_insert_mid = insert_mid(copy, f);
-      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
-        best_steiner = calc_insert_mid;
-      }
-      // std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(copy) << std::endl;
+      // CDT copy(cdt);
+      // // Insert the circumcenter if possible
+      // obt_point calc_insert_mid = insert_mid(copy, f);
+      // if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+      //   best_steiner = calc_insert_mid;
+      // }
+      // // std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(copy) << std::endl;
 
-      CDT copy1(cdt);
-      // Insert the circumcenter if possible
-      obt_point calc_insert_centr = insert_centroid(copy1, f);
-      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
-        best_steiner = calc_insert_centr;
-      }
-      // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
+      // CDT copy1(cdt);
+      // // Insert the circumcenter if possible
+      // obt_point calc_insert_centr = insert_centroid(copy1, f);
+      // if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+      //   best_steiner = calc_insert_centr;
+      // }
+      // // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
 
-      CDT copy2(cdt);
-      // Insert the circumcenter if possible
-      obt_point calc_insert_circ = insert_circumcenter(copy2, f);
-      if (best_steiner.obt_count > calc_insert_circ.obt_count) {
-        best_steiner = calc_insert_circ;
-      }
-      // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
+      // CDT copy2(cdt);
+      // // Insert the circumcenter if possible
+      // obt_point calc_insert_circ = insert_circumcenter(copy2, f);
+      // if (best_steiner.obt_count > calc_insert_circ.obt_count) {
+      //   best_steiner = calc_insert_circ;
+      // }
+      // // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
 
 
-      CDT copy3(cdt);
-      // Insert the circumcenter if possible
-      obt_point calc_insert_inc = insert_incenter(copy3, f);
-      if (best_steiner.obt_count > calc_insert_inc.obt_count) {
-        best_steiner = calc_insert_inc;
-      }
+      // CDT copy3(cdt);
+      // // Insert the circumcenter if possible
+      // obt_point calc_insert_inc = insert_incenter(copy3, f);
+      // if (best_steiner.obt_count > calc_insert_inc.obt_count) {
+      //   best_steiner = calc_insert_inc;
+      // }
+
+      // CDT copy4(cdt);
+      // // Insert the circumcenter if possible
+      // obt_point calc_insert_proj = insert_projection(copy4, f);
+      // if (best_steiner.obt_count > calc_insert_proj.obt_count) {
+      //   best_steiner = calc_insert_proj;
+      // }
+
+      CDT copy5(cdt);
+      merge_obtuse(copy5, f);
     }
   }
   // if (best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
@@ -534,7 +647,7 @@ int main() {
 
   // Insert Steiner points
   std::cout << "\n\n\nSteiner points insertion:\n";
-  for (int i = 0 ; i < 200 ; i++) {
+  for (int i = 0 ; i < 1 ; i++) {
     steiner_insertion(cdt);
     make_flips(cdt);
   }
@@ -543,7 +656,7 @@ int main() {
   std::cout << "Number of obtuse triangles after the flips: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Draw the triangulation using CGAL's draw function
-  // CGAL::draw(cdt);
+  CGAL::draw(cdt);
 
   return 0;
 }
