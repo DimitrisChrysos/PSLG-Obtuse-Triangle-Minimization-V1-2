@@ -381,17 +381,6 @@ Edge get_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
   }
 }
 
-bool shared_edge_constrained(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
-  // Get the index of the shared edge
-  int edge_index = f1->index(neigh);
-
-  // Get the vertices of the shared edge
-  Point p1 = f1->vertex((edge_index + 1) % 3)->point();
-  Point p2 = f1->vertex((edge_index + 2) % 3)->point();
-
-  return cdt.is_constrained(Point(p1.x()), p2);
-}
-
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   CDT copy(cdt);
 
@@ -406,9 +395,9 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   CDT::Face_handle neigh3 = f1->neighbor(2);
 
   // Get the shared edges of the triangle
-  // Edge e1 = get_edge(copy, f1, neigh1);
-  // Edge e2 = get_edge(copy, f1, neigh2);
-  // Edge e3 = get_edge(copy, f1, neigh3);
+  Edge e1 = get_edge(copy, f1, neigh1);
+  Edge e2 = get_edge(copy, f1, neigh2);
+  Edge e3 = get_edge(copy, f1, neigh3);
   // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
 
 
