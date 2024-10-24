@@ -9,6 +9,7 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Polygon_2_algorithms.h>
+#include <CGAL/Polygon_2.h>
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS // optional in native ubuntu, removes a warning in wsl
 #ifndef CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
@@ -91,14 +92,6 @@ public:
       Face_handle f1 = e.first; 
       int i = e.second; 
       Face_handle f2 = f1->neighbor(i);
-
-      // Check if the edge is a boundary or constrained to mark it as not flippable
-      // //
-      // // Check if v1 and v2 are valid
-      // typename Base::Vertex_handle v1 = f1->vertex((i+1)%3);
-      // typename Base::Vertex_handle v2 = f1->vertex((i+2)%3);
-      // std::cout << "Edge points: (" << v1->point() << ") - (" << v2->point() << ")" << std::endl;
-      // //
       if (this->is_infinite(f1) || this->is_infinite(f2)) {
         return false;
       }
@@ -116,6 +109,7 @@ public:
 typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
 typedef CGAL:: Exact_predicates_tag Itag;
 typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+typedef CGAL::Polygon_2<K> Polygon_2;
 
 // typedef K::Point_2 Point;
 typedef K::Segment_2 Segment;
@@ -135,6 +129,9 @@ class obt_point {
     }
 };
 //
+
+bool is_triangle_inside_region_boundary(Polygon_2& region_boundary_polygon, CDT::Face_handle f1);
+Polygon_2 region_boundary_polygon;
 
 bool has_obtuse_angle(CDT::Face_handle face) {
   // Get the vertices of the triangle
@@ -156,6 +153,10 @@ int count_obtuse_triangles(CDT cdt) {
   for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
     CDT::Face_handle face = fit;
     
+    // Check if the face is inside the region boundary
+    if (!is_triangle_inside_region_boundary(region_boundary_polygon, face))
+      continue;
+
     if (has_obtuse_angle(face)) {
       count++;
     }
@@ -181,27 +182,133 @@ int find_obtuse_vertex_id(CDT::Face_handle face) {
   return -1;
 }
 
+Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
+
+// check if a polygon of 4 edges is convex
+bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
+
+  // Get the points of f1
+  Point p1 = f1->vertex(0)->point();
+  Point p2 = f1->vertex(1)->point();
+  Point p3 = f1->vertex(2)->point();
+
+  // Get the points of f2
+  Point p4 = f2->vertex(0)->point();
+  Point p5 = f2->vertex(1)->point();
+  Point p6 = f2->vertex(2)->point();
+
+  // Not Shared Points -> not_shared_points
+  std::set<Point> not_shared_points = {p1, p2, p3};
+  auto it = not_shared_points.find(p4);
+  if (it != not_shared_points.end()) {
+      not_shared_points.erase(it);
+  }
+  else {
+    not_shared_points.insert(p4);
+  }
+  it = not_shared_points.find(p5);
+  if (it != not_shared_points.end()) {
+      not_shared_points.erase(it);
+  }
+  else {
+    not_shared_points.insert(p5);
+  }
+  it = not_shared_points.find(p6);
+  if (it != not_shared_points.end()) {
+      not_shared_points.erase(it);
+  }
+  else {
+    not_shared_points.insert(p6);
+  }
+
+  // Shared Points -> "shared_points"
+  std::set<Point> temp_points = {p1, p2, p3};
+  std::set<Point> shared_points = {};
+  it = temp_points.find(p4);
+  if (it != temp_points.end()) {
+    shared_points.insert(p4);
+  }
+  it = temp_points.find(p5);
+  if (it != temp_points.end()) {
+    shared_points.insert(p5);
+  }
+  it = temp_points.find(p6);
+  if (it != temp_points.end()) {
+    shared_points.insert(p6);
+  }
+
+  // // Print them
+  // for (auto p : shared_points) {
+  //   std::cout << "shared_points: " << p << std::endl;
+  // }
+  // for (auto p : not_shared_points) {
+  //   std::cout << "not_shared_points: " << p << std::endl;
+  // }
+
+  std::vector<Point> polygon_points = {}; 
+  // Take one shared point and them remove it
+  Point shared_point = *shared_points.begin();
+  shared_points.erase(shared_points.begin());
+  polygon_points.push_back(shared_point);
+  // std::cout << "a: " << shared_point << std::endl;
+  // Take the first not shared point and remove it
+  Point not_shared_point = *not_shared_points.begin();
+  not_shared_points.erase(not_shared_points.begin());
+  polygon_points.push_back(not_shared_point);
+  // std::cout << "b: " << not_shared_point << std::endl;
+  // Take the second shared point and remove it
+  shared_point = *shared_points.begin();
+  shared_points.erase(shared_points.begin());
+  polygon_points.push_back(shared_point);
+  // std::cout << "c: " << shared_point << std::endl;
+  // Take the second not shared point and remove it
+  not_shared_point = *not_shared_points.begin();
+  not_shared_points.erase(not_shared_points.begin());
+  polygon_points.push_back(not_shared_point);
+  // std::cout << "d: " << not_shared_point << std::endl;
+
+  // // print the polygon points
+  // for (auto p : polygon_points) {
+  //   std::cout << "polygon_points: " << p << std::endl;
+  // }
+
+  return CGAL::is_convex_2(polygon_points.begin(), polygon_points.end());
+}
+
 bool test_the_flip(CDT& cdt, Point v1, Point v2) {
   CDT copy(cdt);
-  for (CDT::Finite_edges_iterator e = copy.finite_edges_begin(); e != copy.finite_edges_end(); e++) {
+  for (const Edge& e : copy.finite_edges()) {
 
     // Get the edge points
-    CDT::Face_handle f1 = e->first; 
-    int i = e->second; 
+    CDT::Face_handle f1 = e.first; 
+    int i = e.second; 
     CDT::Face_handle f2 = f1->neighbor(i);
     auto p1 = f1->vertex((i+1)%3);
     auto p2 = f1->vertex((i+2)%3);
     Point p1_point = p1->point();
     Point p2_point = p2->point();
 
+    // Check if the edge is the one we are looking for
     if (!(v1.x() == p1_point.x() && v1.y() == p1_point.y() && v2.x() == p2_point.x() && v2.y() == p2_point.y())) {
       continue;
     }
-    else 
-      // std::cout << "Found the edge: (" << p1->point() << ") - (" << p2->point() << ")" << std::endl;
+
+    if (!is_convex(copy, f1, f2)) {
+      return false;
+    };
+
+    //
+    // if (copy.is_constrained(e)) {
+    //   std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
+    // }
+    //
 
     // Check if the edge is flippable
-    if (!copy.my_is_flippable(*e)) return false;
+    if (!copy.my_is_flippable(e)) {
+      return false;
+    }
+    // std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " " << e.first->vertex((e.second+2)%3)->point() << std::endl;
+
 
     // Check if the triangles formed by the edge have obtuse angles
     int obt = 0;
@@ -210,6 +317,9 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
 
     // If triangles have obtuse angles, make the flip
     if (obt) {
+      std::cout << "MPIKA!\n";
+      std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
+      std::cout << "SE LIGO VGAINO\n";
       // Make the flip
       copy.tds().flip(f1, i);
 
@@ -232,15 +342,22 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
 
 void make_flips(CDT& cdt) {
   int count = 0;
-  for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
+  for (const Edge& e : cdt.finite_edges()) {
     
+    //////
+    if (cdt.is_constrained(e)) {
+      std::cout << "2. Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
+    }
+    /////
+
     // Get the edge points
-    CDT::Face_handle f1 = e->first; 
-    int i = e->second; 
+    CDT::Face_handle f1 = e.first;
+    int i = e.second;
     CDT::Face_handle f2 = f1->neighbor(i);
     auto v1 = f1->vertex((i+1)%3);
     auto v2 = f1->vertex((i+2)%3);
     // std::cout << "\nEdge points: (" << v1->point() << ") - (" << v2->point() << ")" << std::endl;
+
 
     // Test is the flip possible or if it is worth doing
     bool do_flip = test_the_flip(cdt, v1->point(), v2->point());
@@ -398,17 +515,17 @@ bool point_part_of_contrained_edge(CDT& cdt, Point p) {
 }
 
 // If two triangles are mergable
-bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge shared_edge) {
+bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge) {
   
   // If the neighbor is not obtused or their shared edge is constrained return false
   if (!has_obtuse_angle(neigh) || cdt.is_constrained(shared_edge))
     return false;
 
   // Get the points of the shared_edge
-  CDT::Face_handle face = shared_edge.first;
+  CDT::Face_handle face1 = shared_edge.first;
   int index = shared_edge.second;
-  Point edge_point1 = face->vertex((index + 1) % 3)->point();
-  Point edge_point2 = face->vertex((index + 2) % 3)->point();
+  Point edge_point1 = face1->vertex((index + 1) % 3)->point();
+  Point edge_point2 = face1->vertex((index + 2) % 3)->point();
 
   // If both of the points of the shared_edge are part of a constrained edge the triangles are not mergable
   if (point_part_of_contrained_edge(cdt, edge_point1) && point_part_of_contrained_edge(cdt, edge_point2))
@@ -501,6 +618,8 @@ bool is_convex_polygon(const std::vector<Point>& points) {
   return CGAL::is_convex_2(points.begin(), points.end());
 }
 
+
+
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 
   CDT copy(cdt);
@@ -521,68 +640,113 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   Edge e3 = get_shared_edge(copy, f1, neigh3);
   // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
 
-
   // Check if the neighbors are obtuse and the shared edges are not constrained
   bool mergable_neigh1 = are_mergable(copy, f1, neigh1, e1);
   bool mergable_neigh2 = are_mergable(copy, f1, neigh2, e2);
   bool mergable_neigh3 = are_mergable(copy, f1, neigh3, e3);
 
-  // If a neighbot "mergable", remove the shared edge with the proper steps
+  std::cout << "Mergable -> neigh1: " << mergable_neigh1 << " | neigh2: " << mergable_neigh2 << " | neigh3: " << mergable_neigh3 << std::endl;
+  
+  // Check if polygon convex
+  CDT polygon_cdt;
+  // face f1
+  for (int i = 0; i < 3; ++i) {
+    Point temp_p1 = f1->vertex((i + 1) % 3)->point();
+    Point temp_p2 = f1->vertex((i + 2) % 3)->point();
+    polygon_cdt.insert_constraint(temp_p1, temp_p2);
+  }
+
+  // If a neighbor "mergable", remove the shared edge with the proper steps
   std::vector<Point> removed_points;
   std::vector<Edge> edges_made_constrained;
-  if (mergable_neigh1)
-    remove_points(copy, e1, removed_points);
-  if (mergable_neigh2)
-    remove_points(copy, e2, removed_points);
-  if (mergable_neigh3)
-    remove_points(copy, e3, removed_points);
+  std::vector<CDT::Face_handle> faces;
+  if (mergable_neigh1) {
+    // To check convexity later
+    for (int i = 0; i < 3; ++i) {
+      Point temp_p1 = neigh1->vertex((i + 1) % 3)->point();
+      Point temp_p2 = neigh1->vertex((i + 2) % 3)->point();
+      polygon_cdt.insert_constraint(temp_p1, temp_p2);
+    }
 
+    // Remove points
+    remove_points(copy, e1, removed_points);
+    faces.push_back(neigh1);
+  }
+  if (mergable_neigh2) {
+    // To check convexity later
+    for (int i = 0; i < 3; ++i) {
+      Point temp_p1 = neigh2->vertex((i + 1) % 3)->point();
+      Point temp_p2 = neigh2->vertex((i + 2) % 3)->point();
+      polygon_cdt.insert_constraint(temp_p1, temp_p2);
+    }
+
+    // Remove points
+    remove_points(copy, e2, removed_points);
+    faces.push_back(neigh2);
+  }
+  if (mergable_neigh3) {
+    // To check convexity later
+    for (int i = 0; i < 3; ++i) {
+      Point temp_p1 = neigh3->vertex((i + 1) % 3)->point();
+      Point temp_p2 = neigh3->vertex((i + 2) % 3)->point();
+      polygon_cdt.insert_constraint(temp_p1, temp_p2);
+    }
+
+    // Remove points
+    remove_points(copy, e3, removed_points);
+    faces.push_back(neigh3);
+  }
+
+  // CGAL::draw(polygon_cdt);
+
+
+  ///////////////////////
   // // If the polygon is convex don't merge anything
   // std::vector<Point> points = {
   //     // Point(0, 0), Point(1, 0), Point(1, 1), Point(0.5, 1.5), Point(0, 1), Point(-0.5, 0.5)
   // };
   // if (is_convex_polygon(points))
   //   return count_obtuse_triangles(cdt);
+  /////////////////////////
+
+
+  // // Add the centroid (or mean point) of the polygon
+  // std::vector<Point> points = {
+  //   f1->vertex(0)->point(), f1->vertex(1)->point(), f1->vertex(2)->point()
+  // };
+  // if (mergable_neigh1) {
+  //   points.push_back(neigh1->vertex(0)->point());
+  //   points.push_back(neigh1->vertex(1)->point());
+  //   points.push_back(neigh1->vertex(2)->point());
+  // }
+  // if (mergable_neigh2) {
+  //   points.push_back(neigh2->vertex(0)->point());
+  //   points.push_back(neigh2->vertex(1)->point());
+  //   points.push_back(neigh2->vertex(2)->point());
+  // }
+  // if (mergable_neigh3) {
+  //   points.push_back(neigh3->vertex(0)->point());
+  //   points.push_back(neigh3->vertex(1)->point());
+  //   points.push_back(neigh3->vertex(2)->point());
+  // }
+
+  // K::FT mean_x = 0;
+  // for (const auto& point : points) {
+  //   mean_x += point.x();
+  // }
+  // K::FT mean_y = 0;
+  // for (const auto& point : points) {
+  //   mean_y += point.y();
+  // }
+  // Point centroid (mean_x / points.size(), mean_y / points.size());
 
 
 
-  // Add the centroid (or mean point) of the polygon
-  std::vector<Point> points = {
-    f1->vertex(0)->point(), f1->vertex(1)->point(), f1->vertex(2)->point()
-  };
-  if (mergable_neigh1) {
-    points.push_back(neigh1->vertex(0)->point());
-    points.push_back(neigh1->vertex(1)->point());
-    points.push_back(neigh1->vertex(2)->point());
-  }
-  if (mergable_neigh2) {
-    points.push_back(neigh2->vertex(0)->point());
-    points.push_back(neigh2->vertex(1)->point());
-    points.push_back(neigh2->vertex(2)->point());
-  }
-  if (mergable_neigh3) {
-    points.push_back(neigh3->vertex(0)->point());
-    points.push_back(neigh3->vertex(1)->point());
-    points.push_back(neigh3->vertex(2)->point());
-  }
-
-  K::FT mean_x = 0;
-  for (const auto& point : points) {
-    mean_x += point.x();
-  }
-  K::FT mean_y = 0;
-  for (const auto& point : points) {
-    mean_y += point.y();
-  }
-  Point centroid (mean_x / points.size(), mean_y / points.size());
-
-
-
-  for (const auto& vertex : f1) {
-    points.push_back(vertex->point());
-  }
-  for (CDT::Finite_vertices_iterator v = copy.finite_vertices_begin(); v != copy.finite_vertices_end(); v++) {
-  }
+  // for (const auto& vertex : f1) {
+  //   points.push_back(vertex->point());
+  // }
+  // for (CDT::Finite_vertices_iterator v = copy.finite_vertices_begin(); v != copy.finite_vertices_end(); v++) {
+  // }
 
 
 
@@ -629,7 +793,22 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-void steiner_insertion(CDT& cdt) {
+bool is_triangle_inside_region_boundary(Polygon_2& region_boundary_polygon, CDT::Face_handle f1) {
+
+  // Get the vertices of the triangle
+  Point p1 = f1->vertex(0)->point();
+  Point p2 = f1->vertex(1)->point();
+  Point p3 = f1->vertex(2)->point();
+
+  // Get the centroid of the triangle
+  Point centroid = CGAL::centroid(p1, p2, p3);
+  if (CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), centroid) == CGAL::ON_BOUNDED_SIDE) {
+    return true;
+  }
+  return false;
+}
+
+void steiner_insertion(CDT& cdt, Polygon_2& region_boundary_polygon) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
   std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
   Point a;
@@ -637,6 +816,9 @@ void steiner_insertion(CDT& cdt) {
 
   // Iterate the faces of the cdt
   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
+
+    if (!is_triangle_inside_region_boundary(region_boundary_polygon, f))
+      continue;
 
     if (has_obtuse_angle(f)) {
       
@@ -758,13 +940,25 @@ std::list<std::pair<int, int>> get_additional_constraints(boost::property_tree::
   return additional_constraints;
 }
 
+Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vector<Point> points) {
+  
+  // Create region_boundary_polygon polygon
+  Polygon_2 region_boundary_polygon;
+  for (int temp : region_boundary) {
+    std::cout << "temp: " << temp << std::endl;
+    region_boundary_polygon.push_back(points[temp]);
+  }
+
+  return region_boundary_polygon;
+}
+
 int main() {
   
   // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
   pt::read_json("input.json", root); // read the json file
-  // pt::read_json("test_instances/instance_test_4.json", root); // read the json file
+  // pt::read_json("test_instances/instance_test_2.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -793,16 +987,26 @@ int main() {
     cdt.insert_constraint(points[constraint.first], points[constraint.second]);
   }
 
-  
+  region_boundary_polygon = make_region_boundary_polygon(region_boundary, points);
+  for (auto it = region_boundary_polygon.vertices_begin(); it != region_boundary_polygon.vertices_end(); ++it) {
+    std::cout << "(" << it->x() << ", " << it->y() << ")" << std::endl;
+  }
 
-  // // Print all edges
-  // for (CDT::Finite_edges_iterator eit = cdt.finite_edges_begin(); eit != cdt.finite_edges_end(); eit++) {
-  //   std::cout << "Edge: " << eit->first->vertex((eit->second+1)%3)->point() << " - " << eit->first->vertex((eit->second+2)%3)->point() << std::endl;
-  // }
+  CGAL::draw(cdt);
+
 
   // Count the obtuse triangles
   std::cout << "Number of obtuse triangles before the flips: " << count_obtuse_triangles(cdt) << std::endl;
   
+
+  //////
+  for (const Edge& e : cdt.finite_edges()) {
+    if (cdt.is_constrained(e)) {
+      std::cout << "1. Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
+    }
+  }
+  //////
+
   // Make flips
   make_flips(cdt);
 
@@ -811,7 +1015,7 @@ int main() {
   // Insert Steiner points
   std::cout << "\n\n\nSteiner points insertion:\n";
   for (int i = 0 ; i < 1 ; i++) {
-    steiner_insertion(cdt);
+    steiner_insertion(cdt, region_boundary_polygon);
   }
 
   // Count the obtuse triangles

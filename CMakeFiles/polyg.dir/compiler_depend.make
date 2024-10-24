@@ -3067,8 +3067,43 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
   /usr/local/include/CGAL/Static_filtered_predicate.h \
   /usr/local/include/CGAL/Epic_converter.h \
   /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_2.h \
-  /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_3.h
+  /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_3.h \
+  /usr/local/include/CGAL/convex_hull_2.h \
+  /usr/local/include/CGAL/license/Convex_hull_2.h \
+  /usr/local/include/CGAL/convex_hull_traits_2.h \
+  /usr/local/include/CGAL/distance_predicates_2.h \
+  /usr/local/include/CGAL/ch_akl_toussaint.h \
+  /usr/local/include/CGAL/Convex_hull_2/ch_akl_toussaint_impl.h \
+  /usr/local/include/CGAL/convexity_check_2.h \
+  /usr/local/include/CGAL/Convex_hull_2/convexity_check_2_impl.h \
+  /usr/local/include/CGAL/ch_selected_extreme_points_2.h \
+  /usr/local/include/CGAL/Convex_hull_2/ch_selected_extreme_points_2_impl.h \
+  /usr/local/include/CGAL/ch_graham_andrew.h \
+  /usr/local/include/CGAL/Convex_hull_2/ch_graham_andrew_impl.h \
+  /usr/local/include/CGAL/IO/Tee_for_output_iterator.h \
+  /usr/local/include/CGAL/ch_bykat.h \
+  /usr/local/include/CGAL/Convex_hull_2/ch_bykat_impl.h
 
+
+/usr/local/include/CGAL/Convex_hull_2/ch_bykat_impl.h:
+
+/usr/local/include/CGAL/IO/Tee_for_output_iterator.h:
+
+/usr/local/include/CGAL/Convex_hull_2/ch_graham_andrew_impl.h:
+
+/usr/local/include/CGAL/Convex_hull_2/ch_selected_extreme_points_2_impl.h:
+
+/usr/local/include/CGAL/ch_selected_extreme_points_2.h:
+
+/usr/local/include/CGAL/Convex_hull_2/convexity_check_2_impl.h:
+
+/usr/local/include/CGAL/convexity_check_2.h:
+
+/usr/local/include/CGAL/ch_akl_toussaint.h:
+
+/usr/local/include/CGAL/convex_hull_traits_2.h:
+
+/usr/local/include/CGAL/convex_hull_2.h:
 
 /usr/local/include/CGAL/Filtered_kernel/Cartesian_coordinate_iterator_2.h:
 
@@ -4278,6 +4313,8 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/Intersections_3/Triangle_3_Triangle_3.h:
 
+/usr/local/include/CGAL/license/Convex_hull_2.h:
+
 /usr/local/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:
 
 /usr/local/include/boost/predef/architecture/z.h:
@@ -4297,6 +4334,8 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qimage.h:
 
 /usr/local/include/boost/smart_ptr/detail/sp_typeinfo_.hpp:
+
+/usr/local/include/CGAL/ch_bykat.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
@@ -4469,6 +4508,8 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/container/detail/is_pair.hpp:
 
 /usr/local/include/boost/predef/make.h:
+
+/usr/local/include/CGAL/Convex_hull_2/ch_akl_toussaint_impl.h:
 
 /usr/local/include/boost/utility/swap.hpp:
 
@@ -6428,6 +6469,8 @@ ex.cpp:
 
 /usr/local/include/boost/mpl/aux_/integral_wrapper.hpp:
 
+/usr/local/include/CGAL/distance_predicates_2.h:
+
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/QImage:
@@ -7009,6 +7052,8 @@ ex.cpp:
 /usr/local/include/boost/predef/platform/windows_phone.h:
 
 /usr/local/include/boost/predef/platform/windows_runtime.h:
+
+/usr/local/include/CGAL/ch_graham_andrew.h:
 
 /usr/local/include/boost/predef/architecture/alpha.h:
 
