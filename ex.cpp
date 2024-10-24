@@ -483,15 +483,17 @@ Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
 // Check if a point is part of a constraint edge
 bool point_part_of_contrained_edge(CDT& cdt, Point p) {
   for (const Edge& e : cdt.finite_edges()) {
-    CDT::Face_handle face = e.first;
-    int index = e.second;
-    Point edge_point1 = face->vertex((index + 1) % 3)->point();
-    Point edge_point2 = face->vertex((index + 2) % 3)->point();
+    if (cdt.is_constrained(e)) {
+      CDT::Face_handle face = e.first;
+      int index = e.second;
+      Point edge_point1 = face->vertex((index + 1) % 3)->point();
+      Point edge_point2 = face->vertex((index + 2) % 3)->point();
 
-    if (edge_point1 == p || edge_point2 == p)
-      return true;
+      if ((edge_point1.x() == p.x() && edge_point1.y() == p.y()) 
+        || (edge_point2.x() == p.x() && edge_point2.y() == p.y()))
+        return true;
+    }
   }
-
   return false;
 }
 
@@ -515,82 +517,34 @@ bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge&
   return true;
 }
 
-void remove_points(CDT& cdt, Edge e, std::vector<Point>& removed_points) {
+void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points) {
   
-  // Get the points of the edge
-  CDT::Vertex_handle v1 = e.first->vertex((e.second+1)%3);
-  CDT::Vertex_handle v2 = e.first->vertex((e.second+2)%3);
-  Point p1 = v1->point();
-  Point p2 = v2->point();
-
-  // Check which point is removable
-  bool p1_removable = !point_part_of_contrained_edge(cdt, p1);
-  bool p2_removable = !point_part_of_contrained_edge(cdt, p2);
-
-  if (p1_removable) {
-    removed_points.push_back(p1);
-    cdt.remove(v1);
-
-  }
-  if (p2_removable) {
-    removed_points.push_back(p2);
-    cdt.remove(v2);
-
+  // Remove the points
+  for (CDT::Vertex_handle v : to_remove_points) {
+    removed_points.push_back(v->point()); 
+    cdt.remove(v);
   }
 
 
-  // // Check if the points are part of a constraint edge
-  // bool p1_constrained = false;
-  // bool p2_constrained = false;
-  // std::vector<Edge> edges_with_p1;
-  // std::vector<Edge> edges_with_p2;
-  // for (const Edge& e : cdt.finite_edges()) {
-  //   CDT::Face_handle face = e.first;
-  //   int index = e.second;
-  //   Point edge_point1 = face->vertex((index + 1) % 3)->point();
-  //   Point edge_point2 = face->vertex((index + 2) % 3)->point();
+  // // Get the points of the edge
+  // CDT::Vertex_handle v1 = e.first->vertex((e.second+1)%3);
+  // CDT::Vertex_handle v2 = e.first->vertex((e.second+2)%3);
+  // Point p1 = v1->point();
+  // Point p2 = v2->point();
 
-  //     if (edge_point1 == p1 || edge_point2 == p1) {
-  //       edges_with_p1.push_back(e);
-  //       if (cdt.is_constrained(e)) {
-  //         p1_constrained = true;
-  //       }
-  //     }
-  //     if (edge_point1 == p2 || edge_point2 == p2) {
-  //       edges_with_p2.push_back(e);
-  //       if (cdt.is_constrained(e)) {
-  //         p2_constrained = true;
-  //       }
-  //     }
-  // }
-
-  // // Remove points that are not part of a constraint edge
-  // if (!p1_constrained) {
-
-  //   // Remove the points
-  //   removed_points.push_back(p1);
-  //   cdt.remove(v1);
-
-  //   // Make the edges that the removed point was part of constrained
-  //   for (const Edge& e : edges_with_p1) {
-  //     if (!cdt.is_constrained(e)) {
-  //       edges_made_constrained.push_back(e);
-  //       cdt.insert_constraint(e.first->vertex((e.second+1)%3)->point(), e.first->vertex((e.second+2)%3)->point());
-  //     }
+  // // Check if points is already removed
+  // if (!(std::find(removed_points.begin(), removed_points.end(), p1) != removed_points.end())) {
+  //   bool p1_removable = !point_part_of_contrained_edge(cdt, p1);
+  //   if (p1_removable) {
+  //     removed_points.push_back(p1);
+  //     cdt.remove(v1);
   //   }
   // }
-  // if (!p2_constrained) {
-
-  //   // Remove the points
-  //   removed_points.push_back(p2);
-  //   cdt.remove(v2);
-
-  //   // Make the edges that the removed point was part of constrained
-  //   for (const Edge& e : edges_with_p2) {
-  //     if (!cdt.is_constrained(e)) {
-  //       edges_made_constrained.push_back(e);
-  //       cdt.insert_constraint(e.first->vertex((e.second+1)%3)->point(), e.first->vertex((e.second+2)%3)->point());
-  //     }
+  // if (!(std::find(removed_points.begin(), removed_points.end(), p2) != removed_points.end())) {
+  //   bool p2_removable = !point_part_of_contrained_edge(cdt, p2);
+  //   if (p2_removable) {
+  //     removed_points.push_back(p2);
+  //     cdt.remove(v2);
   //   }
   // }
 }
@@ -598,7 +552,6 @@ void remove_points(CDT& cdt, Edge e, std::vector<Point>& removed_points) {
 bool is_convex_polygon(const std::vector<Point>& points) {
   return CGAL::is_convex_2(points.begin(), points.end());
 }
-
 
 
 int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
@@ -621,14 +574,7 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   Edge e3 = get_shared_edge(copy, f1, neigh3);
   // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
 
-  // Check if the neighbors are obtuse and the shared edges are not constrained
-  bool mergable_neigh1 = are_mergable(copy, f1, neigh1, e1);
-  bool mergable_neigh2 = are_mergable(copy, f1, neigh2, e2);
-  bool mergable_neigh3 = are_mergable(copy, f1, neigh3, e3);
-
-  std::cout << "Mergable -> neigh1: " << mergable_neigh1 << " | neigh2: " << mergable_neigh2 << " | neigh3: " << mergable_neigh3 << std::endl;
-  
-  // Check if polygon convex
+  // To check if polygon convex
   CDT polygon_cdt;
   // face f1
   for (int i = 0; i < 3; ++i) {
@@ -637,8 +583,20 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     polygon_cdt.insert_constraint(temp_p1, temp_p2);
   }
 
+
+  // Check if the neighbors are obtuse and the shared edges are not constrained
+  bool mergable_neigh1 = are_mergable(copy, f1, neigh1, e1);
+  bool mergable_neigh2 = are_mergable(copy, f1, neigh2, e2);
+  bool mergable_neigh3 = are_mergable(copy, f1, neigh3, e3);
+
+  std::cout << "Mergable -> neigh1: " << mergable_neigh1 << " | neigh2: " << mergable_neigh2 << " | neigh3: " << mergable_neigh3 << std::endl;
+  
+  if (!mergable_neigh1 && !mergable_neigh2 && !mergable_neigh3) {
+    return count_obtuse_triangles(cdt);
+  }
+
   // If a neighbor "mergable", remove the shared edge with the proper steps
-  std::vector<Point> removed_points;
+  std::set<CDT::Vertex_handle> to_remove_points;
   std::vector<Edge> edges_made_constrained;
   std::vector<CDT::Face_handle> faces;
   if (mergable_neigh1) {
@@ -650,7 +608,13 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Remove points
-    remove_points(copy, e1, removed_points);
+    CDT::Vertex_handle v1 = e1.first->vertex((e1.second+1)%3);
+    CDT::Vertex_handle v2 = e1.first->vertex((e1.second+2)%3);
+    Point a = v1->point();
+    Point b = v2->point();
+    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
+    // remove_points(copy, e1, removed_points);
     faces.push_back(neigh1);
   }
   if (mergable_neigh2) {
@@ -662,7 +626,13 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Remove points
-    remove_points(copy, e2, removed_points);
+    CDT::Vertex_handle v1 = e2.first->vertex((e2.second+1)%3);
+    CDT::Vertex_handle v2 = e2.first->vertex((e2.second+2)%3);
+    Point a = v1->point();
+    Point b = v2->point();
+    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
+    // remove_points(copy, e2, removed_points);
     faces.push_back(neigh2);
   }
   if (mergable_neigh3) {
@@ -674,53 +644,80 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Remove points
-    remove_points(copy, e3, removed_points);
+    CDT::Vertex_handle v1 = e3.first->vertex((e3.second+1)%3);
+    CDT::Vertex_handle v2 = e3.first->vertex((e3.second+2)%3);
+    Point a = v1->point();
+    Point b = v2->point();
+    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
+    // remove_points(copy, e3, removed_points);
     faces.push_back(neigh3);
   }
 
-  // CGAL::draw(polygon_cdt);
+  // Print the removed_points
+  for (auto v : to_remove_points) {
+    std::cout << "to_remove_points: " << v->point() << std::endl;
+  }
+
+  std::cout << "Printing polygon cdt to check for convexity..." << std::endl;
+  CGAL::draw(polygon_cdt);
 
 
-  ///////////////////////
-  // // If the polygon is convex don't merge anything
-  // std::vector<Point> points = {
-  //     // Point(0, 0), Point(1, 0), Point(1, 1), Point(0.5, 1.5), Point(0, 1), Point(-0.5, 0.5)
-  // };
-  // if (is_convex_polygon(points))
-  //   return count_obtuse_triangles(cdt);
-  /////////////////////////
+
+  // Check if the polygon is convex:
+  // Iterate over the edges of the polygon_cdt
+  // if there exist edges that are not constrained,
+  // the polygon is not convex
+  for (const Edge& e : polygon_cdt.finite_edges()) {
+    if (!polygon_cdt.is_constrained(e)) {
+      return count_obtuse_triangles(cdt);
+    }
+  }
+
+  CGAL::draw(polygon_cdt);
+
+  // Remove the points
+  std::vector<Point> removed_points;
+  remove_points(copy, to_remove_points, removed_points);
 
 
-  // // Add the centroid (or mean point) of the polygon
-  // std::vector<Point> points = {
-  //   f1->vertex(0)->point(), f1->vertex(1)->point(), f1->vertex(2)->point()
-  // };
-  // if (mergable_neigh1) {
-  //   points.push_back(neigh1->vertex(0)->point());
-  //   points.push_back(neigh1->vertex(1)->point());
-  //   points.push_back(neigh1->vertex(2)->point());
-  // }
-  // if (mergable_neigh2) {
-  //   points.push_back(neigh2->vertex(0)->point());
-  //   points.push_back(neigh2->vertex(1)->point());
-  //   points.push_back(neigh2->vertex(2)->point());
-  // }
-  // if (mergable_neigh3) {
-  //   points.push_back(neigh3->vertex(0)->point());
-  //   points.push_back(neigh3->vertex(1)->point());
-  //   points.push_back(neigh3->vertex(2)->point());
-  // }
+  CGAL::draw(copy);
 
-  // K::FT mean_x = 0;
-  // for (const auto& point : points) {
-  //   mean_x += point.x();
-  // }
-  // K::FT mean_y = 0;
-  // for (const auto& point : points) {
-  //   mean_y += point.y();
-  // }
-  // Point centroid (mean_x / points.size(), mean_y / points.size());
 
+  // Add the centroid (or mean point) of the polygon
+  std::vector<Point> points = {
+    p1, p2, p3
+  };
+  if (mergable_neigh1) {
+    points.push_back(neigh1->vertex(0)->point());
+    points.push_back(neigh1->vertex(1)->point());
+    points.push_back(neigh1->vertex(2)->point());
+  }
+  if (mergable_neigh2) {
+    points.push_back(neigh2->vertex(0)->point());
+    points.push_back(neigh2->vertex(1)->point());
+    points.push_back(neigh2->vertex(2)->point());
+  }
+  if (mergable_neigh3) {
+    points.push_back(neigh3->vertex(0)->point());
+    points.push_back(neigh3->vertex(1)->point());
+    points.push_back(neigh3->vertex(2)->point());
+  }
+
+  K::FT mean_x = 0;
+  K::FT mean_y = 0;
+  for (const auto& point : points) {
+    mean_x += point.x();
+    mean_y += point.y();
+  }
+  K::FT points_size = points.size();
+  mean_x /= points_size;
+  mean_y /= points_size;
+  Point centroid(mean_x, mean_y);
+  std::cout << "centroid: " << centroid << std::endl;
+  copy.insert_no_flip(centroid);
+  
+  CGAL::draw(copy);
 
 
   // for (const auto& vertex : f1) {
@@ -939,7 +936,7 @@ int main() {
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
   // pt::read_json("input.json", root); // read the json file
-  pt::read_json("test_instances/instance_test_2.json", root); // read the json file
+  pt::read_json("test_instances/instance_test_14.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
