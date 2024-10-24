@@ -293,22 +293,15 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
       continue;
     }
 
+    // Check if the polygon created is convex
     if (!is_convex(copy, f1, f2)) {
       return false;
     };
-
-    //
-    // if (copy.is_constrained(e)) {
-    //   std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
-    // }
-    //
 
     // Check if the edge is flippable
     if (!copy.my_is_flippable(e)) {
       return false;
     }
-    // std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " " << e.first->vertex((e.second+2)%3)->point() << std::endl;
-
 
     // Check if the triangles formed by the edge have obtuse angles
     int obt = 0;
@@ -317,9 +310,7 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
 
     // If triangles have obtuse angles, make the flip
     if (obt) {
-      std::cout << "MPIKA!\n";
-      std::cout << "Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
-      std::cout << "SE LIGO VGAINO\n";
+
       // Make the flip
       copy.tds().flip(f1, i);
 
@@ -343,12 +334,6 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
 void make_flips(CDT& cdt) {
   int count = 0;
   for (const Edge& e : cdt.finite_edges()) {
-    
-    //////
-    if (cdt.is_constrained(e)) {
-      std::cout << "2. Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
-    }
-    /////
 
     // Get the edge points
     CDT::Face_handle f1 = e.first;
@@ -356,13 +341,10 @@ void make_flips(CDT& cdt) {
     CDT::Face_handle f2 = f1->neighbor(i);
     auto v1 = f1->vertex((i+1)%3);
     auto v2 = f1->vertex((i+2)%3);
-    // std::cout << "\nEdge points: (" << v1->point() << ") - (" << v2->point() << ")" << std::endl;
 
 
     // Test is the flip possible or if it is worth doing
     bool do_flip = test_the_flip(cdt, v1->point(), v2->point());
-
-    // std::cout << "Now, we have " << count_obtuse_triangles(cdt) << " obtuse triangles\n";
 
     // If the flip is possible and worth it, do it
     if (do_flip) {
@@ -370,7 +352,6 @@ void make_flips(CDT& cdt) {
       count++;
     }
   }
-  // std::cout << "Made " << count << " total successful flips" << std::endl;
 }
 
 Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
@@ -957,8 +938,8 @@ int main() {
   // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
-  pt::read_json("input.json", root); // read the json file
-  // pt::read_json("test_instances/instance_test_2.json", root); // read the json file
+  // pt::read_json("input.json", root); // read the json file
+  pt::read_json("test_instances/instance_test_2.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -997,15 +978,6 @@ int main() {
 
   // Count the obtuse triangles
   std::cout << "Number of obtuse triangles before the flips: " << count_obtuse_triangles(cdt) << std::endl;
-  
-
-  //////
-  for (const Edge& e : cdt.finite_edges()) {
-    if (cdt.is_constrained(e)) {
-      std::cout << "1. Edge points: " << e.first->vertex((e.second+1)%3)->point() << " | " << e.first->vertex((e.second+2)%3)->point() << std::endl;
-    }
-  }
-  //////
 
   // Make flips
   make_flips(cdt);
