@@ -7,9 +7,11 @@
 #include <CGAL/draw_triangulation_2.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
+#include <CGAL/Constrained_triangulation_plus_2.h>
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/Polygon_2.h>
+// #include <CGAL/Constraint_id.h>
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS // optional in native ubuntu, removes a warning in wsl
 #ifndef CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
@@ -108,7 +110,8 @@ public:
 
 typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
 typedef CGAL:: Exact_predicates_tag Itag;
-typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+// typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+typedef CGAL::Constrained_triangulation_plus_2<Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
 typedef CGAL::Polygon_2<K> Polygon_2;
 
 // typedef K::Point_2 Point;
@@ -126,6 +129,17 @@ class obt_point {
     obt_point(int count, Point pt) {
       obt_count = count;
       insrt_pt = pt;
+    }
+};
+
+class obt_face {
+  public:
+    int obt_count;
+    CDT::Face_handle face;
+
+    obt_face(int count, CDT::Face_handle f) {
+      obt_count = count;
+      face = f;
     }
 };
 //
@@ -524,29 +538,6 @@ void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std
     removed_points.push_back(v->point()); 
     cdt.remove(v);
   }
-
-
-  // // Get the points of the edge
-  // CDT::Vertex_handle v1 = e.first->vertex((e.second+1)%3);
-  // CDT::Vertex_handle v2 = e.first->vertex((e.second+2)%3);
-  // Point p1 = v1->point();
-  // Point p2 = v2->point();
-
-  // // Check if points is already removed
-  // if (!(std::find(removed_points.begin(), removed_points.end(), p1) != removed_points.end())) {
-  //   bool p1_removable = !point_part_of_contrained_edge(cdt, p1);
-  //   if (p1_removable) {
-  //     removed_points.push_back(p1);
-  //     cdt.remove(v1);
-  //   }
-  // }
-  // if (!(std::find(removed_points.begin(), removed_points.end(), p2) != removed_points.end())) {
-  //   bool p2_removable = !point_part_of_contrained_edge(cdt, p2);
-  //   if (p2_removable) {
-  //     removed_points.push_back(p2);
-  //     cdt.remove(v2);
-  //   }
-  // }
 }
 
 bool is_convex_polygon(const std::vector<Point>& points) {
@@ -554,9 +545,10 @@ bool is_convex_polygon(const std::vector<Point>& points) {
 }
 
 
-int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
+obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 
-  CDT copy(cdt);
+  // CDT copy(cdt);
+  obt_face ret(-1, f1);
 
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
@@ -569,14 +561,12 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   CDT::Face_handle neigh3 = f1->neighbor(2);
 
   // Get the shared edges of the triangle
-  Edge e1 = get_shared_edge(copy, f1, neigh1);
-  Edge e2 = get_shared_edge(copy, f1, neigh2);
-  Edge e3 = get_shared_edge(copy, f1, neigh3);
-  // std::cout << "2. Edge: " << e1.first->vertex((e1.second+1)%3)->point() << " - " << e1.first->vertex((e1.second+2)%3)->point() << std::endl;
+  Edge e1 = get_shared_edge(cdt, f1, neigh1);
+  Edge e2 = get_shared_edge(cdt, f1, neigh2);
+  Edge e3 = get_shared_edge(cdt, f1, neigh3);
 
-  // To check if polygon convex
+  // To check if polygon convex later
   CDT polygon_cdt;
-  // face f1
   for (int i = 0; i < 3; ++i) {
     Point temp_p1 = f1->vertex((i + 1) % 3)->point();
     Point temp_p2 = f1->vertex((i + 2) % 3)->point();
@@ -584,20 +574,19 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   }
 
 
-  // Check if the neighbors are obtuse and the shared edges are not constrained
-  bool mergable_neigh1 = are_mergable(copy, f1, neigh1, e1);
-  bool mergable_neigh2 = are_mergable(copy, f1, neigh2, e2);
-  bool mergable_neigh3 = are_mergable(copy, f1, neigh3, e3);
+  // Check if any of the neighbors are mergable
+  bool mergable_neigh1 = are_mergable(cdt, f1, neigh1, e1);
+  bool mergable_neigh2 = are_mergable(cdt, f1, neigh2, e2);
+  bool mergable_neigh3 = are_mergable(cdt, f1, neigh3, e3);  
 
-  std::cout << "Mergable -> neigh1: " << mergable_neigh1 << " | neigh2: " << mergable_neigh2 << " | neigh3: " << mergable_neigh3 << std::endl;
-  
+  // If none of the neighbors are mergable, return
   if (!mergable_neigh1 && !mergable_neigh2 && !mergable_neigh3) {
-    return count_obtuse_triangles(cdt);
+    return ret;
   }
 
-  // If a neighbor "mergable", remove the shared edge with the proper steps
+  // If a neighbor is mergable, prepare the points to be removed
   std::set<CDT::Vertex_handle> to_remove_points;
-  std::vector<Edge> edges_made_constrained;
+  std::vector<std::pair<Point, Point>> edges_made_constrained;
   std::vector<CDT::Face_handle> faces;
   if (mergable_neigh1) {
     // To check convexity later
@@ -607,14 +596,14 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
       polygon_cdt.insert_constraint(temp_p1, temp_p2);
     }
 
-    // Remove points
+    // Mark points to be removed
     CDT::Vertex_handle v1 = e1.first->vertex((e1.second+1)%3);
     CDT::Vertex_handle v2 = e1.first->vertex((e1.second+2)%3);
     Point a = v1->point();
     Point b = v2->point();
-    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
-    // remove_points(copy, e1, removed_points);
+    edges_made_constrained.push_back(std::make_pair(a, b));
+    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
     faces.push_back(neigh1);
   }
   if (mergable_neigh2) {
@@ -625,14 +614,14 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
       polygon_cdt.insert_constraint(temp_p1, temp_p2);
     }
 
-    // Remove points
+    // Mark points to be removed
     CDT::Vertex_handle v1 = e2.first->vertex((e2.second+1)%3);
     CDT::Vertex_handle v2 = e2.first->vertex((e2.second+2)%3);
     Point a = v1->point();
     Point b = v2->point();
-    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
-    // remove_points(copy, e2, removed_points);
+    edges_made_constrained.push_back(std::make_pair(a, b));
+    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
     faces.push_back(neigh2);
   }
   if (mergable_neigh3) {
@@ -643,25 +632,25 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
       polygon_cdt.insert_constraint(temp_p1, temp_p2);
     }
 
-    // Remove points
+    // Mark points to be removed
     CDT::Vertex_handle v1 = e3.first->vertex((e3.second+1)%3);
     CDT::Vertex_handle v2 = e3.first->vertex((e3.second+2)%3);
     Point a = v1->point();
     Point b = v2->point();
-    if(!point_part_of_contrained_edge(copy, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(copy, b)) to_remove_points.insert(v2);
-    // remove_points(copy, e3, removed_points);
+    edges_made_constrained.push_back(std::make_pair(a, b));
+    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
+    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
     faces.push_back(neigh3);
   }
 
-  // Print the removed_points
-  for (auto v : to_remove_points) {
-    std::cout << "to_remove_points: " << v->point() << std::endl;
+
+  // If to_remove_points is empty, return
+  if (to_remove_points.empty()) {
+    return ret;
   }
 
-  std::cout << "Printing polygon cdt to check for convexity..." << std::endl;
-  CGAL::draw(polygon_cdt);
 
+  // CGAL::draw(polygon_cdt);
 
 
   // Check if the polygon is convex:
@@ -670,18 +659,18 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   // the polygon is not convex
   for (const Edge& e : polygon_cdt.finite_edges()) {
     if (!polygon_cdt.is_constrained(e)) {
-      return count_obtuse_triangles(cdt);
+      return ret;
     }
   }
 
-  CGAL::draw(polygon_cdt);
+  // CGAL::draw(polygon_cdt);
 
   // Remove the points
   std::vector<Point> removed_points;
-  remove_points(copy, to_remove_points, removed_points);
+  remove_points(cdt, to_remove_points, removed_points);
 
 
-  CGAL::draw(copy);
+  // CGAL::draw(cdt);
 
 
   // Add the centroid (or mean point) of the polygon
@@ -715,27 +704,31 @@ int merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   mean_y /= points_size;
   Point centroid(mean_x, mean_y);
   std::cout << "centroid: " << centroid << std::endl;
-  copy.insert_no_flip(centroid);
+  cdt.insert_no_flip(centroid);
   
-  CGAL::draw(copy);
+  // CGAL::draw(cdt);
+
+  // Add the removed edge as a constrained edge
+  std::vector<CDT::Constraint_id> constraint_ids;
+  for (const auto& edge : edges_made_constrained) {
+    CDT::Constraint_id cid = cdt.insert_constraint(edge.first, edge.second);
+    constraint_ids.push_back(cid);
+  }
+
+  // CGAL::draw(cdt);
 
 
-  // for (const auto& vertex : f1) {
-  //   points.push_back(vertex->point());
-  // }
-  // for (CDT::Finite_vertices_iterator v = copy.finite_vertices_begin(); v != copy.finite_vertices_end(); v++) {
-  // }
+  // Remove the constraint edge
+  for (const auto& cid : constraint_ids) {
+    cdt.remove_constraint(cid);
+  }
+
+  // CGAL::draw(cdt);
 
 
 
-  // Point centroid = CGAL::centroid(a, b, c);
-
-
-
-  // Insert the removed 
-
-
-  return count_obtuse_triangles(copy);
+  ret.obt_count = count_obtuse_triangles(cdt);
+  return ret;
 }
 
 
@@ -790,7 +783,9 @@ void steiner_insertion(CDT& cdt, Polygon_2& region_boundary_polygon) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
   std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
   Point a;
+  CDT::Face_handle f1;
   obt_point best_steiner(9999, a);
+  obt_face of(9999, f1);
 
   // Iterate the faces of the cdt
   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
@@ -832,23 +827,28 @@ void steiner_insertion(CDT& cdt, Polygon_2& region_boundary_polygon) {
       //   best_steiner = calc_insert_inc;
       // }
 
-      // CDT copy4(cdt);
-      // // Insert the circumcenter if possible
-      // obt_point calc_insert_proj = insert_projection(copy4, f);
-      // if (best_steiner.obt_count > calc_insert_proj.obt_count) {
-      //   best_steiner = calc_insert_proj;
-      // }
+      CDT copy4(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_proj = insert_projection(copy4, f);
+      if (best_steiner.obt_count > calc_insert_proj.obt_count) {
+        best_steiner = calc_insert_proj;
+      }
 
       CDT copy5(cdt);
-      merge_obtuse(copy5, f);
+      obt_face temp = merge_obtuse(copy5, f);
+      if (temp.obt_count != -1 && temp.obt_count < of.obt_count) {
+        of = temp;
+      }
     }
   }
-  // if (best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
-  // CGAL::draw(cdt);
-  // std::cout << "largest edge midpoint: " << best_steiner.insrt_pt << std::endl;
-  cdt.insert_no_flip(best_steiner.insrt_pt);
-  // CGAL::draw(cdt);
-  // }
+  if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count < count_obtuse_triangles(cdt)) {
+    cdt.insert_no_flip(best_steiner.insrt_pt);
+    // na kanw kai insert to steiner_x_y
+  }
+  else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
+    merge_obtuse(cdt, of.face);
+    std::cout << "mpaino sto merge gia to kanoniko polygono!\n";
+  }
 
   std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
 }
