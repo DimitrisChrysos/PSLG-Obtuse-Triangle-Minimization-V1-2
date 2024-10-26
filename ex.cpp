@@ -793,6 +793,7 @@ void steiner_insertion(CDT& cdt) {
   }
   else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
     merge_obtuse(cdt, of.face);
+    std::cout << "dialeksa ti merge\n";
   }
 }
 
@@ -877,8 +878,8 @@ int main() {
   // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
-  pt::read_json("input.json", root); // read the json file
-  // pt::read_json("test_instances/instance_test_4.json", root); // read the json file
+  // pt::read_json("input.json", root); // read the json file
+  pt::read_json("test_instances/instance_test_4.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -919,15 +920,17 @@ int main() {
   std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
+  int steps = 0;
   for (int i = 0 ; i < 200 ; i++) {
     if (count_obtuse_triangles(cdt) == 0) {
+      steps = i;
       break;
     }
     steiner_insertion(cdt);
-    std::cout << "After Steriner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+    std::cout << "After Steiner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
 
-  std::cout << "After Steriner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
 
   // Draw the triangulation using CGAL's draw function
