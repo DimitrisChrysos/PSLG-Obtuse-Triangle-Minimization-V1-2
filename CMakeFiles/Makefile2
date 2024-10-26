@@ -65,12 +65,12 @@ CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAs
 # The main recursive "all" target.
 all: CMakeFiles/polyg.dir/all
 all: includes/utils/all
-all: includes/graphics/all
+all: includes/custom_cdt_class/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: includes/utils/preinstall
-preinstall: includes/graphics/preinstall
+preinstall: includes/custom_cdt_class/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
@@ -78,23 +78,23 @@ clean: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean
 clean: CMakeFiles/polyg.dir/clean
 clean: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean
 clean: includes/utils/clean
-clean: includes/graphics/clean
+clean: includes/custom_cdt_class/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory includes/graphics
+# Directory level rules for directory includes/custom_cdt_class
 
 # Recursive "all" directory target.
-includes/graphics/all: includes/graphics/CMakeFiles/graphics.dir/all
-.PHONY : includes/graphics/all
+includes/custom_cdt_class/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
+.PHONY : includes/custom_cdt_class/all
 
 # Recursive "preinstall" directory target.
-includes/graphics/preinstall:
-.PHONY : includes/graphics/preinstall
+includes/custom_cdt_class/preinstall:
+.PHONY : includes/custom_cdt_class/preinstall
 
 # Recursive "clean" directory target.
-includes/graphics/clean: includes/graphics/CMakeFiles/graphics.dir/clean
-.PHONY : includes/graphics/clean
+includes/custom_cdt_class/clean: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean
+.PHONY : includes/custom_cdt_class/clean
 
 #=============================================================================
 # Directory level rules for directory includes/utils
@@ -141,9 +141,9 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 # Target rules for target CMakeFiles/polyg.dir
 
 # All Build rule for target.
+CMakeFiles/polyg.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
 CMakeFiles/polyg.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
 CMakeFiles/polyg.dir/all: includes/utils/CMakeFiles/utils.dir/all
-CMakeFiles/polyg.dir/all: includes/graphics/CMakeFiles/graphics.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=15,16 "Built target polyg"
@@ -218,30 +218,30 @@ includes/utils/CMakeFiles/utils.dir/clean:
 .PHONY : includes/utils/CMakeFiles/utils.dir/clean
 
 #=============================================================================
-# Target rules for target includes/graphics/CMakeFiles/graphics.dir
+# Target rules for target includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir
 
 # All Build rule for target.
-includes/graphics/CMakeFiles/graphics.dir/all:
-	$(MAKE) $(MAKESILENT) -f includes/graphics/CMakeFiles/graphics.dir/build.make includes/graphics/CMakeFiles/graphics.dir/depend
-	$(MAKE) $(MAKESILENT) -f includes/graphics/CMakeFiles/graphics.dir/build.make includes/graphics/CMakeFiles/graphics.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=13,14 "Built target graphics"
-.PHONY : includes/graphics/CMakeFiles/graphics.dir/all
+includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all:
+	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/depend
+	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=13,14 "Built target custom_cdt_class"
+.PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
 
 # Build rule for subdir invocation for target.
-includes/graphics/CMakeFiles/graphics.dir/rule: cmake_check_build_system
+includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/graphics/CMakeFiles/graphics.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
-.PHONY : includes/graphics/CMakeFiles/graphics.dir/rule
+.PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
 
 # Convenience name for target.
-graphics: includes/graphics/CMakeFiles/graphics.dir/rule
-.PHONY : graphics
+custom_cdt_class: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
+.PHONY : custom_cdt_class
 
 # clean rule for target.
-includes/graphics/CMakeFiles/graphics.dir/clean:
-	$(MAKE) $(MAKESILENT) -f includes/graphics/CMakeFiles/graphics.dir/build.make includes/graphics/CMakeFiles/graphics.dir/clean
-.PHONY : includes/graphics/CMakeFiles/graphics.dir/clean
+includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean:
+	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean
+.PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

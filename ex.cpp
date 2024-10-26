@@ -1,6 +1,10 @@
+#include <boost/json/src.hpp>
+#include <boost/json.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <list>
 #include <vector>
@@ -11,7 +15,9 @@
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/Polygon_2.h>
-// #include <CGAL/Constraint_id.h>
+
+typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
+typedef CGAL:: Exact_predicates_tag Itag;
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS // optional in native ubuntu, removes a warning in wsl
 #ifndef CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
@@ -41,6 +47,9 @@ public:
     using typename Base::Vertex_handle;
 
     using typename Base::Locate_type;
+
+    std::vector<K::FT> steiner_x;
+    std::vector<K::FT> steiner_y;
 
 
 
@@ -90,6 +99,11 @@ public:
 
     }
 
+    void insert_steiner_x_y(K::FT x, K::FT y) {
+      this->steiner_x.push_back(x);
+      this->steiner_y.push_back(y);
+    }
+
     bool my_is_flippable(const typename Base::Edge& e) {
       Face_handle f1 = e.first; 
       int i = e.second; 
@@ -108,19 +122,14 @@ public:
 #endif // CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
 
 
-typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
-typedef CGAL:: Exact_predicates_tag Itag;
-// typedef Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag> CDT;
+
+
 typedef CGAL::Constrained_triangulation_plus_2<Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
 typedef CGAL::Polygon_2<K> Polygon_2;
-
-// typedef K::Point_2 Point;
 typedef K::Segment_2 Segment;
-
 typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
-//
 class obt_point {
   public:
     int obt_count;
@@ -142,7 +151,6 @@ class obt_face {
       face = f;
     }
 };
-//
 
 Polygon_2 region_boundary_polygon;
 bool is_triangle_inside_region_boundary(CDT::Face_handle f1);
@@ -669,6 +677,7 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   mean_y /= points_size;
   Point centroid(mean_x, mean_y);
   cdt.insert_no_flip(centroid);
+  cdt.insert_steiner_x_y(centroid.x(), centroid.y());
   
   // Add the removed edge as a constrained edge
   std::vector<CDT::Constraint_id> constraint_ids;
@@ -789,7 +798,7 @@ void steiner_insertion(CDT& cdt) {
   }
   if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
     cdt.insert_no_flip(best_steiner.insrt_pt);
-    // na kanw kai insert to steiner_x_y
+    cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
   }
   else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
     merge_obtuse(cdt, of.face);
@@ -879,7 +888,8 @@ int main() {
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
   // pt::read_json("input.json", root); // read the json file
-  pt::read_json("test_instances/instance_test_4.json", root); // read the json file
+  pt::read_json("test_instances/instance_test_14.json", root); // read the json file
+  // pt::read_json("tests/instance_2.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -913,6 +923,8 @@ int main() {
   // Count the obtuse triangles
   std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
+  CGAL::draw(cdt);
+
   // Make flips
   make_flips(cdt);
 
@@ -935,6 +947,130 @@ int main() {
 
   // Draw the triangulation using CGAL's draw function
   CGAL::draw(cdt);
+
+  boost::json::object root1;
+  root1["content_type"] = "CG_SHOP_2025_Solution";
+  root1["instance_uid"] = "some_instance_uid";
+
+  // JSON array to hold steiner_x values
+  boost::json::array steiner_x_json;
+  for (const auto& x : cdt.steiner_x) {
+    steiner_x_json.push_back(static_cast<double>(CGAL::to_double(x)));
+  }
+
+  // Add steiner_x JSON array to root object
+  root1["steiner_x"] = steiner_x_json;
+
+  // JSON array to hold steiner_x values
+  boost::json::array steiner_y_json;
+  for (const auto& y : cdt.steiner_y) {
+    steiner_y_json.push_back(static_cast<double>(CGAL::to_double(y)));
+  }
+
+  // Add steiner_x JSON array to root object
+  root1["steiner_y"] = steiner_y_json;
+
+  boost::json::array edges_array;
+
+  for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
+    CDT::Face_handle f1 = e->first;  // The face containing the edge
+    int edge_index = e->second;        // The local index of the edge within the face
+
+    // Get the two vertices of the edge
+    CDT::Vertex_handle v1 = f1->vertex((edge_index + 1) % 3);
+    CDT::Vertex_handle v2 = f1->vertex((edge_index + 2) % 3);
+
+    // Access the coordinates of the vertices
+    Point p1 = v1->point();
+    Point p2 = v2->point();
+
+    int ind_1;
+    int ind_2;
+    bool found_1 = false;
+    bool found_2 = false;
+
+    for (std::size_t i = 0; i < points.size(); ++i) {
+      if (p1.x() == points[i].x() && p1.y() == points[i].y()) {
+        ind_1 = i;
+        found_1 = true;
+      }
+      if (p2.x() == points[i].x() && p2.y() == points[i].y()) {
+        ind_2 = i;
+        found_2 = true;
+      }
+      if (found_1 && found_2) break;
+      // std::cout << "Point " << i << ": (" << points[i].x() << ", " << points[i].y() << ")" << std::endl;
+    }
+
+    if (!found_1 || !found_2) {
+      for (std::size_t i = 0; i < cdt.steiner_x.size(); ++i) {
+        if (p1.x() == cdt.steiner_x[i] && p1.y() == cdt.steiner_y[i]) {
+          ind_1 = points.size() + i;
+          found_1 = true;
+        }
+        if (p2.x() == cdt.steiner_x[i] && p2.y() == cdt.steiner_y[i]) {
+          ind_2 = points.size() + i;
+          found_2 = true;
+        }
+        if (found_1 && found_2) break;
+      }
+    }
+
+    boost::json::array edge_pair;
+    edge_pair.push_back(ind_1);
+    edge_pair.push_back(ind_2);
+
+    // Add the edge pair to the edges_array
+    edges_array.push_back(edge_pair);
+
+
+
+    // Add edges array to the root JSON structure
+  }
+  root1["edges"] = edges_array;
+
+  // Serialize the whole JSON object
+  std::string json_string = boost::json::serialize(root1);
+
+
+  std::string pretty_json;
+  int indent = 0;
+  char prev;
+  bool in_string = false;
+  bool first_edge = true; // Track the first edge for proper formatting
+
+  for (char ch : json_string) {
+    if (ch == '"') in_string = !in_string;
+    if (!in_string) {
+      if (ch == ',') {
+        if (prev == '"' || prev == ']') {
+          pretty_json += ch;
+          pretty_json += '\n';
+          prev = ch;
+          continue;
+        }
+      }
+      else if (ch == ':') {
+        pretty_json += ch;
+        pretty_json += ' ';
+        prev = ch;
+        continue;
+      }
+      else if (ch == '[') {
+        if (prev == '[') {
+          pretty_json += '\n';
+        }
+        pretty_json += '\t';
+      }
+    }
+    pretty_json += ch;
+    prev = ch;
+  }
+  
+  // Write to file
+  std::ofstream file("output.json");
+  file << pretty_json;
+  file.close();
   
   return 0;
 }

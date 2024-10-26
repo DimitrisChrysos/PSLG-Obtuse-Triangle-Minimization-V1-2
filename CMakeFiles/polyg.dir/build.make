@@ -93,7 +93,7 @@ polyg_EXTERNAL_OBJECTS =
 polyg: CMakeFiles/polyg.dir/ex.cpp.o
 polyg: CMakeFiles/polyg.dir/build.make
 polyg: includes/utils/libutils.a
-polyg: includes/graphics/libgraphics.a
+polyg: includes/custom_cdt_class/libcustom_cdt_class.a
 polyg: libCGAL_Qt5_moc_and_resources.a
 polyg: /usr/lib/x86_64-linux-gnu/libgmpxx.so
 polyg: /usr/lib/x86_64-linux-gnu/libmpfr.so

@@ -169,17 +169,17 @@ utils/fast:
 .PHONY : utils/fast
 
 #=============================================================================
-# Target rules for targets named graphics
+# Target rules for targets named custom_cdt_class
 
 # Build rule for target.
-graphics: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graphics
-.PHONY : graphics
+custom_cdt_class: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 custom_cdt_class
+.PHONY : custom_cdt_class
 
 # fast build rule for target.
-graphics/fast:
-	$(MAKE) $(MAKESILENT) -f includes/graphics/CMakeFiles/graphics.dir/build.make includes/graphics/CMakeFiles/graphics.dir/build
-.PHONY : graphics/fast
+custom_cdt_class/fast:
+	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
+.PHONY : custom_cdt_class/fast
 
 CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o: CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp.o
 .PHONY : CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o
@@ -335,7 +335,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen"
 	@echo "... CGAL_Qt5_moc_and_resources"
-	@echo "... graphics"
+	@echo "... custom_cdt_class"
 	@echo "... polyg"
 	@echo "... utils"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o"

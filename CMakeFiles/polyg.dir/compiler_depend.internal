@@ -4,8 +4,9 @@
 CMakeFiles/polyg.dir/ex.cpp.o
  /home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/ex.cpp
  /usr/include/stdc-predef.h
- /usr/local/include/boost/property_tree/ptree.hpp
- /usr/local/include/boost/property_tree/ptree_fwd.hpp
+ /usr/local/include/boost/json/src.hpp
+ /usr/local/include/boost/json.hpp
+ /usr/local/include/boost/json/detail/config.hpp
  /usr/local/include/boost/config.hpp
  /usr/local/include/boost/config/user.hpp
  /usr/local/include/boost/config/detail/select_compiler_config.hpp
@@ -79,7 +80,8 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/config/detail/suffix.hpp
  /usr/local/include/boost/config/helper_macros.hpp
  /usr/local/include/boost/config/detail/cxx_composite.hpp
- /usr/local/include/boost/optional/optional_fwd.hpp
+ /usr/local/include/boost/assert.hpp
+ /usr/include/assert.h
  /usr/local/include/boost/throw_exception.hpp
  /usr/local/include/boost/exception/exception.hpp
  /usr/local/include/boost/assert/source_location.hpp
@@ -194,6 +196,19 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/c++/11/bits/nested_exception.h
  /usr/include/c++/11/utility
  /usr/include/c++/11/bits/stl_relops.h
+ /usr/local/include/boost/json/array.hpp
+ /usr/local/include/boost/json/kind.hpp
+ /usr/local/include/boost/json/string_view.hpp
+ /usr/local/include/boost/core/detail/string_view.hpp
+ /usr/local/include/boost/core/enable_if.hpp
+ /usr/local/include/boost/core/detail/is_same.hpp
+ /usr/include/c++/11/algorithm
+ /usr/include/c++/11/bits/stl_algo.h
+ /usr/include/c++/11/bits/algorithmfwd.h
+ /usr/include/c++/11/bits/stl_heap.h
+ /usr/include/c++/11/bits/stl_tempbuf.h
+ /usr/include/c++/11/bits/uniform_int_dist.h
+ /usr/include/c++/11/pstl/glue_algorithm_defs.h
  /usr/include/c++/11/functional
  /usr/include/c++/11/tuple
  /usr/include/c++/11/array
@@ -214,11 +229,287 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/c++/11/bits/stl_vector.h
  /usr/include/c++/11/bits/stl_bvector.h
  /usr/include/c++/11/bits/vector.tcc
- /usr/include/c++/11/bits/stl_algo.h
- /usr/include/c++/11/bits/algorithmfwd.h
- /usr/include/c++/11/bits/stl_heap.h
- /usr/include/c++/11/bits/stl_tempbuf.h
- /usr/include/c++/11/bits/uniform_int_dist.h
+ /usr/include/c++/11/pstl/execution_defs.h
+ /usr/include/c++/11/stdexcept
+ /usr/include/c++/11/climits
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h
+ /usr/include/limits.h
+ /usr/include/x86_64-linux-gnu/bits/posix1_lim.h
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h
+ /usr/include/linux/limits.h
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h
+ /usr/include/c++/11/ios
+ /usr/include/c++/11/bits/ios_base.h
+ /usr/include/c++/11/bits/locale_classes.h
+ /usr/include/c++/11/bits/locale_classes.tcc
+ /usr/include/c++/11/system_error
+ /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h
+ /usr/include/c++/11/streambuf
+ /usr/include/c++/11/bits/streambuf.tcc
+ /usr/include/c++/11/bits/basic_ios.h
+ /usr/include/c++/11/bits/locale_facets.h
+ /usr/include/c++/11/cwctype
+ /usr/include/wctype.h
+ /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h
+ /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h
+ /usr/include/c++/11/bits/streambuf_iterator.h
+ /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h
+ /usr/include/c++/11/bits/locale_facets.tcc
+ /usr/include/c++/11/bits/basic_ios.tcc
+ /usr/local/include/boost/json/pilfer.hpp
+ /usr/local/include/boost/json/storage_ptr.hpp
+ /usr/local/include/boost/json/memory_resource.hpp
+ /usr/local/include/boost/container/pmr/memory_resource.hpp
+ /usr/local/include/boost/container/detail/config_begin.hpp
+ /usr/local/include/boost/container/detail/workaround.hpp
+ /usr/local/include/boost/container/container_fwd.hpp
+ /usr/local/include/boost/container/detail/std_fwd.hpp
+ /usr/local/include/boost/move/detail/std_ns_begin.hpp
+ /usr/local/include/boost/move/detail/std_ns_end.hpp
+ /usr/local/include/boost/move/detail/type_traits.hpp
+ /usr/local/include/boost/move/detail/config_begin.hpp
+ /usr/local/include/boost/move/detail/workaround.hpp
+ /usr/local/include/boost/move/detail/meta_utils.hpp
+ /usr/local/include/boost/move/detail/meta_utils_core.hpp
+ /usr/local/include/boost/move/detail/addressof.hpp
+ /usr/local/include/boost/move/detail/config_end.hpp
+ /usr/include/c++/11/cassert
+ /usr/local/include/boost/container/detail/placement_new.hpp
+ /usr/local/include/boost/container/detail/config_end.hpp
+ /usr/local/include/boost/container/pmr/polymorphic_allocator.hpp
+ /usr/local/include/boost/move/utility_core.hpp
+ /usr/local/include/boost/move/core.hpp
+ /usr/local/include/boost/container/detail/dispatch_uses_allocator.hpp
+ /usr/local/include/boost/container/allocator_traits.hpp
+ /usr/local/include/boost/container/detail/mpl.hpp
+ /usr/local/include/boost/intrusive/detail/mpl.hpp
+ /usr/local/include/boost/intrusive/detail/config_begin.hpp
+ /usr/local/include/boost/intrusive/detail/config_end.hpp
+ /usr/local/include/boost/container/detail/type_traits.hpp
+ /usr/local/include/boost/intrusive/pointer_traits.hpp
+ /usr/local/include/boost/intrusive/detail/workaround.hpp
+ /usr/local/include/boost/intrusive/pointer_rebind.hpp
+ /usr/local/include/boost/move/detail/pointer_element.hpp
+ /usr/local/include/boost/static_assert.hpp
+ /usr/local/include/boost/detail/workaround.hpp
+ /usr/local/include/boost/intrusive/detail/has_member_function_callable_with.hpp
+ /usr/local/include/boost/move/detail/fwd_macros.hpp
+ /usr/local/include/boost/container/uses_allocator.hpp
+ /usr/local/include/boost/container/uses_allocator_fwd.hpp
+ /usr/local/include/boost/container/detail/addressof.hpp
+ /usr/local/include/boost/container/detail/is_pair.hpp
+ /usr/local/include/boost/container/detail/variadic_templates_tools.hpp
+ /usr/local/include/boost/container/new_allocator.hpp
+ /usr/local/include/boost/container/throw_exception.hpp
+ /usr/local/include/boost/container/pmr/global_resource.hpp
+ /usr/local/include/boost/container/detail/auto_link.hpp
+ /usr/local/include/boost/json/detail/shared_resource.hpp
+ /usr/include/c++/11/atomic
+ /usr/include/c++/11/bits/atomic_base.h
+ /usr/include/c++/11/bits/atomic_lockfree_defines.h
+ /usr/local/include/boost/json/detail/default_resource.hpp
+ /usr/local/include/boost/json/detail/array.hpp
+ /usr/include/c++/11/iterator
+ /usr/include/c++/11/bits/stream_iterator.h
+ /usr/local/include/boost/json/value.hpp
+ /usr/local/include/boost/json/object.hpp
+ /usr/local/include/boost/json/detail/object.hpp
+ /usr/local/include/boost/json/detail/value.hpp
+ /usr/include/c++/11/limits
+ /usr/local/include/boost/json/set_pointer_options.hpp
+ /usr/local/include/boost/json/string.hpp
+ /usr/local/include/boost/json/detail/digest.hpp
+ /usr/local/include/boost/json/detail/except.hpp
+ /usr/local/include/boost/json/error.hpp
+ /usr/local/include/boost/json/system_error.hpp
+ /usr/local/include/boost/json/fwd.hpp
+ /usr/local/include/boost/system/error_code.hpp
+ /usr/local/include/boost/system/detail/error_code.hpp
+ /usr/local/include/boost/system/is_error_code_enum.hpp
+ /usr/local/include/boost/system/detail/error_category.hpp
+ /usr/local/include/boost/system/detail/config.hpp
+ /usr/local/include/boost/system/detail/requires_cxx11.hpp
+ /usr/local/include/boost/config/pragma_message.hpp
+ /usr/local/include/boost/system/detail/error_condition.hpp
+ /usr/local/include/boost/system/detail/generic_category.hpp
+ /usr/local/include/boost/system/detail/generic_category_message.hpp
+ /usr/local/include/boost/system/detail/enable_if.hpp
+ /usr/local/include/boost/system/detail/is_same.hpp
+ /usr/local/include/boost/system/detail/errc.hpp
+ /usr/local/include/boost/system/is_error_condition_enum.hpp
+ /usr/local/include/boost/system/detail/cerrno.hpp
+ /usr/local/include/boost/system/detail/append_int.hpp
+ /usr/local/include/boost/system/detail/snprintf.hpp
+ /usr/include/c++/11/cstdarg
+ /usr/local/include/boost/system/detail/system_category.hpp
+ /usr/local/include/boost/system/detail/system_category_impl.hpp
+ /usr/local/include/boost/system/detail/system_category_message.hpp
+ /usr/local/include/boost/system/api_config.hpp
+ /usr/local/include/boost/system/detail/interop_category.hpp
+ /usr/local/include/boost/system/detail/std_category.hpp
+ /usr/include/c++/11/ostream
+ /usr/include/c++/11/bits/ostream.tcc
+ /usr/local/include/boost/system/error_category.hpp
+ /usr/local/include/boost/system/detail/error_category_impl.hpp
+ /usr/local/include/boost/system/detail/std_category_impl.hpp
+ /usr/local/include/boost/system/detail/mutex.hpp
+ /usr/include/c++/11/mutex
+ /usr/include/c++/11/chrono
+ /usr/include/c++/11/ratio
+ /usr/include/c++/11/ctime
+ /usr/include/c++/11/bits/parse_numbers.h
+ /usr/include/c++/11/bits/std_mutex.h
+ /usr/include/c++/11/bits/unique_lock.h
+ /usr/local/include/boost/system/error_condition.hpp
+ /usr/local/include/boost/system/errc.hpp
+ /usr/local/include/boost/system/generic_category.hpp
+ /usr/local/include/boost/system/system_category.hpp
+ /usr/local/include/boost/system/detail/throws.hpp
+ /usr/local/include/boost/system/result.hpp
+ /usr/local/include/boost/system/system_error.hpp
+ /usr/local/include/boost/variant2/variant.hpp
+ /usr/local/include/boost/mp11.hpp
+ /usr/local/include/boost/mp11/list.hpp
+ /usr/local/include/boost/mp11/integral.hpp
+ /usr/local/include/boost/mp11/version.hpp
+ /usr/local/include/boost/mp11/detail/mp_list.hpp
+ /usr/local/include/boost/mp11/detail/mp_is_list.hpp
+ /usr/local/include/boost/mp11/detail/mp_append.hpp
+ /usr/local/include/boost/mp11/utility.hpp
+ /usr/local/include/boost/mp11/detail/mp_fold.hpp
+ /usr/local/include/boost/mp11/detail/config.hpp
+ /usr/local/include/boost/mp11/detail/mp_front.hpp
+ /usr/local/include/boost/mp11/detail/mp_rename.hpp
+ /usr/local/include/boost/mp11/algorithm.hpp
+ /usr/local/include/boost/mp11/set.hpp
+ /usr/local/include/boost/mp11/function.hpp
+ /usr/local/include/boost/mp11/detail/mp_count.hpp
+ /usr/local/include/boost/mp11/detail/mp_plus.hpp
+ /usr/local/include/boost/mp11/detail/mp_min_element.hpp
+ /usr/local/include/boost/mp11/detail/mp_void.hpp
+ /usr/local/include/boost/mp11/detail/mp_copy_if.hpp
+ /usr/local/include/boost/mp11/detail/mp_remove_if.hpp
+ /usr/local/include/boost/mp11/detail/mp_map_find.hpp
+ /usr/local/include/boost/mp11/detail/mp_with_index.hpp
+ /usr/local/include/boost/mp11/integer_sequence.hpp
+ /usr/local/include/boost/mp11/map.hpp
+ /usr/local/include/boost/mp11/bind.hpp
+ /usr/local/include/boost/mp11/tuple.hpp
+ /usr/local/include/boost/json/impl/error.hpp
+ /usr/local/include/boost/json/detail/string_impl.hpp
+ /usr/local/include/boost/json/impl/string.hpp
+ /usr/local/include/boost/json/value_ref.hpp
+ /usr/local/include/boost/json/detail/impl/array.hpp
+ /usr/local/include/boost/json/impl/array.hpp
+ /usr/local/include/boost/json/impl/object.hpp
+ /usr/include/c++/11/cmath
+ /usr/include/math.h
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h
+ /usr/include/c++/11/bits/specfun.h
+ /usr/include/c++/11/tr1/gamma.tcc
+ /usr/include/c++/11/tr1/special_function_util.h
+ /usr/include/c++/11/tr1/bessel_function.tcc
+ /usr/include/c++/11/tr1/beta_function.tcc
+ /usr/include/c++/11/tr1/ell_integral.tcc
+ /usr/include/c++/11/tr1/exp_integral.tcc
+ /usr/include/c++/11/tr1/hypergeometric.tcc
+ /usr/include/c++/11/tr1/legendre_function.tcc
+ /usr/include/c++/11/tr1/modified_bessel_func.tcc
+ /usr/include/c++/11/tr1/poly_hermite.tcc
+ /usr/include/c++/11/tr1/poly_laguerre.tcc
+ /usr/include/c++/11/tr1/riemann_zeta.tcc
+ /usr/local/include/boost/json/impl/value.hpp
+ /usr/local/include/boost/json/impl/value_ref.hpp
+ /usr/local/include/boost/json/basic_parser.hpp
+ /usr/local/include/boost/json/parse_options.hpp
+ /usr/local/include/boost/json/detail/stack.hpp
+ /usr/local/include/boost/json/detail/stream.hpp
+ /usr/local/include/boost/json/detail/utf8.hpp
+ /usr/local/include/boost/json/conversion.hpp
+ /usr/local/include/boost/json/impl/conversion.hpp
+ /usr/local/include/boost/describe/enumerators.hpp
+ /usr/local/include/boost/describe/detail/void_t.hpp
+ /usr/local/include/boost/describe/detail/config.hpp
+ /usr/local/include/boost/describe/members.hpp
+ /usr/local/include/boost/describe/modifiers.hpp
+ /usr/local/include/boost/describe/bases.hpp
+ /usr/local/include/boost/describe/detail/cx_streq.hpp
+ /usr/include/c++/11/variant
+ /usr/local/include/boost/json/monotonic_resource.hpp
+ /usr/local/include/boost/json/null_resource.hpp
+ /usr/local/include/boost/json/parse.hpp
+ /usr/local/include/boost/json/parser.hpp
+ /usr/local/include/boost/json/detail/handler.hpp
+ /usr/local/include/boost/json/value_stack.hpp
+ /usr/local/include/boost/json/serialize.hpp
+ /usr/local/include/boost/json/serializer.hpp
+ /usr/local/include/boost/json/detail/format.hpp
+ /usr/local/include/boost/json/static_resource.hpp
+ /usr/local/include/boost/json/stream_parser.hpp
+ /usr/local/include/boost/json/value_from.hpp
+ /usr/local/include/boost/json/detail/value_from.hpp
+ /usr/local/include/boost/describe/enum_to_string.hpp
+ /usr/include/c++/11/optional
+ /usr/local/include/boost/json/value_to.hpp
+ /usr/local/include/boost/json/detail/value_to.hpp
+ /usr/local/include/boost/describe/enum_from_string.hpp
+ /usr/local/include/boost/json/visit.hpp
+ /usr/local/include/boost/json/impl/visit.hpp
+ /usr/local/include/boost/json/impl/array.ipp
+ /usr/local/include/boost/container_hash/hash.hpp
+ /usr/local/include/boost/container_hash/hash_fwd.hpp
+ /usr/local/include/boost/container_hash/detail/requires_cxx11.hpp
+ /usr/local/include/boost/container_hash/is_range.hpp
+ /usr/local/include/boost/type_traits/integral_constant.hpp
+ /usr/local/include/boost/type_traits/is_integral.hpp
+ /usr/local/include/boost/type_traits/declval.hpp
+ /usr/local/include/boost/type_traits/add_rvalue_reference.hpp
+ /usr/local/include/boost/type_traits/is_void.hpp
+ /usr/local/include/boost/type_traits/is_reference.hpp
+ /usr/local/include/boost/type_traits/is_lvalue_reference.hpp
+ /usr/local/include/boost/type_traits/is_rvalue_reference.hpp
+ /usr/local/include/boost/type_traits/is_same.hpp
+ /usr/local/include/boost/type_traits/remove_cv.hpp
+ /usr/local/include/boost/container_hash/is_contiguous_range.hpp
+ /usr/local/include/boost/container_hash/is_unordered_range.hpp
+ /usr/local/include/boost/container_hash/is_described_class.hpp
+ /usr/local/include/boost/type_traits/is_union.hpp
+ /usr/local/include/boost/type_traits/intrinsics.hpp
+ /usr/local/include/boost/type_traits/detail/config.hpp
+ /usr/local/include/boost/version.hpp
+ /usr/local/include/boost/container_hash/detail/hash_tuple_like.hpp
+ /usr/local/include/boost/container_hash/is_tuple_like.hpp
+ /usr/local/include/boost/type_traits/enable_if.hpp
+ /usr/local/include/boost/container_hash/detail/hash_mix.hpp
+ /usr/local/include/boost/container_hash/detail/hash_range.hpp
+ /usr/local/include/boost/container_hash/detail/mulx.hpp
+ /usr/local/include/boost/type_traits/is_enum.hpp
+ /usr/local/include/boost/type_traits/is_floating_point.hpp
+ /usr/local/include/boost/type_traits/is_signed.hpp
+ /usr/local/include/boost/type_traits/is_unsigned.hpp
+ /usr/local/include/boost/type_traits/make_unsigned.hpp
+ /usr/local/include/boost/type_traits/conditional.hpp
+ /usr/local/include/boost/type_traits/is_const.hpp
+ /usr/local/include/boost/type_traits/is_volatile.hpp
+ /usr/local/include/boost/type_traits/add_const.hpp
+ /usr/local/include/boost/type_traits/add_volatile.hpp
+ /usr/local/include/boost/type_traits/conjunction.hpp
+ /usr/include/c++/11/complex
+ /usr/include/c++/11/sstream
+ /usr/include/c++/11/istream
+ /usr/include/c++/11/bits/istream.tcc
+ /usr/include/c++/11/bits/sstream.tcc
  /usr/include/c++/11/memory
  /usr/include/c++/11/bits/stl_raw_storage_iter.h
  /usr/include/c++/11/bits/align.h
@@ -229,43 +520,69 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/c++/11/bits/allocated_ptr.h
  /usr/include/c++/11/ext/concurrence.h
  /usr/include/c++/11/bits/shared_ptr_atomic.h
- /usr/include/c++/11/bits/atomic_base.h
- /usr/include/c++/11/bits/atomic_lockfree_defines.h
  /usr/include/c++/11/backward/auto_ptr.h
  /usr/include/c++/11/pstl/glue_memory_defs.h
- /usr/include/c++/11/pstl/execution_defs.h
+ /usr/include/c++/11/typeindex
+ /usr/local/include/boost/json/impl/error.ipp
+ /usr/local/include/boost/json/impl/kind.ipp
+ /usr/local/include/boost/json/impl/monotonic_resource.ipp
+ /usr/local/include/boost/align/align.hpp
+ /usr/local/include/boost/align/detail/align.hpp
+ /usr/local/include/boost/align/detail/is_alignment.hpp
+ /usr/local/include/boost/core/max_align.hpp
+ /usr/local/include/boost/core/alignof.hpp
+ /usr/local/include/boost/json/impl/null_resource.ipp
+ /usr/local/include/boost/json/impl/object.ipp
+ /usr/local/include/boost/json/impl/parse.ipp
+ /usr/local/include/boost/json/impl/parser.ipp
+ /usr/local/include/boost/json/basic_parser_impl.hpp
+ /usr/local/include/boost/json/detail/buffer.hpp
+ /usr/local/include/boost/json/detail/sse2.hpp
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h
+ /usr/include/c++/11/stdlib.h
+ /usr/local/include/boost/json/impl/pointer.ipp
+ /usr/local/include/boost/json/impl/serialize.ipp
+ /usr/local/include/boost/json/impl/serializer.ipp
+ /usr/local/include/boost/json/impl/static_resource.ipp
+ /usr/local/include/boost/json/impl/stream_parser.ipp
+ /usr/local/include/boost/json/impl/string.ipp
+ /usr/local/include/boost/json/impl/value.ipp
+ /usr/local/include/boost/json/impl/value_stack.ipp
+ /usr/local/include/boost/json/impl/value_ref.ipp
+ /usr/local/include/boost/json/detail/impl/shared_resource.ipp
+ /usr/local/include/boost/json/detail/impl/default_resource.ipp
+ /usr/local/include/boost/json/detail/impl/except.ipp
+ /usr/local/include/boost/json/detail/impl/format.ipp
+ /usr/local/include/boost/json/detail/ryu/ryu.hpp
+ /usr/local/include/boost/json/detail/impl/handler.ipp
+ /usr/local/include/boost/json/detail/impl/stack.ipp
+ /usr/local/include/boost/json/detail/impl/string_impl.ipp
+ /usr/local/include/boost/json/detail/ryu/impl/d2s.ipp
+ /usr/local/include/boost/json/detail/ryu/detail/common.hpp
+ /usr/local/include/boost/json/detail/ryu/detail/digit_table.hpp
+ /usr/local/include/boost/json/detail/ryu/detail/d2s.hpp
+ /usr/local/include/boost/json/detail/ryu/detail/d2s_full_table.hpp
+ /usr/local/include/boost/json/detail/ryu/detail/d2s_intrinsics.hpp
+ /usr/local/include/boost/property_tree/ptree.hpp
+ /usr/local/include/boost/property_tree/ptree_fwd.hpp
+ /usr/local/include/boost/optional/optional_fwd.hpp
  /usr/local/include/boost/property_tree/string_path.hpp
  /usr/local/include/boost/property_tree/id_translator.hpp
  /usr/local/include/boost/optional.hpp
  /usr/local/include/boost/optional/optional.hpp
- /usr/local/include/boost/assert.hpp
- /usr/include/assert.h
  /usr/local/include/boost/core/addressof.hpp
- /usr/local/include/boost/core/enable_if.hpp
  /usr/local/include/boost/core/explicit_operator_bool.hpp
  /usr/local/include/boost/core/swap.hpp
  /usr/local/include/boost/optional/bad_optional_access.hpp
- /usr/include/c++/11/stdexcept
- /usr/local/include/boost/static_assert.hpp
- /usr/local/include/boost/detail/workaround.hpp
  /usr/local/include/boost/type.hpp
  /usr/local/include/boost/type_traits/alignment_of.hpp
- /usr/local/include/boost/type_traits/intrinsics.hpp
- /usr/local/include/boost/type_traits/detail/config.hpp
- /usr/local/include/boost/version.hpp
- /usr/local/include/boost/type_traits/integral_constant.hpp
- /usr/local/include/boost/type_traits/conditional.hpp
- /usr/local/include/boost/type_traits/conjunction.hpp
  /usr/local/include/boost/type_traits/disjunction.hpp
  /usr/local/include/boost/type_traits/has_nothrow_constructor.hpp
  /usr/local/include/boost/type_traits/is_default_constructible.hpp
  /usr/local/include/boost/type_traits/is_complete.hpp
- /usr/local/include/boost/type_traits/declval.hpp
- /usr/local/include/boost/type_traits/add_rvalue_reference.hpp
- /usr/local/include/boost/type_traits/is_void.hpp
- /usr/local/include/boost/type_traits/is_reference.hpp
- /usr/local/include/boost/type_traits/is_lvalue_reference.hpp
- /usr/local/include/boost/type_traits/is_rvalue_reference.hpp
  /usr/local/include/boost/type_traits/remove_reference.hpp
  /usr/local/include/boost/type_traits/is_function.hpp
  /usr/local/include/boost/type_traits/detail/is_function_cxx_11.hpp
@@ -274,9 +591,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/type_traits/is_pod.hpp
  /usr/local/include/boost/type_traits/is_scalar.hpp
  /usr/local/include/boost/type_traits/is_arithmetic.hpp
- /usr/local/include/boost/type_traits/is_integral.hpp
- /usr/local/include/boost/type_traits/is_floating_point.hpp
- /usr/local/include/boost/type_traits/is_enum.hpp
  /usr/local/include/boost/type_traits/is_pointer.hpp
  /usr/local/include/boost/type_traits/is_member_pointer.hpp
  /usr/local/include/boost/type_traits/is_member_function_pointer.hpp
@@ -287,13 +601,10 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/type_traits/remove_bounds.hpp
  /usr/local/include/boost/type_traits/remove_extent.hpp
  /usr/local/include/boost/type_traits/add_pointer.hpp
- /usr/local/include/boost/type_traits/remove_cv.hpp
  /usr/local/include/boost/type_traits/is_assignable.hpp
  /usr/local/include/boost/type_traits/is_base_of.hpp
  /usr/local/include/boost/type_traits/is_base_and_derived.hpp
- /usr/local/include/boost/type_traits/is_same.hpp
  /usr/local/include/boost/type_traits/is_class.hpp
- /usr/local/include/boost/type_traits/is_const.hpp
  /usr/local/include/boost/type_traits/is_constructible.hpp
  /usr/local/include/boost/type_traits/is_destructible.hpp
  /usr/local/include/boost/type_traits/is_convertible.hpp
@@ -302,22 +613,10 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/type_traits/add_reference.hpp
  /usr/local/include/boost/type_traits/is_nothrow_move_assignable.hpp
  /usr/local/include/boost/type_traits/has_trivial_move_assign.hpp
- /usr/local/include/boost/type_traits/is_volatile.hpp
  /usr/local/include/boost/type_traits/has_nothrow_assign.hpp
- /usr/local/include/boost/type_traits/enable_if.hpp
  /usr/local/include/boost/type_traits/is_nothrow_move_constructible.hpp
  /usr/local/include/boost/move/utility.hpp
- /usr/local/include/boost/move/detail/config_begin.hpp
- /usr/local/include/boost/move/detail/workaround.hpp
- /usr/local/include/boost/move/utility_core.hpp
- /usr/local/include/boost/move/core.hpp
- /usr/local/include/boost/move/detail/config_end.hpp
- /usr/local/include/boost/move/detail/meta_utils.hpp
- /usr/local/include/boost/move/detail/meta_utils_core.hpp
- /usr/local/include/boost/move/detail/addressof.hpp
  /usr/local/include/boost/move/traits.hpp
- /usr/local/include/boost/move/detail/type_traits.hpp
- /usr/include/c++/11/cassert
  /usr/local/include/boost/none.hpp
  /usr/local/include/boost/none_t.hpp
  /usr/local/include/boost/utility/compare_pointees.hpp
@@ -339,14 +638,12 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/type_index.hpp
  /usr/local/include/boost/type_index/stl_type_index.hpp
  /usr/local/include/boost/type_index/type_index_facade.hpp
- /usr/local/include/boost/container_hash/hash_fwd.hpp
  /usr/local/include/boost/core/demangle.hpp
  /usr/include/c++/11/cxxabi.h
  /usr/include/x86_64-linux-gnu/c++/11/bits/cxxabi_tweaks.h
  /usr/local/include/boost/property_tree/detail/exception_implementation.hpp
  /usr/local/include/boost/property_tree/detail/ptree_utils.hpp
  /usr/local/include/boost/limits.hpp
- /usr/include/c++/11/limits
  /usr/local/include/boost/mpl/has_xxx.hpp
  /usr/local/include/boost/mpl/bool.hpp
  /usr/local/include/boost/mpl/bool_fwd.hpp
@@ -467,46 +764,17 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/mpl/aux_/config/compiler.hpp
  /usr/local/include/boost/preprocessor/stringize.hpp
  /usr/local/include/boost/mpl/aux_/preprocessed/gcc/and.hpp
- /usr/include/c++/11/algorithm
- /usr/include/c++/11/pstl/glue_algorithm_defs.h
  /usr/include/c++/11/locale
- /usr/include/c++/11/bits/locale_classes.h
- /usr/include/c++/11/bits/locale_classes.tcc
- /usr/include/c++/11/bits/locale_facets.h
- /usr/include/c++/11/cwctype
- /usr/include/wctype.h
- /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h
- /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h
- /usr/include/c++/11/bits/ios_base.h
- /usr/include/c++/11/system_error
- /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h
- /usr/include/c++/11/streambuf
- /usr/include/c++/11/bits/streambuf.tcc
- /usr/include/c++/11/bits/streambuf_iterator.h
- /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h
- /usr/include/c++/11/bits/locale_facets.tcc
  /usr/include/c++/11/bits/locale_facets_nonio.h
- /usr/include/c++/11/ctime
  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h
  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h
  /usr/include/libintl.h
  /usr/include/c++/11/bits/codecvt.h
  /usr/include/c++/11/bits/locale_facets_nonio.tcc
  /usr/include/c++/11/bits/locale_conv.h
- /usr/include/c++/11/iterator
- /usr/include/c++/11/bits/stream_iterator.h
  /usr/local/include/boost/property_tree/stream_translator.hpp
  /usr/local/include/boost/optional/optional_io.hpp
- /usr/include/c++/11/istream
- /usr/include/c++/11/ios
- /usr/include/c++/11/bits/basic_ios.h
- /usr/include/c++/11/bits/basic_ios.tcc
- /usr/include/c++/11/ostream
- /usr/include/c++/11/bits/ostream.tcc
- /usr/include/c++/11/bits/istream.tcc
  /usr/local/include/boost/utility/enable_if.hpp
- /usr/include/c++/11/sstream
- /usr/include/c++/11/bits/sstream.tcc
  /usr/local/include/boost/multi_index_container.hpp
  /usr/local/include/boost/core/no_exceptions_support.hpp
  /usr/local/include/boost/mpl/at.hpp
@@ -764,8 +1032,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/core/ref.hpp
  /usr/local/include/boost/tuple/detail/tuple_basic.hpp
  /usr/local/include/boost/type_traits/cv_traits.hpp
- /usr/local/include/boost/type_traits/add_const.hpp
- /usr/local/include/boost/type_traits/add_volatile.hpp
  /usr/local/include/boost/type_traits/add_cv.hpp
  /usr/local/include/boost/type_traits/remove_volatile.hpp
  /usr/local/include/boost/type_traits/function_traits.hpp
@@ -785,7 +1051,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/multi_index/sequenced_index.hpp
  /usr/local/include/boost/bind/bind.hpp
  /usr/local/include/boost/bind/detail/requires_cxx11.hpp
- /usr/local/include/boost/config/pragma_message.hpp
  /usr/local/include/boost/bind/mem_fn.hpp
  /usr/local/include/boost/get_pointer.hpp
  /usr/local/include/boost/config/no_tr1/memory.hpp
@@ -935,19 +1200,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/iterator/iterator_concepts.hpp
  /usr/local/include/boost/range/value_type.hpp
  /usr/local/include/boost/range/detail/misc_concept.hpp
- /usr/local/include/boost/type_traits/make_unsigned.hpp
- /usr/local/include/boost/type_traits/is_signed.hpp
- /usr/include/c++/11/climits
- /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h
- /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h
- /usr/include/limits.h
- /usr/include/x86_64-linux-gnu/bits/posix1_lim.h
- /usr/include/x86_64-linux-gnu/bits/local_lim.h
- /usr/include/linux/limits.h
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h
- /usr/include/x86_64-linux-gnu/bits/uio_lim.h
- /usr/local/include/boost/type_traits/is_unsigned.hpp
  /usr/local/include/boost/range/detail/has_member_size.hpp
  /usr/local/include/boost/utility.hpp
  /usr/local/include/boost/utility/binary.hpp
@@ -1146,10 +1398,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/c++/11/thread
  /usr/include/c++/11/bits/std_thread.h
  /usr/include/c++/11/bits/this_thread_sleep.h
- /usr/include/c++/11/chrono
- /usr/include/c++/11/ratio
- /usr/include/c++/11/bits/parse_numbers.h
- /usr/include/c++/11/atomic
  /usr/local/include/CGAL/license/lgpl.h
  /usr/local/include/CGAL/license.h
  /usr/local/include/CGAL/Qt/Basic_viewer_qt.h
@@ -1184,7 +1432,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qrefcount.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qnamespace.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qarraydata.h
- /usr/include/c++/11/stdlib.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qstringliteral.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qstringalgorithms.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qstringview.h
@@ -1227,7 +1474,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qvariant.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmap.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qhash.h
- /usr/include/c++/11/variant
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qshareddata.h
  /usr/include/x86_64-linux-gnu/qt5/QtGui/QKeyEvent
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qevent.h
@@ -1250,30 +1496,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QtGlobal
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h
  /usr/include/c++/11/math.h
- /usr/include/c++/11/cmath
- /usr/include/math.h
- /usr/include/x86_64-linux-gnu/bits/math-vector.h
- /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h
- /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h
- /usr/include/x86_64-linux-gnu/bits/fp-logb.h
- /usr/include/x86_64-linux-gnu/bits/fp-fast.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h
- /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h
- /usr/include/x86_64-linux-gnu/bits/iscanonical.h
- /usr/include/c++/11/bits/specfun.h
- /usr/include/c++/11/tr1/gamma.tcc
- /usr/include/c++/11/tr1/special_function_util.h
- /usr/include/c++/11/tr1/bessel_function.tcc
- /usr/include/c++/11/tr1/beta_function.tcc
- /usr/include/c++/11/tr1/ell_integral.tcc
- /usr/include/c++/11/tr1/exp_integral.tcc
- /usr/include/c++/11/tr1/hypergeometric.tcc
- /usr/include/c++/11/tr1/legendre_function.tcc
- /usr/include/c++/11/tr1/modified_bessel_func.tcc
- /usr/include/c++/11/tr1/poly_hermite.tcc
- /usr/include/c++/11/tr1/poly_laguerre.tcc
- /usr/include/c++/11/tr1/riemann_zeta.tcc
  /usr/local/include/CGAL/Qt/camera.h
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QMap
  /usr/include/x86_64-linux-gnu/qt5/QtCore/qmap.h
@@ -1498,7 +1720,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/CGAL/Kernel_traits_fwd.h
  /usr/local/include/boost/math/special_functions/next.hpp
  /usr/local/include/boost/math/special_functions/math_fwd.hpp
- /usr/include/c++/11/complex
  /usr/local/include/boost/math/special_functions/detail/round_fwd.hpp
  /usr/local/include/boost/math/tools/config.hpp
  /usr/local/include/boost/math/tools/is_standalone.hpp
@@ -1517,10 +1738,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/math/special_functions/sign.hpp
  /usr/local/include/boost/math/special_functions/trunc.hpp
  /usr/local/include/boost/math/tools/traits.hpp
- /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h
- /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h
- /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h
- /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h
  /usr/local/include/CGAL/Circle_2.h
  /usr/local/include/CGAL/Kernel/Return_base_tag.h
  /usr/local/include/CGAL/number_utils.h
@@ -1767,50 +1984,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Plane_3_intersection.h
  /usr/local/include/CGAL/utility.h
  /usr/local/include/boost/functional/hash.hpp
- /usr/local/include/boost/container_hash/hash.hpp
- /usr/local/include/boost/container_hash/detail/requires_cxx11.hpp
- /usr/local/include/boost/container_hash/is_range.hpp
- /usr/local/include/boost/container_hash/is_contiguous_range.hpp
- /usr/local/include/boost/container_hash/is_unordered_range.hpp
- /usr/local/include/boost/container_hash/is_described_class.hpp
- /usr/local/include/boost/type_traits/is_union.hpp
- /usr/local/include/boost/describe/bases.hpp
- /usr/local/include/boost/describe/modifiers.hpp
- /usr/local/include/boost/describe/detail/config.hpp
- /usr/local/include/boost/describe/detail/void_t.hpp
- /usr/local/include/boost/mp11/algorithm.hpp
- /usr/local/include/boost/mp11/list.hpp
- /usr/local/include/boost/mp11/integral.hpp
- /usr/local/include/boost/mp11/version.hpp
- /usr/local/include/boost/mp11/detail/mp_list.hpp
- /usr/local/include/boost/mp11/detail/mp_is_list.hpp
- /usr/local/include/boost/mp11/detail/mp_append.hpp
- /usr/local/include/boost/mp11/utility.hpp
- /usr/local/include/boost/mp11/detail/mp_fold.hpp
- /usr/local/include/boost/mp11/detail/config.hpp
- /usr/local/include/boost/mp11/detail/mp_front.hpp
- /usr/local/include/boost/mp11/detail/mp_rename.hpp
- /usr/local/include/boost/mp11/set.hpp
- /usr/local/include/boost/mp11/function.hpp
- /usr/local/include/boost/mp11/detail/mp_count.hpp
- /usr/local/include/boost/mp11/detail/mp_plus.hpp
- /usr/local/include/boost/mp11/detail/mp_min_element.hpp
- /usr/local/include/boost/mp11/detail/mp_void.hpp
- /usr/local/include/boost/mp11/detail/mp_copy_if.hpp
- /usr/local/include/boost/mp11/detail/mp_remove_if.hpp
- /usr/local/include/boost/mp11/detail/mp_map_find.hpp
- /usr/local/include/boost/mp11/detail/mp_with_index.hpp
- /usr/local/include/boost/mp11/integer_sequence.hpp
- /usr/local/include/boost/describe/members.hpp
- /usr/local/include/boost/describe/detail/cx_streq.hpp
- /usr/local/include/boost/mp11/bind.hpp
- /usr/local/include/boost/container_hash/detail/hash_tuple_like.hpp
- /usr/local/include/boost/container_hash/is_tuple_like.hpp
- /usr/local/include/boost/container_hash/detail/hash_mix.hpp
- /usr/local/include/boost/container_hash/detail/hash_range.hpp
- /usr/local/include/boost/container_hash/detail/mulx.hpp
- /usr/include/c++/11/typeindex
- /usr/include/c++/11/optional
  /usr/local/include/CGAL/Intersections_3/Bbox_3_Point_3.h
  /usr/local/include/CGAL/Intersections_3/Iso_cuboid_3_Point_3.h
  /usr/local/include/CGAL/Intersections_3/internal/Iso_cuboid_3_Point_3_do_intersect.h
@@ -2488,9 +2661,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/CGAL/min_max_n.h
  /usr/local/include/CGAL/type_traits/is_iterator.h
  /usr/local/include/CGAL/transforming_iterator.h
- /usr/include/c++/11/mutex
- /usr/include/c++/11/bits/std_mutex.h
- /usr/include/c++/11/bits/unique_lock.h
  /usr/local/include/CGAL/boost_mp.h
  /usr/local/include/boost/multiprecision/number.hpp
  /usr/local/include/boost/multiprecision/detail/standalone_config.hpp
@@ -2537,10 +2707,6 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/type_traits/has_right_shift.hpp
  /usr/local/include/boost/detail/lcast_precision.hpp
  /usr/local/include/boost/lexical_cast/detail/widest_char.hpp
- /usr/local/include/boost/container/container_fwd.hpp
- /usr/local/include/boost/container/detail/std_fwd.hpp
- /usr/local/include/boost/move/detail/std_ns_begin.hpp
- /usr/local/include/boost/move/detail/std_ns_end.hpp
  /usr/local/include/boost/lexical_cast/detail/converter_lexical_streams.hpp
  /usr/local/include/boost/core/snprintf.hpp
  /usr/local/include/boost/lexical_cast/detail/lcast_char_constants.hpp
@@ -2751,28 +2917,8 @@ CMakeFiles/polyg.dir/ex.cpp.o
  /usr/local/include/boost/iterator/filter_iterator.hpp
  /usr/local/include/CGAL/Triangulation_2/insert_constraints.h
  /usr/local/include/boost/container/flat_set.hpp
- /usr/local/include/boost/container/detail/config_begin.hpp
- /usr/local/include/boost/container/detail/workaround.hpp
- /usr/local/include/boost/container/allocator_traits.hpp
- /usr/local/include/boost/container/detail/mpl.hpp
- /usr/local/include/boost/intrusive/detail/mpl.hpp
- /usr/local/include/boost/intrusive/detail/config_begin.hpp
- /usr/local/include/boost/intrusive/detail/config_end.hpp
- /usr/local/include/boost/container/detail/config_end.hpp
- /usr/local/include/boost/container/detail/type_traits.hpp
- /usr/local/include/boost/container/detail/placement_new.hpp
- /usr/local/include/boost/intrusive/pointer_traits.hpp
- /usr/local/include/boost/intrusive/detail/workaround.hpp
- /usr/local/include/boost/intrusive/pointer_rebind.hpp
- /usr/local/include/boost/move/detail/pointer_element.hpp
- /usr/local/include/boost/intrusive/detail/has_member_function_callable_with.hpp
- /usr/local/include/boost/move/detail/fwd_macros.hpp
- /usr/local/include/boost/container/new_allocator.hpp
- /usr/local/include/boost/container/throw_exception.hpp
  /usr/local/include/boost/container/detail/flat_tree.hpp
  /usr/local/include/boost/container/detail/pair.hpp
- /usr/local/include/boost/container/detail/is_pair.hpp
- /usr/local/include/boost/container/detail/variadic_templates_tools.hpp
  /usr/local/include/boost/intrusive/detail/minimal_pair_header.hpp
  /usr/local/include/boost/container/vector.hpp
  /usr/local/include/boost/container/options.hpp
