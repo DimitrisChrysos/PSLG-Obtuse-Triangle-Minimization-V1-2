@@ -144,8 +144,8 @@ class obt_face {
 };
 //
 
-bool is_triangle_inside_region_boundary(Polygon_2& region_boundary_polygon, CDT::Face_handle f1);
 Polygon_2 region_boundary_polygon;
+bool is_triangle_inside_region_boundary(CDT::Face_handle f1);
 
 bool has_obtuse_angle(CDT::Face_handle face) {
   // Get the vertices of the triangle
@@ -168,7 +168,7 @@ int count_obtuse_triangles(CDT cdt) {
     CDT::Face_handle face = fit;
     
     // Check if the face is inside the region boundary
-    if (!is_triangle_inside_region_boundary(region_boundary_polygon, face))
+    if (!is_triangle_inside_region_boundary(face))
       continue;
 
     if (has_obtuse_angle(face)) {
@@ -409,32 +409,6 @@ obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-Point compute_incenter(CDT::Face_handle f) {
-  // Get the vertices of the face
-  Point A = f->vertex(0)->point();
-  Point B = f->vertex(1)->point();
-  Point C = f->vertex(2)->point();
-
-  // Calculate the lengths of the sides
-  K::FT a = CGAL::squared_distance(B, C); // Side opposite to A
-  K::FT b = CGAL::squared_distance(A, C); // Side opposite to B
-  K::FT c = CGAL::squared_distance(A, B); // Side opposite to C
-
-  // Calculate the incenter using the weighted average formula
-  K::FT sum = a + b + c;
-  Point incenter = CGAL::barycenter(A, a, B, b, C, c);
-
-  return incenter;
-}
-
-obt_point insert_incenter(CDT& cdt, CDT::Face_handle f1) {
-  Point incenter = compute_incenter(f1);
-  cdt.insert_no_flip(incenter);
-
-  obt_point ret(count_obtuse_triangles(cdt), incenter);
-  return ret;
-}
-
 obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
   // Calculate the circumcenter of the triangle
@@ -480,8 +454,8 @@ Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
   // Get the vertices of the shared edge
   Point p1 = f1->vertex((edge_index + 1) % 3)->point();
   Point p2 = f1->vertex((edge_index + 2) % 3)->point();
-  // std::cout << "1. Edge: " << p1 << " - " << p2 << std::endl;
 
+  const Edge ed;
   for (const Edge& e : cdt.finite_edges()) {
     CDT::Face_handle face = e.first;
     int index = e.second;
@@ -492,6 +466,8 @@ Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
       return e;
     }
   }
+
+  return ed;
 }
 
 // Check if a point is part of a constraint edge
@@ -573,7 +549,6 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     polygon_cdt.insert_constraint(temp_p1, temp_p2);
   }
 
-
   // Check if any of the neighbors are mergable
   bool mergable_neigh1 = are_mergable(cdt, f1, neigh1, e1);
   bool mergable_neigh2 = are_mergable(cdt, f1, neigh2, e2);
@@ -649,10 +624,6 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     return ret;
   }
 
-
-  // CGAL::draw(polygon_cdt);
-
-
   // Check if the polygon is convex:
   // Iterate over the edges of the polygon_cdt
   // if there exist edges that are not constrained,
@@ -663,15 +634,9 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
   }
 
-  // CGAL::draw(polygon_cdt);
-
   // Remove the points
   std::vector<Point> removed_points;
   remove_points(cdt, to_remove_points, removed_points);
-
-
-  // CGAL::draw(cdt);
-
 
   // Add the centroid (or mean point) of the polygon
   std::vector<Point> points = {
@@ -703,11 +668,8 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   mean_x /= points_size;
   mean_y /= points_size;
   Point centroid(mean_x, mean_y);
-  std::cout << "centroid: " << centroid << std::endl;
   cdt.insert_no_flip(centroid);
   
-  // CGAL::draw(cdt);
-
   // Add the removed edge as a constrained edge
   std::vector<CDT::Constraint_id> constraint_ids;
   for (const auto& edge : edges_made_constrained) {
@@ -715,17 +677,10 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     constraint_ids.push_back(cid);
   }
 
-  // CGAL::draw(cdt);
-
-
   // Remove the constraint edge
   for (const auto& cid : constraint_ids) {
     cdt.remove_constraint(cid);
   }
-
-  // CGAL::draw(cdt);
-
-
 
   ret.obt_count = count_obtuse_triangles(cdt);
   return ret;
@@ -764,7 +719,7 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-bool is_triangle_inside_region_boundary(Polygon_2& region_boundary_polygon, CDT::Face_handle f1) {
+bool is_triangle_inside_region_boundary(CDT::Face_handle f1) {
 
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
@@ -779,9 +734,8 @@ bool is_triangle_inside_region_boundary(Polygon_2& region_boundary_polygon, CDT:
   return false;
 }
 
-void steiner_insertion(CDT& cdt, Polygon_2& region_boundary_polygon) {
+void steiner_insertion(CDT& cdt) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
-  std::cout << "Initial obtuse count: " << init_obtuse_count << std::endl;
   Point a;
   CDT::Face_handle f1;
   obt_point best_steiner(9999, a);
@@ -790,67 +744,56 @@ void steiner_insertion(CDT& cdt, Polygon_2& region_boundary_polygon) {
   // Iterate the faces of the cdt
   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
 
-    if (!is_triangle_inside_region_boundary(region_boundary_polygon, f))
+    if (!is_triangle_inside_region_boundary(f))
       continue;
 
     if (has_obtuse_angle(f)) {
       
-      // CDT copy(cdt);
-      // // Insert the circumcenter if possible
-      // obt_point calc_insert_mid = insert_mid(copy, f);
-      // if (best_steiner.obt_count > calc_insert_mid.obt_count) {
-      //   best_steiner = calc_insert_mid;
-      // }
-      // // std::cout << "Obtuse triangles after inserting the edge midpoint: " << count_obtuse_triangles(copy) << std::endl;
-
-      // CDT copy1(cdt);
-      // // Insert the circumcenter if possible
-      // obt_point calc_insert_centr = insert_centroid(copy1, f);
-      // if (best_steiner.obt_count > calc_insert_centr.obt_count) {
-      //   best_steiner = calc_insert_centr;
-      // }
-      // // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
-
-      // CDT copy2(cdt);
-      // // Insert the circumcenter if possible
-      // obt_point calc_insert_circ = insert_circumcenter(copy2, f);
-      // if (best_steiner.obt_count > calc_insert_circ.obt_count) {
-      //   best_steiner = calc_insert_circ;
-      // }
-      // // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
-
-
-      // CDT copy3(cdt);
-      // // Insert the circumcenter if possible
-      // obt_point calc_insert_inc = insert_incenter(copy3, f);
-      // if (best_steiner.obt_count > calc_insert_inc.obt_count) {
-      //   best_steiner = calc_insert_inc;
-      // }
-
-      CDT copy4(cdt);
+      CDT copy(cdt);
       // Insert the circumcenter if possible
-      obt_point calc_insert_proj = insert_projection(copy4, f);
-      if (best_steiner.obt_count > calc_insert_proj.obt_count) {
+      obt_point calc_insert_proj = insert_projection(copy, f);
+      if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
         best_steiner = calc_insert_proj;
       }
 
-      CDT copy5(cdt);
-      obt_face temp = merge_obtuse(copy5, f);
+      CDT copy1(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_mid = insert_mid(copy1, f);
+      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+        best_steiner = calc_insert_mid;
+      }
+
+      CDT copy2(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_centr = insert_centroid(copy2, f);
+      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+        best_steiner = calc_insert_centr;
+      }
+      // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
+
+      CDT copy3(cdt);
+      // Insert the circumcenter if possible
+      obt_point calc_insert_circ = insert_circumcenter(copy3, f);
+      if (best_steiner.obt_count > calc_insert_circ.obt_count) {
+        best_steiner = calc_insert_circ;
+      }
+      // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
+
+
+      CDT copy4(cdt);
+      obt_face temp = merge_obtuse(copy4, f);
       if (temp.obt_count != -1 && temp.obt_count < of.obt_count) {
         of = temp;
       }
     }
   }
-  if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count < count_obtuse_triangles(cdt)) {
+  if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
     cdt.insert_no_flip(best_steiner.insrt_pt);
     // na kanw kai insert to steiner_x_y
   }
   else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
     merge_obtuse(cdt, of.face);
-    std::cout << "mpaino sto merge gia to kanoniko polygono!\n";
   }
-
-  std::cout << "Final obtuse count: " << count_obtuse_triangles(cdt) << std::endl;
 }
 
 
@@ -923,7 +866,6 @@ Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vect
   // Create region_boundary_polygon polygon
   Polygon_2 region_boundary_polygon;
   for (int temp : region_boundary) {
-    std::cout << "temp: " << temp << std::endl;
     region_boundary_polygon.push_back(points[temp]);
   }
 
@@ -935,8 +877,8 @@ int main() {
   // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
-  // pt::read_json("input.json", root); // read the json file
-  pt::read_json("test_instances/instance_test_14.json", root); // read the json file
+  pt::read_json("input.json", root); // read the json file
+  // pt::read_json("test_instances/instance_test_4.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -944,7 +886,6 @@ int main() {
   std::list<int> region_boundary = get_region_boundary(root);
   std::string num_constraints = get_num_constraints(root);
   std::list<std::pair<int, int>> additional_constraints = get_additional_constraints(root, region_boundary);
-
 
   // Create the Constrained Delaunay Triangulation (CDT)
   CDT cdt;
@@ -965,33 +906,32 @@ int main() {
     cdt.insert_constraint(points[constraint.first], points[constraint.second]);
   }
 
+  // Create the region boundary polygon
   region_boundary_polygon = make_region_boundary_polygon(region_boundary, points);
-  for (auto it = region_boundary_polygon.vertices_begin(); it != region_boundary_polygon.vertices_end(); ++it) {
-    std::cout << "(" << it->x() << ", " << it->y() << ")" << std::endl;
-  }
-
-  CGAL::draw(cdt);
-
 
   // Count the obtuse triangles
-  std::cout << "Number of obtuse triangles before the flips: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Make flips
   make_flips(cdt);
 
-  CGAL::draw(cdt);
+  // Count the obtuse triangles
+  std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
-  std::cout << "\n\n\nSteiner points insertion:\n";
-  for (int i = 0 ; i < 1 ; i++) {
-    steiner_insertion(cdt, region_boundary_polygon);
+  for (int i = 0 ; i < 200 ; i++) {
+    if (count_obtuse_triangles(cdt) == 0) {
+      break;
+    }
+    steiner_insertion(cdt);
+    std::cout << "After Steriner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
 
-  // Count the obtuse triangles
-  std::cout << "Number of obtuse triangles after the flips: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "After Steriner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+
 
   // Draw the triangulation using CGAL's draw function
   CGAL::draw(cdt);
-
+  
   return 0;
 }
