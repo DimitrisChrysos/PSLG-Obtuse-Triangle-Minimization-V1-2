@@ -342,9 +342,9 @@ int main() {
   pt::ptree root; // create a root node
 
   // Choose the file to read
-  // pt::read_json("input.json", root); // read the json file
-  // pt::read_json("test_instances/instance_test_14.json", root); // read the json file
-  pt::read_json("tests/instance_6.json", root); // read the json file
+  pt::read_json("input.json", root); // read the json file
+  // pt::read_json("test_instances/instance_test_12.json", root); // read the json file
+  // pt::read_json("tests/instance_7.json", root); // read the json file
   
   // Read the json file
   std::string instance_uid = get_instance_uid(root);
@@ -379,7 +379,7 @@ int main() {
 
   // Count the obtuse triangles
   std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-  // CGAL::draw(cdt);
+  CGAL::draw(cdt);
 
   // Make flips
   make_flips(cdt);
@@ -405,7 +405,7 @@ int main() {
     std::cout << "After try to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
   std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-  // CGAL::draw(cdt);
+  CGAL::draw(cdt);
 
   write_output(cdt, points);
   
