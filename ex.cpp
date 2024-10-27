@@ -344,7 +344,7 @@ int main() {
   // Choose the file to read
   // pt::read_json("input.json", root); // read the json file
   // pt::read_json("test_instances/instance_test_14.json", root); // read the json file
-  pt::read_json("tests/instance_4.json", root); // read the json file
+  pt::read_json("tests/instance_3.json", root); // read the json file
   
   // Read the json file
   std::string instance_uid = get_instance_uid(root);
@@ -389,12 +389,10 @@ int main() {
   int steps = 0;
   for (int i = 0 ; i < 200 ; i++) {
     if (count_obtuse_triangles(cdt) == 0) {
-      steps = i;
       break;
     }
-    steps = i;
-    steiner_insertion(cdt);
-    std::cout << "After Steiner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+    steps += steiner_insertion(cdt);
+    std::cout << "After try to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
   std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   // CGAL::draw(cdt);
