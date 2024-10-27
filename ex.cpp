@@ -130,6 +130,7 @@ typedef K::Segment_2 Segment;
 typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
+//
 class obt_point {
   public:
     int obt_count;
@@ -141,6 +142,7 @@ class obt_point {
     }
 };
 
+//
 class obt_face {
   public:
     int obt_count;
@@ -154,7 +156,9 @@ class obt_face {
 
 Polygon_2 region_boundary_polygon;
 bool is_triangle_inside_region_boundary(CDT::Face_handle f1);
+Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
 
+// Checks if a triangle has an obtuse angle
 bool has_obtuse_angle(CDT::Face_handle face) {
   // Get the vertices of the triangle
   Point p1 = face->vertex(0)->point();
@@ -170,6 +174,7 @@ bool has_obtuse_angle(CDT::Face_handle face) {
   return false;
 }
 
+// Count the number of obtuse triangles in the CDT
 int count_obtuse_triangles(CDT cdt) {
   int count = 0;
   for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
@@ -186,6 +191,7 @@ int count_obtuse_triangles(CDT cdt) {
   return count;
 }
 
+// Find the obtuse vertex of a triangle
 int find_obtuse_vertex_id(CDT::Face_handle face) {
   Point p1 = face->vertex(0)->point();
   Point p2 = face->vertex(1)->point();
@@ -204,7 +210,6 @@ int find_obtuse_vertex_id(CDT::Face_handle face) {
   return -1;
 }
 
-Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
 
 // Check if a polygon of 4 edges is convex
 bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
@@ -282,6 +287,7 @@ bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
   return CGAL::is_convex_2(polygon_points.begin(), polygon_points.end());
 }
 
+// Test if the flip is possible
 bool test_the_flip(CDT& cdt, Point v1, Point v2) {
   CDT copy(cdt);
   for (const Edge& e : copy.finite_edges()) {
@@ -338,6 +344,7 @@ bool test_the_flip(CDT& cdt, Point v1, Point v2) {
   return false;
 }
 
+// Make flips in the CDT if possible and worth it
 void make_flips(CDT& cdt) {
   int count = 0;
   for (const Edge& e : cdt.finite_edges()) {
@@ -348,7 +355,6 @@ void make_flips(CDT& cdt) {
     CDT::Face_handle f2 = f1->neighbor(i);
     auto v1 = f1->vertex((i+1)%3);
     auto v2 = f1->vertex((i+2)%3);
-
 
     // Test is the flip possible or if it is worth doing
     bool do_flip = test_the_flip(cdt, v1->point(), v2->point());
@@ -361,6 +367,7 @@ void make_flips(CDT& cdt) {
   }
 }
 
+// Find the projection point of the obtuse vertex onto the opposite edge
 Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
     // Get the vertices of the face
     Point A = f->vertex(0)->point();
@@ -393,6 +400,7 @@ Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
     return projection;
 }
 
+// Insert the projection point of the obtuse vertex onto the opposite edge
 obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
   int obt_id = find_obtuse_vertex_id(f1);
   Point projection = find_perpendicular_projection(f1, obt_id);
@@ -402,6 +410,7 @@ obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
+// Insert a point at the circumcenter of the triangle
 obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
   // Calculate the circumcenter of the triangle
@@ -416,11 +425,11 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     cdt.insert_no_flip(pericenter);
   }
 
-  // return count_obtuse_triangles(copy);
   obt_point ret(count_obtuse_triangles(cdt), pericenter);
   return ret;
 }
 
+// Insert a point at the centroid of the triangle
 obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
 
   // Calculate the centroid of the triangle
@@ -432,15 +441,14 @@ obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
   // Insert the centroid
   cdt.insert_no_flip(centroid);
 
-
-  // count_obtuse_triangles(copy);
   obt_point ret(count_obtuse_triangles(cdt), centroid);
   return ret;
 }
 
 
-
+// Get the shared edge of two triangles
 Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
+
   // Get the index of the shared edge
   int edge_index = f1->index(neigh);
 
@@ -480,7 +488,7 @@ bool point_part_of_contrained_edge(CDT& cdt, Point p) {
   return false;
 }
 
-// If two triangles are mergable
+// Returns if two triangles are mergable
 bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge) {
   
   // If the neighbor is not obtused or their shared edge is constrained return false
@@ -500,6 +508,7 @@ bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge&
   return true;
 }
 
+// Remove the points given from the CDT
 void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points) {
   
   // Remove the points
@@ -509,14 +518,14 @@ void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std
   }
 }
 
+// Check if a polygon is convex from the points given
 bool is_convex_polygon(const std::vector<Point>& points) {
   return CGAL::is_convex_2(points.begin(), points.end());
 }
 
-
+// Merge triangles if possible
 obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 
-  // CDT copy(cdt);
   obt_face ret(-1, f1);
 
   // Get the vertices of the triangle
@@ -680,16 +689,17 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-
+// Insert a point at the midpoint of the longest edge
 obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   CDT copy(cdt);
 
-  // Calculate the circumcenter of the triangle
+  // Get the vertices of the triangle
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
   Point c = f1->vertex(2)->point();
   Point mid;
 
+  // Calculate the length of the edges
   K::FT l0 = CGAL::squared_distance(a, b);
   K::FT l1 = CGAL::squared_distance(a, c);
   K::FT l2 = CGAL::squared_distance(b, c);
@@ -712,6 +722,7 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
+// Check if a triangle is inside the region boundary
 bool is_triangle_inside_region_boundary(CDT::Face_handle f1) {
 
   // Get the vertices of the triangle
@@ -727,6 +738,7 @@ bool is_triangle_inside_region_boundary(CDT::Face_handle f1) {
   return false;
 }
 
+// Choose the best method to insert a steiner point
 void steiner_insertion(CDT& cdt) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
   Point a;
@@ -743,33 +755,28 @@ void steiner_insertion(CDT& cdt) {
     if (has_obtuse_angle(f)) {
       
       CDT copy(cdt);
-      // Insert the circumcenter if possible
       obt_point calc_insert_proj = insert_projection(copy, f);
       if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
         best_steiner = calc_insert_proj;
       }
 
       CDT copy1(cdt);
-      // Insert the circumcenter if possible
       obt_point calc_insert_mid = insert_mid(copy1, f);
       if (best_steiner.obt_count > calc_insert_mid.obt_count) {
         best_steiner = calc_insert_mid;
       }
 
       CDT copy2(cdt);
-      // Insert the circumcenter if possible
       obt_point calc_insert_centr = insert_centroid(copy2, f);
       if (best_steiner.obt_count > calc_insert_centr.obt_count) {
         best_steiner = calc_insert_centr;
       }
 
       CDT copy3(cdt);
-      // Insert the circumcenter if possible
       obt_point calc_insert_circ = insert_circumcenter(copy3, f);
       if (best_steiner.obt_count > calc_insert_circ.obt_count) {
         best_steiner = calc_insert_circ;
       }
-
 
       CDT copy4(cdt);
       obt_face temp = merge_obtuse(copy4, f);
@@ -786,7 +793,6 @@ void steiner_insertion(CDT& cdt) {
     merge_obtuse(cdt, of.face);
   }
 }
-
 
 // Read JSON functions
 std::string get_instance_uid(boost::property_tree::ptree root) {
@@ -852,14 +858,12 @@ std::list<std::pair<int, int>> get_additional_constraints(boost::property_tree::
   return additional_constraints;
 }
 
+// Create the region_boundary_polygon polygon
 Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vector<Point> points) {
-  
-  // Create region_boundary_polygon polygon
   Polygon_2 region_boundary_polygon;
   for (int temp : region_boundary) {
     region_boundary_polygon.push_back(points[temp]);
   }
-
   return region_boundary_polygon;
 }
 
@@ -904,7 +908,6 @@ int main() {
   // Count the obtuse triangles
   std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   CGAL::draw(cdt);
-
 
   // Make flips
   make_flips(cdt);
