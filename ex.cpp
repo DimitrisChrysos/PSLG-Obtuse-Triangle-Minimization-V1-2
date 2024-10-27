@@ -1,348 +1,4 @@
-#include <boost/json/src.hpp>
-#include <boost/json.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <list>
-#include <vector>
-#include <CGAL/draw_triangulation_2.h>
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-#include <CGAL/Constrained_Delaunay_triangulation_2.h>
-#include <CGAL/Constrained_triangulation_plus_2.h>
-#include <CGAL/convex_hull_2.h>
-#include <CGAL/Polygon_2_algorithms.h>
-#include <CGAL/Polygon_2.h>
-
-typedef CGAL:: Exact_predicates_exact_constructions_kernel K;
-typedef CGAL:: Exact_predicates_tag Itag;
-
-#define BOOST_BIND_GLOBAL_PLACEHOLDERS // optional in native ubuntu, removes a warning in wsl
-#ifndef CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
-
-#define CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
-
-
-
-#include <CGAL/Constrained_Delaunay_triangulation_2.h>
-
-
-
-template <class Gt, class Tds = CGAL::Default, class Itag = CGAL::Default>
-
-class Custom_Constrained_Delaunay_triangulation_2
-
-    : public CGAL::Constrained_Delaunay_triangulation_2<Gt, Tds, Itag> {
-
-public:
-
-    using Base = CGAL::Constrained_Delaunay_triangulation_2<Gt, Tds, Itag>;
-
-    using typename Base::Face_handle;
-
-    using typename Base::Point;
-
-    using typename Base::Vertex_handle;
-
-    using typename Base::Locate_type;
-
-    std::vector<K::FT> steiner_x;
-    std::vector<K::FT> steiner_y;
-
-
-
-    // Constructors
-
-    Custom_Constrained_Delaunay_triangulation_2(const Gt& gt = Gt())
-
-        : Base(gt) {}
-
-
-
-    Custom_Constrained_Delaunay_triangulation_2(typename Base::List_constraints& lc, const Gt& gt = Gt())
-
-        : Base(lc, gt) {}
-
-
-
-    template <class InputIterator>
-
-    Custom_Constrained_Delaunay_triangulation_2(InputIterator it, InputIterator last, const Gt& gt = Gt())
-
-        : Base(it, last, gt) {}
-
-
-
-    // New insert method without flips
-
-    Vertex_handle insert_no_flip(const Point& a, Face_handle start = Face_handle()) {
-
-        // Call Ctr::insert without flip_around
-
-        Vertex_handle va = this->Base::Ctr::insert(a, start); // Directly call Ctr::insert from the base
-
-        return va;
-
-    }
-
-
-
-    // Another insert method with known location
-
-    Vertex_handle insert_no_flip(const Point& a, Locate_type lt, Face_handle loc, int li) {
-
-        Vertex_handle va = this->Base::Ctr::insert(a, lt, loc, li); // Directly call Ctr::insert from the base
-
-        return va;
-
-    }
-
-    void insert_steiner_x_y(K::FT x, K::FT y) {
-      this->steiner_x.push_back(x);
-      this->steiner_y.push_back(y);
-    }
-
-    bool my_is_flippable(const typename Base::Edge& e) {
-      Face_handle f1 = e.first; 
-      int i = e.second; 
-      Face_handle f2 = f1->neighbor(i);
-      if (this->is_infinite(f1) || this->is_infinite(f2)) {
-        return false;
-      }
-      else if (this->is_constrained(e)) {
-        return false;
-      }
-
-      return true;
-    }
-};
-
-#endif // CGAL_CUSTOM_CONSTRAINED_DELAUNAY_TRIANGULATION_2_H
-
-
-
-
-typedef CGAL::Constrained_triangulation_plus_2<Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
-typedef CGAL::Polygon_2<K> Polygon_2;
-typedef K::Segment_2 Segment;
-typedef CDT::Point Point;
-typedef CDT::Edge Edge;
-
-//
-class obt_point {
-  public:
-    int obt_count;
-    Point insrt_pt;
-
-    obt_point(int count, Point pt) {
-      obt_count = count;
-      insrt_pt = pt;
-    }
-};
-
-//
-class obt_face {
-  public:
-    int obt_count;
-    CDT::Face_handle face;
-
-    obt_face(int count, CDT::Face_handle f) {
-      obt_count = count;
-      face = f;
-    }
-};
-
-Polygon_2 region_boundary_polygon;
-bool is_triangle_inside_region_boundary(CDT::Face_handle f1);
-Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
-
-// Checks if a triangle has an obtuse angle
-bool has_obtuse_angle(CDT::Face_handle face) {
-  // Get the vertices of the triangle
-  Point p1 = face->vertex(0)->point();
-  Point p2 = face->vertex(1)->point();
-  Point p3 = face->vertex(2)->point();
-
-  // Check if any angle of the triangle is obtuse
-  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE ||
-      CGAL::angle(p2,p3,p1) == CGAL::OBTUSE ||
-      CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
-    return true;
-  }
-  return false;
-}
-
-// Count the number of obtuse triangles in the CDT
-int count_obtuse_triangles(CDT cdt) {
-  int count = 0;
-  for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
-    CDT::Face_handle face = fit;
-    
-    // Check if the face is inside the region boundary
-    if (!is_triangle_inside_region_boundary(face))
-      continue;
-
-    if (has_obtuse_angle(face)) {
-      count++;
-    }
-  }
-  return count;
-}
-
-// Find the obtuse vertex of a triangle
-int find_obtuse_vertex_id(CDT::Face_handle face) {
-  Point p1 = face->vertex(0)->point();
-  Point p2 = face->vertex(1)->point();
-  Point p3 = face->vertex(2)->point();
-
-  // Check if any angle of the triangle is obtuse
-  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE) {
-    return 1;
-  }
-  else if (CGAL::angle(p2,p3,p1) == CGAL::OBTUSE) {
-    return 2;
-  }
-  else if (CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
-    return 0;
-  }
-  return -1;
-}
-
-
-// Check if a polygon of 4 edges is convex
-bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
-
-  // Get the points of f1
-  Point p1 = f1->vertex(0)->point();
-  Point p2 = f1->vertex(1)->point();
-  Point p3 = f1->vertex(2)->point();
-
-  // Get the points of f2
-  Point p4 = f2->vertex(0)->point();
-  Point p5 = f2->vertex(1)->point();
-  Point p6 = f2->vertex(2)->point();
-
-  // Not Shared Points -> not_shared_points
-  std::set<Point> not_shared_points = {p1, p2, p3};
-  auto it = not_shared_points.find(p4);
-  if (it != not_shared_points.end()) {
-      not_shared_points.erase(it);
-  }
-  else {
-    not_shared_points.insert(p4);
-  }
-  it = not_shared_points.find(p5);
-  if (it != not_shared_points.end()) {
-      not_shared_points.erase(it);
-  }
-  else {
-    not_shared_points.insert(p5);
-  }
-  it = not_shared_points.find(p6);
-  if (it != not_shared_points.end()) {
-      not_shared_points.erase(it);
-  }
-  else {
-    not_shared_points.insert(p6);
-  }
-
-  // Shared Points -> "shared_points"
-  std::set<Point> temp_points = {p1, p2, p3};
-  std::set<Point> shared_points = {};
-  it = temp_points.find(p4);
-  if (it != temp_points.end()) {
-    shared_points.insert(p4);
-  }
-  it = temp_points.find(p5);
-  if (it != temp_points.end()) {
-    shared_points.insert(p5);
-  }
-  it = temp_points.find(p6);
-  if (it != temp_points.end()) {
-    shared_points.insert(p6);
-  }
-
-  // Create a polygon with the points of the two triangles
-  std::vector<Point> polygon_points = {}; 
-  // Take one shared point and them remove it
-  Point shared_point = *shared_points.begin();
-  shared_points.erase(shared_points.begin());
-  polygon_points.push_back(shared_point);
-  // Take the first not shared point and remove it
-  Point not_shared_point = *not_shared_points.begin();
-  not_shared_points.erase(not_shared_points.begin());
-  polygon_points.push_back(not_shared_point);
-  // Take the second shared point and remove it
-  shared_point = *shared_points.begin();
-  shared_points.erase(shared_points.begin());
-  polygon_points.push_back(shared_point);
-  // Take the second not shared point and remove it
-  not_shared_point = *not_shared_points.begin();
-  not_shared_points.erase(not_shared_points.begin());
-  polygon_points.push_back(not_shared_point);
-
-  // Return if the polygon is convex
-  return CGAL::is_convex_2(polygon_points.begin(), polygon_points.end());
-}
-
-// Test if the flip is possible
-bool test_the_flip(CDT& cdt, Point v1, Point v2) {
-  CDT copy(cdt);
-  for (const Edge& e : copy.finite_edges()) {
-
-    // Get the edge points
-    CDT::Face_handle f1 = e.first; 
-    int i = e.second; 
-    CDT::Face_handle f2 = f1->neighbor(i);
-    auto p1 = f1->vertex((i+1)%3);
-    auto p2 = f1->vertex((i+2)%3);
-    Point p1_point = p1->point();
-    Point p2_point = p2->point();
-
-    // Check if the edge is the one we are looking for
-    if (!(v1.x() == p1_point.x() && v1.y() == p1_point.y() && v2.x() == p2_point.x() && v2.y() == p2_point.y())) {
-      continue;
-    }
-
-    // Check if the polygon created is convex
-    if (!is_convex(copy, f1, f2)) {
-      return false;
-    };
-
-    // Check if the edge is flippable
-    if (!copy.my_is_flippable(e)) {
-      return false;
-    }
-
-    // Check if the triangles formed by the edge have obtuse angles
-    int obt = 0;
-    if (has_obtuse_angle(f1)) obt++;
-    if (has_obtuse_angle(f2)) obt++;
-
-    // If triangles have obtuse angles, make the flip
-    if (obt) {
-
-      // Make the flip
-      copy.tds().flip(f1, i);
-
-      // Check if the triangles formed by the edge have obtuse angles after the flip
-      int obt2 = 0;
-      if (has_obtuse_angle(f1)) obt2++;
-      if (has_obtuse_angle(f2)) obt2++;
-
-      // If the number of obtuse angles after the flip are less, return true
-      if (obt2 < obt) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  return false;
-}
+#include "includes/utils/utils.hpp"
 
 // Make flips in the CDT if possible and worth it
 void make_flips(CDT& cdt) {
@@ -365,39 +21,6 @@ void make_flips(CDT& cdt) {
       count++;
     }
   }
-}
-
-// Find the projection point of the obtuse vertex onto the opposite edge
-Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
-    // Get the vertices of the face
-    Point A = f->vertex(0)->point();
-    Point B = f->vertex(1)->point();
-    Point C = f->vertex(2)->point();
-    
-    Point obtuse_vertex, vertex1, vertex2;
-    
-    // Identify which vertex has the obtuse angle
-    if (obtuse_vertex_idx == 0) {
-        obtuse_vertex = A;
-        vertex1 = B;
-        vertex2 = C;
-    } else if (obtuse_vertex_idx == 1) {
-        obtuse_vertex = B;
-        vertex1 = A;
-        vertex2 = C;
-    } else {
-        obtuse_vertex = C;
-        vertex1 = A;
-        vertex2 = B;
-    }
-
-    // Project the obtuse vertex onto the opposite edge (vertex1, vertex2)
-    Segment opposite_edge(vertex1, vertex2);
-
-    // Project the obtuse vertex onto the opposite edge
-    Point projection = opposite_edge.supporting_line().projection(obtuse_vertex);
-
-    return projection;
 }
 
 // Insert the projection point of the obtuse vertex onto the opposite edge
@@ -443,84 +66,6 @@ obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
 
   obt_point ret(count_obtuse_triangles(cdt), centroid);
   return ret;
-}
-
-
-// Get the shared edge of two triangles
-Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh) {
-
-  // Get the index of the shared edge
-  int edge_index = f1->index(neigh);
-
-  // Get the vertices of the shared edge
-  Point p1 = f1->vertex((edge_index + 1) % 3)->point();
-  Point p2 = f1->vertex((edge_index + 2) % 3)->point();
-
-  const Edge ed;
-  for (const Edge& e : cdt.finite_edges()) {
-    CDT::Face_handle face = e.first;
-    int index = e.second;
-    Point edgeP1 = face->vertex((index + 1) % 3)->point();
-    Point edgeP2 = face->vertex((index + 2) % 3)->point();
-
-    if ((edgeP1 == p1 && edgeP2 == p2) || (edgeP1 == p2 && edgeP2 == p1)) {
-      return e;
-    }
-  }
-
-  return ed;
-}
-
-// Check if a point is part of a constraint edge
-bool point_part_of_contrained_edge(CDT& cdt, Point p) {
-  for (const Edge& e : cdt.finite_edges()) {
-    if (cdt.is_constrained(e)) {
-      CDT::Face_handle face = e.first;
-      int index = e.second;
-      Point edge_point1 = face->vertex((index + 1) % 3)->point();
-      Point edge_point2 = face->vertex((index + 2) % 3)->point();
-
-      if ((edge_point1.x() == p.x() && edge_point1.y() == p.y()) 
-        || (edge_point2.x() == p.x() && edge_point2.y() == p.y()))
-        return true;
-    }
-  }
-  return false;
-}
-
-// Returns if two triangles are mergable
-bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge) {
-  
-  // If the neighbor is not obtused or their shared edge is constrained return false
-  if (!has_obtuse_angle(neigh) || cdt.is_constrained(shared_edge))
-    return false;
-
-  // Get the points of the shared_edge
-  CDT::Face_handle face1 = shared_edge.first;
-  int index = shared_edge.second;
-  Point edge_point1 = face1->vertex((index + 1) % 3)->point();
-  Point edge_point2 = face1->vertex((index + 2) % 3)->point();
-
-  // If both of the points of the shared_edge are part of a constrained edge the triangles are not mergable
-  if (point_part_of_contrained_edge(cdt, edge_point1) && point_part_of_contrained_edge(cdt, edge_point2))
-    return false;
-
-  return true;
-}
-
-// Remove the points given from the CDT
-void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points) {
-  
-  // Remove the points
-  for (CDT::Vertex_handle v : to_remove_points) {
-    removed_points.push_back(v->point()); 
-    cdt.remove(v);
-  }
-}
-
-// Check if a polygon is convex from the points given
-bool is_convex_polygon(const std::vector<Point>& points) {
-  return CGAL::is_convex_2(points.begin(), points.end());
 }
 
 // Merge triangles if possible
@@ -722,24 +267,8 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-// Check if a triangle is inside the region boundary
-bool is_triangle_inside_region_boundary(CDT::Face_handle f1) {
-
-  // Get the vertices of the triangle
-  Point p1 = f1->vertex(0)->point();
-  Point p2 = f1->vertex(1)->point();
-  Point p3 = f1->vertex(2)->point();
-
-  // Get the centroid of the triangle
-  Point centroid = CGAL::centroid(p1, p2, p3);
-  if (CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), centroid) == CGAL::ON_BOUNDED_SIDE) {
-    return true;
-  }
-  return false;
-}
-
 // Choose the best method to insert a steiner point
-void steiner_insertion(CDT& cdt) {
+int steiner_insertion(CDT& cdt) {
   int init_obtuse_count = count_obtuse_triangles(cdt);
   Point a;
   CDT::Face_handle f1;
@@ -788,75 +317,15 @@ void steiner_insertion(CDT& cdt) {
   if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
     cdt.insert_no_flip(best_steiner.insrt_pt);
     cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
+    return 1;
   }
   else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
     merge_obtuse(cdt, of.face);
+    return 1;
   }
+  return 0;
 }
 
-// Read JSON functions
-std::string get_instance_uid(boost::property_tree::ptree root) {
-  return root.get<std::string>("instance_uid");
-}
-
-int get_num_points(boost::property_tree::ptree root) {
-  return root.get<int>("num_points", 0);;
-}
-
-std::list<int> get_points_x(boost::property_tree::ptree root) {
-  std::list<int> points_x;
-  for (boost::property_tree::ptree::value_type &point_x : root.get_child("points_x")) {
-    points_x.push_back(point_x.second.get_value<int>());
-  }
-  return points_x;
-}
-
-std::list<int> get_points_y(boost::property_tree::ptree root) {
-  std::list<int> points_y;
-  for (boost::property_tree::ptree::value_type &point_y : root.get_child("points_y")) {
-    points_y.push_back(point_y.second.get_value<int>());
-  }
-  return points_y;
-}
-
-std::list<int> get_region_boundary(boost::property_tree::ptree root) {
-  std::list<int> region_boundary;
-  for (boost::property_tree::ptree::value_type &temp : root.get_child("region_boundary")) {
-    region_boundary.push_back(temp.second.get_value<int>());
-  }
-  return region_boundary;
-}
-
-std::string get_num_constraints(boost::property_tree::ptree root) {
-  return root.get<std::string>("num_constraints");
-}
-
-std::list<std::pair<int, int>> get_additional_constraints(boost::property_tree::ptree root, std::list<int> region_boundary) {
-  std::list<std::pair<int, int>> additional_constraints;
-  for (boost::property_tree::ptree::value_type &row : root.get_child("additional_constraints")) {
-    auto it = row.second.begin();
-    int first = it->second.get_value<int>();
-    ++it;
-    int second = it->second.get_value<int>();
-    additional_constraints.push_back(std::make_pair(first, second));
-  }
-
-  // Add region_boundary to additional_constraints
-  int prev = -1;
-  int first;
-  for (const auto &temp : region_boundary) {
-    if (prev == -1) {
-      prev = temp;
-      first = temp;
-      continue;
-    }
-    additional_constraints.push_back(std::make_pair(prev, temp));
-    prev = temp;
-  }
-  additional_constraints.push_back(std::make_pair(prev, first));
-
-  return additional_constraints;
-}
 
 // Create the region_boundary_polygon polygon
 Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vector<Point> points) {
@@ -869,12 +338,15 @@ Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vect
 
 int main() {
   
-  // Read the json file
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
+
+  // Choose the file to read
   // pt::read_json("input.json", root); // read the json file
   // pt::read_json("test_instances/instance_test_14.json", root); // read the json file
-  pt::read_json("tests/instance_2.json", root); // read the json file
+  pt::read_json("tests/instance_4.json", root); // read the json file
+  
+  // Read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -907,7 +379,7 @@ int main() {
 
   // Count the obtuse triangles
   std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
 
   // Make flips
   make_flips(cdt);
@@ -920,135 +392,14 @@ int main() {
       steps = i;
       break;
     }
+    steps = i;
     steiner_insertion(cdt);
     std::cout << "After Steiner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
   std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
 
-  boost::json::object root1;
-  root1["content_type"] = "CG_SHOP_2025_Solution";
-  root1["instance_uid"] = "some_instance_uid";
-
-  // JSON array to hold steiner_x values
-  boost::json::array steiner_x_json;
-  for (const auto& x : cdt.steiner_x) {
-    steiner_x_json.push_back(static_cast<double>(CGAL::to_double(x)));
-  }
-
-  // Add steiner_x JSON array to root object
-  root1["steiner_x"] = steiner_x_json;
-
-  // JSON array to hold steiner_x values
-  boost::json::array steiner_y_json;
-  for (const auto& y : cdt.steiner_y) {
-    steiner_y_json.push_back(static_cast<double>(CGAL::to_double(y)));
-  }
-
-  // Add steiner_x JSON array to root object
-  root1["steiner_y"] = steiner_y_json;
-
-  boost::json::array edges_array;
-
-  for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
-    CDT::Face_handle f1 = e->first;  // The face containing the edge
-    int edge_index = e->second;        // The local index of the edge within the face
-
-    // Get the two vertices of the edge
-    CDT::Vertex_handle v1 = f1->vertex((edge_index + 1) % 3);
-    CDT::Vertex_handle v2 = f1->vertex((edge_index + 2) % 3);
-
-    // Access the coordinates of the vertices
-    Point p1 = v1->point();
-    Point p2 = v2->point();
-
-    int ind_1;
-    int ind_2;
-    bool found_1 = false;
-    bool found_2 = false;
-
-    for (std::size_t i = 0; i < points.size(); ++i) {
-      if (p1.x() == points[i].x() && p1.y() == points[i].y()) {
-        ind_1 = i;
-        found_1 = true;
-      }
-      if (p2.x() == points[i].x() && p2.y() == points[i].y()) {
-        ind_2 = i;
-        found_2 = true;
-      }
-      if (found_1 && found_2) break;
-      // std::cout << "Point " << i << ": (" << points[i].x() << ", " << points[i].y() << ")" << std::endl;
-    }
-
-    if (!found_1 || !found_2) {
-      for (std::size_t i = 0; i < cdt.steiner_x.size(); ++i) {
-        if (p1.x() == cdt.steiner_x[i] && p1.y() == cdt.steiner_y[i]) {
-          ind_1 = points.size() + i;
-          found_1 = true;
-        }
-        if (p2.x() == cdt.steiner_x[i] && p2.y() == cdt.steiner_y[i]) {
-          ind_2 = points.size() + i;
-          found_2 = true;
-        }
-        if (found_1 && found_2) break;
-      }
-    }
-
-    boost::json::array edge_pair;
-    edge_pair.push_back(ind_1);
-    edge_pair.push_back(ind_2);
-
-    // Add the edge pair to the edges_array
-    edges_array.push_back(edge_pair);
-
-
-
-    // Add edges array to the root JSON structure
-  }
-  root1["edges"] = edges_array;
-
-  // Serialize the whole JSON object
-  std::string json_string = boost::json::serialize(root1);
-
-
-  std::string pretty_json;
-  int indent = 0;
-  char prev;
-  bool in_string = false;
-  bool first_edge = true; // Track the first edge for proper formatting
-
-  for (char ch : json_string) {
-    if (ch == '"') in_string = !in_string;
-    if (!in_string) {
-      if (ch == ',') {
-        if (prev == '"' || prev == ']') {
-          pretty_json += ch;
-          pretty_json += '\n';
-          prev = ch;
-          continue;
-        }
-      }
-      else if (ch == ':') {
-        pretty_json += ch;
-        pretty_json += ' ';
-        prev = ch;
-        continue;
-      }
-      else if (ch == '[') {
-        if (prev == '[') {
-          pretty_json += '\n';
-        }
-        pretty_json += '\t';
-      }
-    }
-    pretty_json += ch;
-    prev = ch;
-  }
-  
-  // Write to file
-  std::ofstream file("output.json");
-  file << pretty_json;
-  file.close();
+  write_output(cdt, points);
   
   return 0;
 }

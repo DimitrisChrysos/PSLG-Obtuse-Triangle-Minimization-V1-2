@@ -3,6 +3,9 @@
 
 CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
   /usr/include/stdc-predef.h \
+  includes/utils/utils.hpp \
+  includes/read_write_file/read_write_file.hpp \
+  includes/custom_cdt_class/custom_cdt_class.hpp \
   /usr/local/include/boost/json/src.hpp \
   /usr/local/include/boost/json.hpp \
   /usr/local/include/boost/json/detail/config.hpp \
@@ -4291,8 +4294,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/fusion/view/single_view/detail/value_of_impl.hpp:
 
-/usr/local/include/boost/fusion/view/single_view/detail/deref_impl.hpp:
-
 /usr/local/include/boost/fusion/view/single_view/single_view_iterator.hpp:
 
 /usr/local/include/boost/mpl/aux_/preprocessed/gcc/inherit.hpp:
@@ -4321,15 +4322,9 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/fusion/view/joint_view/detail/deref_impl.hpp:
 
-/usr/local/include/CGAL/Distance_3/Line_3_Plane_3.h:
+/usr/local/include/boost/mpl/end.hpp:
 
-/usr/local/include/boost/format/detail/compat_workarounds.hpp:
-
-/usr/local/include/boost/mpl/aux_/config/static_constant.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/timex.h:
-
-/usr/include/x86_64-linux-gnu/bits/endianness.h:
+/usr/local/include/boost/fusion/mpl/end.hpp:
 
 /usr/local/include/boost/property_tree/detail/file_parser_error.hpp:
 
@@ -4386,10 +4381,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/random/weibull_distribution.hpp:
 
 /usr/local/include/boost/bind/bind_mf2_cc.hpp:
-
-/usr/local/include/boost/format.hpp:
-
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qstringmatcher.h:
 
 /usr/local/include/boost/bind/bind_cc.hpp:
 
@@ -4572,6 +4563,10 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/random/uniform_on_sphere.hpp:
 
 /usr/local/include/boost/mpl/aux_/preprocessed/gcc/minus.hpp:
+
+/usr/local/include/boost/format.hpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qstringmatcher.h:
 
 /usr/local/include/boost/mpl/aux_/preprocessed/gcc/plus.hpp:
 
@@ -4891,8 +4886,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/Intersections_3/Plane_3_Ray_3.h:
 
-/usr/local/include/boost/mpl/end.hpp:
-
 /usr/local/include/boost/preprocessor/array/data.hpp:
 
 /usr/local/include/boost/mpl/reverse_fold.hpp:
@@ -5074,6 +5067,16 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/CGAL/Cartesian/Iso_rectangle_2.h:
 
 /usr/local/include/boost/mpl/aux_/na.hpp:
+
+/usr/local/include/boost/mpl/aux_/config/static_constant.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/timex.h:
+
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
+
+/usr/local/include/CGAL/Distance_3/Line_3_Plane_3.h:
+
+/usr/local/include/boost/format/detail/compat_workarounds.hpp:
 
 /usr/local/include/boost/mpl/bool.hpp:
 
@@ -5341,14 +5344,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/Triangle_3.h:
 
-/usr/include/c++/11/bits/enable_special_members.h:
-
-/usr/local/include/boost/mp11/detail/mp_fold.hpp:
-
-/usr/local/include/boost/property_tree/detail/ptree_implementation.hpp:
-
-/usr/local/include/boost/move/detail/type_traits.hpp:
-
 /usr/local/include/boost/mpl/pair_view.hpp:
 
 /usr/local/include/boost/ref.hpp:
@@ -5428,6 +5423,12 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/include/c++/11/bits/erase_if.h:
 
 /usr/local/include/boost/preprocessor/array/elem.hpp:
+
+/usr/include/c++/11/bits/enable_special_members.h:
+
+/usr/local/include/boost/mp11/detail/mp_fold.hpp:
+
+/usr/local/include/boost/property_tree/detail/ptree_implementation.hpp:
 
 /usr/local/include/boost/container/detail/destroyers.hpp:
 
@@ -5566,8 +5567,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/CGAL/Profile_counter.h:
 
 /usr/local/include/CGAL/Direction_3.h:
-
-/usr/local/include/boost/fusion/mpl/end.hpp:
 
 /usr/local/include/boost/type_traits/is_nothrow_swappable.hpp:
 
@@ -5713,19 +5712,7 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
-
-/usr/local/include/boost/range/functions.hpp:
-
-/usr/local/include/boost/type_index/stl_type_index.hpp:
-
-/usr/local/include/boost/describe/modifiers.hpp:
-
 /usr/local/include/CGAL/Intersections_2/Line_2_Line_2.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
-/usr/local/include/CGAL/Intersections_3/Ray_3_Segment_3.h:
 
 /usr/local/include/boost/json/detail/ryu/detail/d2s.hpp:
 
@@ -5779,6 +5766,32 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/assertions.h:
 
+/usr/local/include/boost/mpl/vector/aux_/pop_front.hpp:
+
+/usr/local/include/boost/predef/compiler/edg.h:
+
+/usr/local/include/boost/container/detail/value_functors.hpp:
+
+/usr/local/include/boost/mpl/apply_wrap.hpp:
+
+/usr/local/include/boost/fusion/container/vector/detail/end_impl.hpp:
+
+/usr/local/include/boost/smart_ptr/detail/requires_cxx11.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
+
+/usr/local/include/boost/json/static_resource.hpp:
+
+/usr/local/include/boost/multi_index_container_fwd.hpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtOpenGL/qtopenglglobal.h:
+
+/usr/local/include/boost/utility/result_of.hpp:
+
+/usr/local/include/boost/type_traits/is_virtual_base_of.hpp:
+
+/usr/local/include/boost/system/detail/std_category_impl.hpp:
+
 /usr/local/include/boost/mpl/aux_/pop_front_impl.hpp:
 
 /usr/local/include/boost/mpl/vector/aux_/include_preprocessed.hpp:
@@ -5808,6 +5821,18 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/CGAL/Simple_cartesian.h:
 
 /usr/include/c++/11/pstl/glue_memory_defs.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
+
+/usr/local/include/boost/range/functions.hpp:
+
+/usr/local/include/boost/type_index/stl_type_index.hpp:
+
+/usr/local/include/boost/describe/modifiers.hpp:
+
+includes/read_write_file/read_write_file.hpp:
+
+/usr/local/include/boost/mpl/inserter.hpp:
 
 /usr/local/include/boost/config/user.hpp:
 
@@ -5843,15 +5868,31 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/Intersections_3/internal/Plane_3_Triangle_3_do_intersect.h:
 
-/usr/local/include/boost/mpl/pop_front_fwd.hpp:
+/usr/include/x86_64-linux-gnu/bits/select.h:
 
-/usr/local/include/boost/type_traits/is_final.hpp:
+/usr/include/x86_64-linux-gnu/bits/time.h:
 
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qelapsedtimer.h:
+/usr/local/include/boost/json/impl/static_resource.ipp:
 
-/usr/local/include/boost/config/no_tr1/cmath.hpp:
+/usr/local/include/boost/any/fwd.hpp:
 
-/usr/local/include/boost/json/detail/config.hpp:
+/usr/include/x86_64-linux-gnu/qt5/QtGui/qsurfaceformat.h:
+
+/usr/local/include/boost/fusion/container/vector/detail/begin_impl.hpp:
+
+/usr/local/include/boost/mp11/set.hpp:
+
+/usr/local/include/boost/type_traits/integral_promotion.hpp:
+
+/usr/local/include/boost/predef/os/bsd/dragonfly.h:
+
+/usr/local/include/boost/intrusive/detail/hook_traits.hpp:
+
+/usr/local/include/boost/describe/detail/void_t.hpp:
+
+/usr/include/c++/11/istream:
+
+/usr/local/include/CGAL/Qt/qglviewer_impl_list.h:
 
 /usr/include/ctype.h:
 
@@ -5888,6 +5929,16 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/include/c++/11/ext/type_traits.h:
 
 /usr/local/include/CGAL/Intersections_3/Sphere_3_Sphere_3.h:
+
+/usr/local/include/boost/mpl/pop_front_fwd.hpp:
+
+/usr/local/include/boost/type_traits/is_final.hpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qelapsedtimer.h:
+
+/usr/local/include/boost/config/no_tr1/cmath.hpp:
+
+/usr/local/include/boost/json/detail/config.hpp:
 
 /usr/include/asm-generic/errno-base.h:
 
@@ -5945,23 +5996,25 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/CGAL/Point_2.h:
 
-/usr/local/include/boost/mpl/vector/aux_/pop_front.hpp:
+/usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
-/usr/local/include/boost/predef/compiler/edg.h:
+/usr/local/include/CGAL/Intersections_3/Ray_3_Segment_3.h:
 
-/usr/local/include/boost/container/detail/value_functors.hpp:
+/usr/local/include/boost/mpl/quote.hpp:
 
-/usr/local/include/boost/mpl/apply_wrap.hpp:
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qstringview.h:
 
-/usr/local/include/boost/fusion/container/vector/detail/end_impl.hpp:
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QCheckBox:
 
-/usr/local/include/boost/smart_ptr/detail/requires_cxx11.hpp:
+/usr/local/include/boost/preprocessor/arithmetic/limits/inc_256.hpp:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
+/usr/local/include/boost/type_traits/has_multiplies.hpp:
 
-/usr/local/include/boost/json/static_resource.hpp:
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
-/usr/local/include/boost/multi_index_container_fwd.hpp:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt5/QtGui/QClipboard:
 
 /usr/include/c++/11/bits/exception_defines.h:
 
@@ -5995,64 +6048,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/fusion/iterator/distance.hpp:
 
-/usr/local/include/boost/json/detail/ryu/detail/d2s_full_table.hpp:
-
-/usr/local/include/boost/mpl/front_fwd.hpp:
-
-/usr/local/include/boost/type_traits/add_pointer.hpp:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h:
-
-/usr/local/include/boost/config/helper_macros.hpp:
-
-/usr/include/c++/11/bits/hash_bytes.h:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
-
-/usr/local/include/boost/mpl/quote.hpp:
-
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qstringview.h:
-
-/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QCheckBox:
-
-/usr/local/include/boost/preprocessor/arithmetic/limits/inc_256.hpp:
-
-/usr/local/include/boost/type_traits/has_multiplies.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h:
-
-/usr/include/x86_64-linux-gnu/qt5/QtGui/QClipboard:
-
-/usr/include/x86_64-linux-gnu/bits/select.h:
-
-/usr/include/x86_64-linux-gnu/bits/time.h:
-
-/usr/local/include/boost/json/impl/static_resource.ipp:
-
-/usr/local/include/boost/any/fwd.hpp:
-
-/usr/include/x86_64-linux-gnu/qt5/QtGui/qsurfaceformat.h:
-
-/usr/local/include/boost/fusion/container/vector/detail/begin_impl.hpp:
-
-/usr/local/include/boost/mp11/set.hpp:
-
-/usr/local/include/boost/type_traits/integral_promotion.hpp:
-
-/usr/local/include/boost/predef/os/bsd/dragonfly.h:
-
-/usr/local/include/boost/intrusive/detail/hook_traits.hpp:
-
-/usr/local/include/boost/describe/detail/void_t.hpp:
-
-/usr/include/c++/11/istream:
-
-/usr/local/include/CGAL/Qt/qglviewer_impl_list.h:
-
 /usr/include/c++/11/bits/ostream_insert.h:
 
 /usr/local/include/boost/preprocessor/variadic/elem.hpp:
@@ -6077,21 +6072,17 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/fusion/adapted/boost_tuple/detail/build_cons.hpp:
 
-/usr/local/include/boost/mpl/aux_/iter_fold_impl.hpp:
-
-/usr/local/include/boost/range/iterator_range_core.hpp:
-
-/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton:
-
-/usr/include/c++/11/bits/ptr_traits.h:
-
-/usr/local/include/boost/config/stdlib/libstdcpp3.hpp:
-
-/usr/local/include/CGAL/Intersections_3/internal/Line_3_Sphere_3_do_intersect.h:
-
 /usr/local/include/boost/json/value.hpp:
 
 /usr/local/include/boost/json/null_resource.hpp:
+
+includes/utils/utils.hpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qatomic_cxx11.h:
+
+/usr/include/c++/11/tr1/modified_bessel_func.tcc:
+
+/usr/local/include/boost/system/detail/enable_if.hpp:
 
 /usr/local/include/boost/container_hash/is_unordered_range.hpp:
 
@@ -6125,6 +6116,12 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/include/c++/11/bits/string_view.tcc:
 
+/usr/include/c++/11/bits/hash_bytes.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h:
+
+/usr/local/include/boost/config/helper_macros.hpp:
+
 /usr/local/include/boost/predef/hardware.h:
 
 /usr/include/c++/11/bits/move.h:
@@ -6132,10 +6129,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/multiprecision/detail/precision.hpp:
 
 /usr/local/include/boost/mpl/sizeof.hpp:
-
-/usr/local/include/boost/system/detail/enable_if.hpp:
-
-/usr/include/c++/11/tr1/modified_bessel_func.tcc:
 
 /usr/local/include/boost/fusion/view/single_view/detail/equal_to_impl.hpp:
 
@@ -6163,7 +6156,15 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/fusion/support/detail/enabler.hpp:
 
-/usr/local/include/boost/mpl/inserter.hpp:
+/usr/local/include/boost/mpl/front_fwd.hpp:
+
+/usr/local/include/boost/type_traits/add_pointer.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/local/include/boost/json/detail/ryu/detail/d2s_full_table.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
 /usr/local/include/boost/mpl/aux_/fold_impl.hpp:
 
@@ -6174,14 +6175,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/mpl/aux_/numeric_op.hpp:
 
 /usr/local/include/CGAL/basic.h:
-
-/usr/include/x86_64-linux-gnu/qt5/QtOpenGL/qtopenglglobal.h:
-
-/usr/local/include/boost/utility/result_of.hpp:
-
-/usr/local/include/boost/type_traits/is_virtual_base_of.hpp:
-
-/usr/local/include/boost/system/detail/std_category_impl.hpp:
 
 /usr/local/include/boost/json/detail/ryu/impl/d2s.ipp:
 
@@ -6233,6 +6226,18 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/include/c++/11/pstl/pstl_config.h:
 
+/usr/local/include/boost/mpl/aux_/iter_fold_impl.hpp:
+
+/usr/local/include/boost/range/iterator_range_core.hpp:
+
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton:
+
+/usr/include/c++/11/bits/ptr_traits.h:
+
+/usr/local/include/boost/config/stdlib/libstdcpp3.hpp:
+
+/usr/local/include/CGAL/Intersections_3/internal/Line_3_Sphere_3_do_intersect.h:
+
 /usr/local/include/boost/mpl/negate.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qpair.h:
@@ -6263,6 +6268,16 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/format/detail/unset_macros.hpp:
 
+/usr/local/include/CGAL/int.h:
+
+/usr/local/include/boost/mpl/begin_end_fwd.hpp:
+
+/usr/local/include/boost/json/detail/stack.hpp:
+
+/usr/local/include/CGAL/Distance_3/Ray_3_Plane_3.h:
+
+/usr/local/include/CGAL/Bbox_2.h:
+
 /usr/local/include/boost/mpl/aux_/config/gcc.hpp:
 
 /usr/local/include/boost/container_hash/hash_fwd.hpp:
@@ -6274,16 +6289,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/config/detail/cxx_composite.hpp:
 
 /usr/local/include/boost/random/linear_feedback_shift.hpp:
-
-/usr/local/include/CGAL/int.h:
-
-/usr/local/include/boost/mpl/begin_end_fwd.hpp:
-
-/usr/local/include/boost/json/detail/stack.hpp:
-
-/usr/local/include/CGAL/Distance_3/Ray_3_Plane_3.h:
-
-/usr/local/include/CGAL/Bbox_2.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtGui/qmatrix4x4.h:
 
@@ -6389,8 +6394,6 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 
 /usr/local/include/boost/json/impl/array.ipp:
 
-/usr/include/unistd.h:
-
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
@@ -6412,6 +6415,10 @@ CMakeFiles/polyg.dir/ex.cpp.o: ex.cpp \
 /usr/local/include/boost/move/detail/pointer_element.hpp:
 
 /usr/local/include/CGAL/IO/io.h:
+
+/usr/include/unistd.h:
+
+/usr/local/include/boost/move/detail/type_traits.hpp:
 
 /usr/local/include/boost/graph/graph_mutability_traits.hpp:
 
@@ -6559,6 +6566,10 @@ ex.cpp:
 
 /usr/local/include/boost/throw_exception.hpp:
 
+/usr/local/include/boost/fusion/view/single_view/detail/deref_impl.hpp:
+
+includes/custom_cdt_class/custom_cdt_class.hpp:
+
 /usr/local/include/boost/move/detail/config_begin.hpp:
 
 /usr/local/include/boost/mp11/version.hpp:
@@ -6698,6 +6709,10 @@ ex.cpp:
 /usr/local/include/boost/mpl/identity.hpp:
 
 /usr/local/include/CGAL/rank.h:
+
+/usr/local/include/boost/fusion/adapted/mpl/detail/end_impl.hpp:
+
+/usr/include/c++/11/typeindex:
 
 /usr/local/include/boost/json/detail/shared_resource.hpp:
 
@@ -7043,6 +7058,16 @@ ex.cpp:
 
 /usr/local/include/boost/preprocessor/array/size.hpp:
 
+/usr/local/include/boost/predef/architecture/arm.h:
+
+/usr/local/include/boost/json/value_stack.hpp:
+
+/usr/local/include/boost/mpl/aux_/largest_int.hpp:
+
+/usr/include/c++/11/cstddef:
+
+/usr/local/include/boost/cstdint.hpp:
+
 /usr/local/include/boost/json/serialize.hpp:
 
 /usr/local/include/boost/preprocessor/arithmetic/detail/is_minimum_number.hpp:
@@ -7136,16 +7161,6 @@ ex.cpp:
 /usr/local/include/boost/type_traits/conjunction.hpp:
 
 /usr/local/include/boost/mpl/push_front.hpp:
-
-/usr/local/include/boost/predef/architecture/arm.h:
-
-/usr/local/include/boost/json/value_stack.hpp:
-
-/usr/local/include/boost/mpl/aux_/largest_int.hpp:
-
-/usr/include/c++/11/cstddef:
-
-/usr/local/include/boost/cstdint.hpp:
 
 /usr/local/include/boost/mpl/aux_/template_arity_fwd.hpp:
 
@@ -7980,8 +7995,6 @@ ex.cpp:
 /usr/local/include/boost/multiprecision/detail/atomic.hpp:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qbasicatomic.h:
-
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qatomic_cxx11.h:
 
 /usr/include/x86_64-linux-gnu/qt5/QtCore/qgenericatomic.h:
 
@@ -9622,7 +9635,3 @@ ui_ImageInterface.h:
 /usr/local/include/CGAL/wmult.h:
 
 /usr/local/include/boost/fusion/adapted/mpl/mpl_iterator.hpp:
-
-/usr/include/c++/11/typeindex:
-
-/usr/local/include/boost/fusion/adapted/mpl/detail/end_impl.hpp:

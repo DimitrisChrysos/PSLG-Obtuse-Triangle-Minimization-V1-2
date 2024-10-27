@@ -29,6 +29,16 @@ if ( NOT Boost_FOUND )
 
 endif()
 
+# include for local directory
+# include utils and graphics libraries
+add_subdirectory(includes/custom_cdt_class)
+add_subdirectory(includes/utils)
+add_subdirectory(includes/read_write_file)
+
+
+# add libraries to EXTRA_LIBS
+list(APPEND EXTRA_LIBS custom_cdt_class utils read_write_file)
+
 # include for local package
 
 
