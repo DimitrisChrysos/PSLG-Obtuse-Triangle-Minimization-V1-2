@@ -14,8 +14,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "icons/File.qrc"
   "icons/Input.qrc"
   "icons/Triangulation_2.qrc"
-  "includes/custom_cdt_class/CMakeLists.txt"
-  "includes/utils/CMakeLists.txt"
   "resources/CGAL.qrc"
   "/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfigVersion.cmake"
@@ -135,8 +133,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "icons/Triangulation_2.qrc.depends"
   "CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/AutogenInfo.json"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
-  "includes/utils/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "includes/custom_cdt_class/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -144,6 +140,4 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/CGAL_Qt5_moc_and_resources.dir/DependInfo.cmake"
   "CMakeFiles/polyg.dir/DependInfo.cmake"
   "CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/DependInfo.cmake"
-  "includes/utils/CMakeFiles/utils.dir/DependInfo.cmake"
-  "includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/DependInfo.cmake"
   )

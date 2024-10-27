@@ -155,32 +155,6 @@ CGAL_Qt5_moc_and_resources_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build.make CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build
 .PHONY : CGAL_Qt5_moc_and_resources_autogen/fast
 
-#=============================================================================
-# Target rules for targets named utils
-
-# Build rule for target.
-utils: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 utils
-.PHONY : utils
-
-# fast build rule for target.
-utils/fast:
-	$(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/build
-.PHONY : utils/fast
-
-#=============================================================================
-# Target rules for targets named custom_cdt_class
-
-# Build rule for target.
-custom_cdt_class: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 custom_cdt_class
-.PHONY : custom_cdt_class
-
-# fast build rule for target.
-custom_cdt_class/fast:
-	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
-.PHONY : custom_cdt_class/fast
-
 CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o: CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp.o
 .PHONY : CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o
 
@@ -335,9 +309,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen"
 	@echo "... CGAL_Qt5_moc_and_resources"
-	@echo "... custom_cdt_class"
 	@echo "... polyg"
-	@echo "... utils"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.i"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.s"

@@ -13,8 +13,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/CMakeFiles/utils.dir/DependInfo.cmake"
-  "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/DependInfo.cmake"
   "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles/CGAL_Qt5_moc_and_resources.dir/DependInfo.cmake"
   )
 

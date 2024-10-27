@@ -206,7 +206,7 @@ int find_obtuse_vertex_id(CDT::Face_handle face) {
 
 Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
 
-// check if a polygon of 4 edges is convex
+// Check if a polygon of 4 edges is convex
 bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
 
   // Get the points of f1
@@ -259,41 +259,26 @@ bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
     shared_points.insert(p6);
   }
 
-  // // Print them
-  // for (auto p : shared_points) {
-  //   std::cout << "shared_points: " << p << std::endl;
-  // }
-  // for (auto p : not_shared_points) {
-  //   std::cout << "not_shared_points: " << p << std::endl;
-  // }
-
+  // Create a polygon with the points of the two triangles
   std::vector<Point> polygon_points = {}; 
   // Take one shared point and them remove it
   Point shared_point = *shared_points.begin();
   shared_points.erase(shared_points.begin());
   polygon_points.push_back(shared_point);
-  // std::cout << "a: " << shared_point << std::endl;
   // Take the first not shared point and remove it
   Point not_shared_point = *not_shared_points.begin();
   not_shared_points.erase(not_shared_points.begin());
   polygon_points.push_back(not_shared_point);
-  // std::cout << "b: " << not_shared_point << std::endl;
   // Take the second shared point and remove it
   shared_point = *shared_points.begin();
   shared_points.erase(shared_points.begin());
   polygon_points.push_back(shared_point);
-  // std::cout << "c: " << shared_point << std::endl;
   // Take the second not shared point and remove it
   not_shared_point = *not_shared_points.begin();
   not_shared_points.erase(not_shared_points.begin());
   polygon_points.push_back(not_shared_point);
-  // std::cout << "d: " << not_shared_point << std::endl;
 
-  // // print the polygon points
-  // for (auto p : polygon_points) {
-  //   std::cout << "polygon_points: " << p << std::endl;
-  // }
-
+  // Return if the polygon is convex
   return CGAL::is_convex_2(polygon_points.begin(), polygon_points.end());
 }
 
@@ -721,7 +706,6 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
     midpoint = CGAL::midpoint(b, c);
   }
 
-  // std::cout << "midpoint: " << midpoint << " | points: a:" << a << " b: " << b << std::endl;
   cdt.insert_no_flip(midpoint);
   int obt = count_obtuse_triangles(cdt);
   obt_point ret = obt_point(obt, midpoint);
@@ -778,7 +762,6 @@ void steiner_insertion(CDT& cdt) {
       if (best_steiner.obt_count > calc_insert_centr.obt_count) {
         best_steiner = calc_insert_centr;
       }
-      // std::cout << "Obtuse triangles after inserting the centroid: " << count_obtuse_triangles(copy1) << std::endl;
 
       CDT copy3(cdt);
       // Insert the circumcenter if possible
@@ -786,7 +769,6 @@ void steiner_insertion(CDT& cdt) {
       if (best_steiner.obt_count > calc_insert_circ.obt_count) {
         best_steiner = calc_insert_circ;
       }
-      // std::cout << "Obtuse triangles after inserting the circumcenter: " << count_obtuse_triangles(copy2) << std::endl;
 
 
       CDT copy4(cdt);
@@ -802,7 +784,6 @@ void steiner_insertion(CDT& cdt) {
   }
   else if (of.obt_count < best_steiner.obt_count && of.obt_count < count_obtuse_triangles(cdt)) {
     merge_obtuse(cdt, of.face);
-    std::cout << "dialeksa ti merge\n";
   }
 }
 
@@ -888,8 +869,8 @@ int main() {
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
   // pt::read_json("input.json", root); // read the json file
-  pt::read_json("test_instances/instance_test_14.json", root); // read the json file
-  // pt::read_json("tests/instance_2.json", root); // read the json file
+  // pt::read_json("test_instances/instance_test_14.json", root); // read the json file
+  pt::read_json("tests/instance_2.json", root); // read the json file
   std::string instance_uid = get_instance_uid(root);
   int num_points = get_num_points(root);
   std::list<int> points_x = get_points_x(root);
@@ -922,13 +903,11 @@ int main() {
 
   // Count the obtuse triangles
   std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-
   CGAL::draw(cdt);
+
 
   // Make flips
   make_flips(cdt);
-
-  // Count the obtuse triangles
   std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
@@ -941,11 +920,7 @@ int main() {
     steiner_insertion(cdt);
     std::cout << "After Steiner Insertion | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
-
   std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
-
-
-  // Draw the triangulation using CGAL's draw function
   CGAL::draw(cdt);
 
   boost::json::object root1;

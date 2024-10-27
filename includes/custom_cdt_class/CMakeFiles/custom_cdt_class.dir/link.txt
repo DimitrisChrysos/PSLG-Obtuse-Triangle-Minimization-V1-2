@@ -1,2 +1,0 @@
-/usr/bin/ar qc libcustom_cdt_class.a CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.o
-/usr/bin/ranlib libcustom_cdt_class.a
