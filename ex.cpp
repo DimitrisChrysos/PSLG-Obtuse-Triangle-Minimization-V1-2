@@ -1,4 +1,16 @@
+#include "includes/custom_cdt_class/custom_cdt_class.hpp"
 #include "includes/utils/utils.hpp"
+#include "includes/read_write_file/read_write_file.hpp"
+// #include <boost/json/src.hpp>
+// #include <boost/json.hpp>
+// #include <boost/property_tree/ptree.hpp>
+// #include <boost/property_tree/json_parser.hpp>
+
+typedef CGAL::Constrained_triangulation_plus_2<custom_cdt_class::Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
+typedef CGAL::Polygon_2<K> Polygon_2;
+typedef K::Segment_2 Segment;
+typedef CDT::Point Point;
+typedef CDT::Edge Edge;
 
 // Make flips in the CDT if possible and worth it
 void make_flips(CDT& cdt) {
@@ -13,7 +25,7 @@ void make_flips(CDT& cdt) {
     auto v2 = f1->vertex((i+2)%3);
 
     // Test is the flip possible or if it is worth doing
-    bool do_flip = test_the_flip(cdt, v1->point(), v2->point());
+    bool do_flip = utils::test_the_flip(cdt, v1->point(), v2->point());
 
     // If the flip is possible and worth it, do it
     if (do_flip) {
@@ -22,6 +34,8 @@ void make_flips(CDT& cdt) {
     }
   }
 }
+
+using namespace utils;
 
 // Insert the projection point of the obtuse vertex onto the opposite edge
 obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
@@ -335,6 +349,8 @@ Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vect
   }
   return region_boundary_polygon;
 }
+
+using namespace read_write_file;
 
 int main() {
   

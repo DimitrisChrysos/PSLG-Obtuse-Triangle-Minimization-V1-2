@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # Include any dependencies generated for this target.
 include includes/read_write_file/CMakeFiles/read_write_file.dir/depend.make
@@ -72,16 +72,16 @@ include includes/read_write_file/CMakeFiles/read_write_file.dir/flags.make
 includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o: includes/read_write_file/CMakeFiles/read_write_file.dir/flags.make
 includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o: includes/read_write_file/read_write_file.cpp
 includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o: includes/read_write_file/CMakeFiles/read_write_file.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o -MF CMakeFiles/read_write_file.dir/read_write_file.cpp.o.d -o CMakeFiles/read_write_file.dir/read_write_file.cpp.o -c "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/read_write_file.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o"
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o -MF CMakeFiles/read_write_file.dir/read_write_file.cpp.o.d -o CMakeFiles/read_write_file.dir/read_write_file.cpp.o -c "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp"
 
 includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/read_write_file.dir/read_write_file.cpp.i"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/read_write_file.cpp" > CMakeFiles/read_write_file.dir/read_write_file.cpp.i
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp" > CMakeFiles/read_write_file.dir/read_write_file.cpp.i
 
 includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/read_write_file.dir/read_write_file.cpp.s"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/read_write_file.cpp" -o CMakeFiles/read_write_file.dir/read_write_file.cpp.s
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp" -o CMakeFiles/read_write_file.dir/read_write_file.cpp.s
 
 # Object files for target read_write_file
 read_write_file_OBJECTS = \
@@ -93,19 +93,19 @@ read_write_file_EXTERNAL_OBJECTS =
 includes/read_write_file/libread_write_file.a: includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o
 includes/read_write_file/libread_write_file.a: includes/read_write_file/CMakeFiles/read_write_file.dir/build.make
 includes/read_write_file/libread_write_file.a: includes/read_write_file/CMakeFiles/read_write_file.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libread_write_file.a"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && $(CMAKE_COMMAND) -P CMakeFiles/read_write_file.dir/cmake_clean_target.cmake
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/read_write_file.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libread_write_file.a"
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && $(CMAKE_COMMAND) -P CMakeFiles/read_write_file.dir/cmake_clean_target.cmake
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/read_write_file.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 includes/read_write_file/CMakeFiles/read_write_file.dir/build: includes/read_write_file/libread_write_file.a
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/build
 
 includes/read_write_file/CMakeFiles/read_write_file.dir/clean:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" && $(CMAKE_COMMAND) -P CMakeFiles/read_write_file.dir/cmake_clean.cmake
+	cd "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" && $(CMAKE_COMMAND) -P CMakeFiles/read_write_file.dir/cmake_clean.cmake
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/clean
 
 includes/read_write_file/CMakeFiles/read_write_file.dir/depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/CMakeFiles/read_write_file.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2/includes/read_write_file" "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/CMakeFiles/read_write_file.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/depend
 

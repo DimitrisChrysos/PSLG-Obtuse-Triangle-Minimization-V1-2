@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.1...3.23)
 
 # Define project name
-project( polyg )
+project( exec )
 
 
 # CGAL and its components
@@ -29,8 +29,7 @@ if ( NOT Boost_FOUND )
 
 endif()
 
-# include for local directory
-# include utils and graphics libraries
+# includes for directories
 add_subdirectory(includes/custom_cdt_class)
 add_subdirectory(includes/utils)
 add_subdirectory(includes/read_write_file)
@@ -45,13 +44,13 @@ list(APPEND EXTRA_LIBS custom_cdt_class utils read_write_file)
 # Creating entries for target: polyg
 # ############################
 
-add_executable( polyg  ex.cpp )
+add_executable(exec  ex.cpp)
 
 # Link the executable to CGAL and third-party libraries
-target_link_libraries(polyg PRIVATE CGAL::CGAL ${EXTRA_LIBS})
+target_link_libraries(exec PRIVATE CGAL::CGAL ${EXTRA_LIBS})
 
 # Link Qt5 libraries only if CGAL_Qt5 is found
 if (CGAL_Qt5_FOUND)
   add_definitions(-DCGAL_USE_BASIC_VIEWER) # Enable viewer functionality
-  target_link_libraries(polyg PRIVATE CGAL::CGAL_Qt5)
+  target_link_libraries(exec PRIVATE CGAL::CGAL_Qt5)
 endif()

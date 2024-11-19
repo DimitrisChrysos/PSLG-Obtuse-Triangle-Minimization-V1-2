@@ -1,7 +1,7 @@
 CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp.o: \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp \
  /usr/include/stdc-predef.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_DemosMainWindow.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_DemosMainWindow.cpp \
  /usr/include/c++/11/memory /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -117,7 +117,7 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/moc
  /usr/include/c++/11/backward/auto_ptr.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
  /usr/include/c++/11/pstl/execution_defs.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/DemosMainWindow.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/DemosMainWindow.h \
  /usr/local/include/CGAL/license/GraphicsView.h \
  /usr/local/include/CGAL/config.h /usr/local/include/boost/config.hpp \
  /usr/local/include/boost/config/user.hpp \
@@ -1362,8 +1362,8 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/moc
  /usr/include/x86_64-linux-gnu/qt5/QtOpenGL/qglshaderprogram.h \
  /usr/include/x86_64-linux-gnu/qt5/QtOpenGL/qtopenglversion.h \
  /usr/local/include/CGAL/Qt/DemosMainWindow.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsItem.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsItem.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsItem.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsItem.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QGraphicsItem \
  /usr/local/include/CGAL/Object.h /usr/local/include/CGAL/assertions.h \
  /usr/local/include/CGAL/Uncertain.h /usr/local/include/CGAL/enum.h \
@@ -1689,12 +1689,12 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/moc
  /usr/local/include/boost/any.hpp \
  /usr/local/include/boost/any/bad_any_cast.hpp \
  /usr/local/include/boost/any/fwd.hpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsViewInput.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsViewInput.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsViewNavigation.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsViewNavigation.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_camera.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/camera.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsViewInput.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsViewInput.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_GraphicsViewNavigation.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/GraphicsViewNavigation.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_camera.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/camera.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QMap \
  /usr/local/include/CGAL/Qt/vec.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QtGlobal \
@@ -1704,13 +1704,13 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/moc
  /usr/include/x86_64-linux-gnu/qt5/QtGui/qopenglfunctions_2_1.h \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/QOpenGLVersionFunctions \
  /usr/include/x86_64-linux-gnu/qt5/QtGui/QOpenGLFunctions \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_frame.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/frame.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_image_interface.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/image_interface.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_frame.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/frame.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_image_interface.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/image_interface.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/ui_ImageInterface.h \
+ /home/dimitris/Documents/project\ emiris/project2/ui_ImageInterface.h \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QCheckBox \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
@@ -1723,21 +1723,21 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/CGAL_Qt5_moc_and_resources_autogen/moc
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpacerItem \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
  /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_keyFrameInterpolator.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/keyFrameInterpolator.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_keyFrameInterpolator.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/keyFrameInterpolator.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QTimer \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedCameraFrame.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/manipulatedCameraFrame.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedCameraFrame.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/manipulatedCameraFrame.h \
  /usr/local/include/CGAL/Qt/manipulatedFrame.h \
  /usr/local/include/CGAL/Qt/frame.h /usr/local/include/CGAL/Qt/camera.h \
  /usr/local/include/CGAL/Qt/mouseGrabber.h \
  /usr/local/include/CGAL/Qt/viewer_actions.h \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QDateTime \
  /usr/include/x86_64-linux-gnu/qt5/QtCore/QElapsedTimer \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedFrame.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/manipulatedFrame.h \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_qglviewer.cpp \
- /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/qglviewer.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedFrame.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/manipulatedFrame.h \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_qglviewer.cpp \
+ /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/../../../../../../../usr/local/include/CGAL/Qt/qglviewer.h \
  /usr/local/include/CGAL/number_type_config.h \
  /usr/local/include/CGAL/Qt/keyFrameInterpolator.h \
  /usr/local/include/CGAL/Qt/manipulatedCameraFrame.h \

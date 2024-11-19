@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file"
+CXX_INCLUDES = -I"/home/dimitris/Documents/project emiris/project2/includes/read_write_file"
 
 CXX_FLAGS = 
 

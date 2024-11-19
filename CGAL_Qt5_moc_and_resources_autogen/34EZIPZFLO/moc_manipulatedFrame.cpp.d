@@ -1,5 +1,5 @@
-/home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedFrame.cpp: /usr/local/include/CGAL/Qt/manipulatedFrame.h \
-  /home/dimitris/Documents/project\ emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h \
+/home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/34EZIPZFLO/moc_manipulatedFrame.cpp: /usr/local/include/CGAL/Qt/manipulatedFrame.h \
+  /home/dimitris/Documents/project\ emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h \
   /usr/include/GL/gl.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \

@@ -54,16 +54,16 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/polyg.dir/all
+all: CMakeFiles/exec.dir/all
 all: includes/custom_cdt_class/all
 all: includes/utils/all
 all: includes/read_write_file/all
@@ -77,7 +77,7 @@ preinstall: includes/read_write_file/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean
-clean: CMakeFiles/polyg.dir/clean
+clean: CMakeFiles/exec.dir/clean
 clean: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean
 clean: includes/custom_cdt_class/clean
 clean: includes/utils/clean
@@ -136,14 +136,14 @@ includes/utils/clean: includes/utils/CMakeFiles/utils.dir/clean
 CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CGAL_Qt5_moc_and_resources.dir/build.make CMakeFiles/CGAL_Qt5_moc_and_resources.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CGAL_Qt5_moc_and_resources.dir/build.make CMakeFiles/CGAL_Qt5_moc_and_resources.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target CGAL_Qt5_moc_and_resources"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target CGAL_Qt5_moc_and_resources"
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/CGAL_Qt5_moc_and_resources.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 12
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources.dir/rule
 
 # Convenience name for target.
@@ -156,33 +156,33 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/polyg.dir
+# Target rules for target CMakeFiles/exec.dir
 
 # All Build rule for target.
-CMakeFiles/polyg.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
-CMakeFiles/polyg.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
-CMakeFiles/polyg.dir/all: includes/utils/CMakeFiles/utils.dir/all
-CMakeFiles/polyg.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=15,16 "Built target polyg"
-.PHONY : CMakeFiles/polyg.dir/all
+CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
+CMakeFiles/exec.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
+CMakeFiles/exec.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
+CMakeFiles/exec.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=15,16 "Built target exec"
+.PHONY : CMakeFiles/exec.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/polyg.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 20
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/polyg.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
-.PHONY : CMakeFiles/polyg.dir/rule
+CMakeFiles/exec.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 20
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/exec.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
+.PHONY : CMakeFiles/exec.dir/rule
 
 # Convenience name for target.
-polyg: CMakeFiles/polyg.dir/rule
-.PHONY : polyg
+exec: CMakeFiles/exec.dir/rule
+.PHONY : exec
 
 # clean rule for target.
-CMakeFiles/polyg.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/clean
-.PHONY : CMakeFiles/polyg.dir/clean
+CMakeFiles/exec.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/clean
+.PHONY : CMakeFiles/exec.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir
@@ -191,14 +191,14 @@ CMakeFiles/polyg.dir/clean:
 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build.make CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build.make CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=12 "Built target CGAL_Qt5_moc_and_resources_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=12 "Built target CGAL_Qt5_moc_and_resources_autogen"
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 1
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/rule
 
 # Convenience name for target.
@@ -217,14 +217,14 @@ CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean:
 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all:
 	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/depend
 	$(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=13,14 "Built target custom_cdt_class"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=13,14 "Built target custom_cdt_class"
 .PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
 
 # Build rule for subdir invocation for target.
 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
 
 # Convenience name for target.
@@ -243,14 +243,14 @@ includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean:
 includes/utils/CMakeFiles/utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=19,20 "Built target utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=19,20 "Built target utils"
 .PHONY : includes/utils/CMakeFiles/utils.dir/all
 
 # Build rule for subdir invocation for target.
 includes/utils/CMakeFiles/utils.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/CMakeFiles/utils.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : includes/utils/CMakeFiles/utils.dir/rule
 
 # Convenience name for target.
@@ -269,14 +269,14 @@ includes/utils/CMakeFiles/utils.dir/clean:
 includes/read_write_file/CMakeFiles/read_write_file.dir/all:
 	$(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/depend
 	$(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=17,18 "Built target read_write_file"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=17,18 "Built target read_write_file"
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/all
 
 # Build rule for subdir invocation for target.
 includes/read_write_file/CMakeFiles/read_write_file.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/CMakeFiles/read_write_file.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/rule
 
 # Convenience name for target.

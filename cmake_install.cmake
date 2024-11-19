@@ -1,4 +1,4 @@
-# Install script for directory: /home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs
+# Install script for directory: /home/dimitris/Documents/project emiris/project2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,17 +44,17 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/custom_cdt_class/cmake_install.cmake")
+  include("/home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/cmake_install.cmake")
+  include("/home/dimitris/Documents/project emiris/project2/includes/utils/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/cmake_install.cmake")
+  include("/home/dimitris/Documents/project emiris/project2/includes/read_write_file/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -65,5 +65,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/dimitris/Documents/project emiris/project2/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

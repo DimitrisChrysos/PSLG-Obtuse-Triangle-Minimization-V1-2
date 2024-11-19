@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/custom_cdt_class//CMakeFiles/progress.marks"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" "/home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class//CMakeFiles/progress.marks"
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/clean
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,22 +103,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
 .PHONY : includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
 
 # Convenience name for target.
@@ -127,7 +127,7 @@ custom_cdt_class: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/rule
 
 # fast build rule for target.
 custom_cdt_class/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build
 .PHONY : custom_cdt_class/fast
 
 custom_cdt_class.o: custom_cdt_class.cpp.o
@@ -135,7 +135,7 @@ custom_cdt_class.o: custom_cdt_class.cpp.o
 
 # target to build an object file
 custom_cdt_class.cpp.o:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.o
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.o
 .PHONY : custom_cdt_class.cpp.o
 
 custom_cdt_class.i: custom_cdt_class.cpp.i
@@ -143,7 +143,7 @@ custom_cdt_class.i: custom_cdt_class.cpp.i
 
 # target to preprocess a source file
 custom_cdt_class.cpp.i:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.i
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.i
 .PHONY : custom_cdt_class.cpp.i
 
 custom_cdt_class.s: custom_cdt_class.cpp.s
@@ -151,7 +151,7 @@ custom_cdt_class.s: custom_cdt_class.cpp.s
 
 # target to generate assembly for a file
 custom_cdt_class.cpp.s:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.s
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/build.make includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/custom_cdt_class.cpp.s
 .PHONY : custom_cdt_class.cpp.s
 
 # Help Target
@@ -177,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

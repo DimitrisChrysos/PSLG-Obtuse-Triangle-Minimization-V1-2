@@ -179,7 +179,6 @@
 #define __x86_64 1
 #define __cpp_lambdas 200907L
 #define __INT_FAST64_TYPE__ long int
-#define BOOST_ALL_NO_LIB 1
 #define __FLT64_DENORM_MIN__ 4.94065645841246544176568792868221372e-324F64
 #define __cpp_template_auto 201606L
 #define __DBL_MIN__ double(2.22507385850720138309023271733240406e-308L)

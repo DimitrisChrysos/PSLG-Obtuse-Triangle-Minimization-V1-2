@@ -1,4 +1,4 @@
-# Install script for directory: /home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/custom_cdt_class
+# Install script for directory: /home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

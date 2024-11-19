@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs//CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" "/home/dimitris/Documents/project emiris/project2//CMakeFiles/progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -130,17 +130,17 @@ CGAL_Qt5_moc_and_resources/fast:
 .PHONY : CGAL_Qt5_moc_and_resources/fast
 
 #=============================================================================
-# Target rules for targets named polyg
+# Target rules for targets named exec
 
 # Build rule for target.
-polyg: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 polyg
-.PHONY : polyg
+exec: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 exec
+.PHONY : exec
 
 # fast build rule for target.
-polyg/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/build
-.PHONY : polyg/fast
+exec/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
+.PHONY : exec/fast
 
 #=============================================================================
 # Target rules for targets named CGAL_Qt5_moc_and_resources_autogen
@@ -223,7 +223,7 @@ ex.o: ex.cpp.o
 
 # target to build an object file
 ex.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/ex.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.o
 .PHONY : ex.cpp.o
 
 ex.i: ex.cpp.i
@@ -231,7 +231,7 @@ ex.i: ex.cpp.i
 
 # target to preprocess a source file
 ex.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/ex.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.i
 .PHONY : ex.cpp.i
 
 ex.s: ex.cpp.s
@@ -239,7 +239,7 @@ ex.s: ex.cpp.s
 
 # target to generate assembly for a file
 ex.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/polyg.dir/build.make CMakeFiles/polyg.dir/ex.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.s
 .PHONY : ex.cpp.s
 
 qrc_CGAL.o: qrc_CGAL.cpp.o
@@ -349,7 +349,7 @@ help:
 	@echo "... CGAL_Qt5_moc_and_resources_autogen"
 	@echo "... CGAL_Qt5_moc_and_resources"
 	@echo "... custom_cdt_class"
-	@echo "... polyg"
+	@echo "... exec"
 	@echo "... read_write_file"
 	@echo "... utils"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o"

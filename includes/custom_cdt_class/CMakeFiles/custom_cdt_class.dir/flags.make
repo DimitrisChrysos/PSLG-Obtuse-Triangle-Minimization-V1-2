@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/custom_cdt_class"
+CXX_INCLUDES = -I"/home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class"
 
 CXX_FLAGS = 
 

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file/read_write_file.cpp" "includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o" "gcc" "includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o.d"
+  "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp" "includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o" "gcc" "includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o.d"
   )
 
 # Targets to which this target links.

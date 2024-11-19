@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/read_write_file//CMakeFiles/progress.marks"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" "/home/dimitris/Documents/project emiris/project2/includes/read_write_file//CMakeFiles/progress.marks"
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/clean
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,22 +103,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 includes/read_write_file/CMakeFiles/read_write_file.dir/rule:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/CMakeFiles/read_write_file.dir/rule
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/read_write_file/CMakeFiles/read_write_file.dir/rule
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/rule
 
 # Convenience name for target.
@@ -127,7 +127,7 @@ read_write_file: includes/read_write_file/CMakeFiles/read_write_file.dir/rule
 
 # fast build rule for target.
 read_write_file/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/build
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/build
 .PHONY : read_write_file/fast
 
 read_write_file.o: read_write_file.cpp.o
@@ -135,7 +135,7 @@ read_write_file.o: read_write_file.cpp.o
 
 # target to build an object file
 read_write_file.cpp.o:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.o
 .PHONY : read_write_file.cpp.o
 
 read_write_file.i: read_write_file.cpp.i
@@ -143,7 +143,7 @@ read_write_file.i: read_write_file.cpp.i
 
 # target to preprocess a source file
 read_write_file.cpp.i:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.i
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.i
 .PHONY : read_write_file.cpp.i
 
 read_write_file.s: read_write_file.cpp.s
@@ -151,7 +151,7 @@ read_write_file.s: read_write_file.cpp.s
 
 # target to generate assembly for a file
 read_write_file.cpp.s:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.s
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/read_write_file.cpp.s
 .PHONY : read_write_file.cpp.s
 
 # Help Target
@@ -177,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

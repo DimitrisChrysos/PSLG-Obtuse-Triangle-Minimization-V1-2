@@ -2,7 +2,7 @@
 /usr/local/include/CGAL/Qt/qglviewer.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/qglviewer.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -676,7 +676,7 @@
 /usr/local/include/CGAL/Qt/manipulatedCameraFrame.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/manipulatedCameraFrame.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -1246,7 +1246,7 @@
 /usr/local/include/CGAL/Qt/frame.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/frame.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -1791,7 +1791,7 @@
 /usr/local/include/CGAL/Qt/manipulatedFrame.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/manipulatedFrame.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -2360,7 +2360,7 @@
 /usr/local/include/CGAL/Qt/camera.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/camera.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -2915,7 +2915,7 @@
 /usr/local/include/CGAL/Qt/GraphicsViewNavigation.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/GraphicsViewNavigation.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
  mdp:/usr/include/asm-generic/errno.h
@@ -3719,7 +3719,7 @@
 /usr/local/include/CGAL/Qt/GraphicsViewInput.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/GraphicsViewInput.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
  mdp:/usr/include/asm-generic/errno.h
@@ -4175,7 +4175,7 @@
 /usr/local/include/CGAL/Qt/GraphicsItem.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/GraphicsItem.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
  mdp:/usr/include/asm-generic/errno.h
@@ -4695,7 +4695,7 @@
 /usr/local/include/CGAL/Qt/keyFrameInterpolator.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/keyFrameInterpolator.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
@@ -5242,7 +5242,7 @@
 /usr/local/include/CGAL/Qt/image_interface.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/image_interface.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h
  mdp:/usr/include/asm-generic/errno.h
@@ -5776,7 +5776,7 @@
 /usr/local/include/CGAL/Qt/DemosMainWindow.h
  mmc:Q_OBJECT
  mdp:/usr/local/include/CGAL/Qt/DemosMainWindow.h
- mdp:/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
+ mdp:/home/dimitris/Documents/project emiris/project2/CGAL_Qt5_moc_and_resources_autogen/moc_predefs.h
  mdp:/usr/include/GL/gl.h
  mdp:/usr/include/alloca.h
  mdp:/usr/include/asm-generic/errno-base.h

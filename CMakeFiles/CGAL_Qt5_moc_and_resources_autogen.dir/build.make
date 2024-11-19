@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # Utility rule file for CGAL_Qt5_moc_and_resources_autogen.
 
@@ -67,8 +67,8 @@ include CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/compiler_depend.make
 include CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/progress.make
 
 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target CGAL_Qt5_moc_and_resources"
-	/usr/bin/cmake -E cmake_autogen "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/AutogenInfo.json" ""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target CGAL_Qt5_moc_and_resources"
+	/usr/bin/cmake -E cmake_autogen "/home/dimitris/Documents/project emiris/project2/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/AutogenInfo.json" ""
 
 CGAL_Qt5_moc_and_resources_autogen: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen
 CGAL_Qt5_moc_and_resources_autogen: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build.make
@@ -83,6 +83,6 @@ CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean:
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean
 
 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/depend
 

@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils//CMakeFiles/progress.marks"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" "/home/dimitris/Documents/project emiris/project2/includes/utils//CMakeFiles/progress.marks"
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/clean
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,22 +103,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/preinstall
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 includes/utils/CMakeFiles/utils.dir/rule:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/CMakeFiles/utils.dir/rule
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/utils/CMakeFiles/utils.dir/rule
 .PHONY : includes/utils/CMakeFiles/utils.dir/rule
 
 # Convenience name for target.
@@ -127,7 +127,7 @@ utils: includes/utils/CMakeFiles/utils.dir/rule
 
 # fast build rule for target.
 utils/fast:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/build
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/build
 .PHONY : utils/fast
 
 utils.o: utils.cpp.o
@@ -135,7 +135,7 @@ utils.o: utils.cpp.o
 
 # target to build an object file
 utils.cpp.o:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.o
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.o
 .PHONY : utils.cpp.o
 
 utils.i: utils.cpp.i
@@ -143,7 +143,7 @@ utils.i: utils.cpp.i
 
 # target to preprocess a source file
 utils.cpp.i:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.i
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.i
 .PHONY : utils.cpp.i
 
 utils.s: utils.cpp.s
@@ -151,7 +151,7 @@ utils.s: utils.cpp.s
 
 # target to generate assembly for a file
 utils.cpp.s:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.s
+	cd "/home/dimitris/Documents/project emiris/project2" && $(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/utils.cpp.s
 .PHONY : utils.cpp.s
 
 # Help Target
@@ -177,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

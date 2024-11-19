@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_SOURCE_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs"
+CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2"
 
 # Include any dependencies generated for this target.
 include includes/utils/CMakeFiles/utils.dir/depend.make
@@ -72,16 +72,16 @@ include includes/utils/CMakeFiles/utils.dir/flags.make
 includes/utils/CMakeFiles/utils.dir/utils.cpp.o: includes/utils/CMakeFiles/utils.dir/flags.make
 includes/utils/CMakeFiles/utils.dir/utils.cpp.o: includes/utils/utils.cpp
 includes/utils/CMakeFiles/utils.dir/utils.cpp.o: includes/utils/CMakeFiles/utils.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object includes/utils/CMakeFiles/utils.dir/utils.cpp.o"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT includes/utils/CMakeFiles/utils.dir/utils.cpp.o -MF CMakeFiles/utils.dir/utils.cpp.o.d -o CMakeFiles/utils.dir/utils.cpp.o -c "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/utils.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object includes/utils/CMakeFiles/utils.dir/utils.cpp.o"
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT includes/utils/CMakeFiles/utils.dir/utils.cpp.o -MF CMakeFiles/utils.dir/utils.cpp.o.d -o CMakeFiles/utils.dir/utils.cpp.o -c "/home/dimitris/Documents/project emiris/project2/includes/utils/utils.cpp"
 
 includes/utils/CMakeFiles/utils.dir/utils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/utils.dir/utils.cpp.i"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/utils.cpp" > CMakeFiles/utils.dir/utils.cpp.i
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/dimitris/Documents/project emiris/project2/includes/utils/utils.cpp" > CMakeFiles/utils.dir/utils.cpp.i
 
 includes/utils/CMakeFiles/utils.dir/utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/utils.dir/utils.cpp.s"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/utils.cpp" -o CMakeFiles/utils.dir/utils.cpp.s
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/dimitris/Documents/project emiris/project2/includes/utils/utils.cpp" -o CMakeFiles/utils.dir/utils.cpp.s
 
 # Object files for target utils
 utils_OBJECTS = \
@@ -93,19 +93,19 @@ utils_EXTERNAL_OBJECTS =
 includes/utils/libutils.a: includes/utils/CMakeFiles/utils.dir/utils.cpp.o
 includes/utils/libutils.a: includes/utils/CMakeFiles/utils.dir/build.make
 includes/utils/libutils.a: includes/utils/CMakeFiles/utils.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libutils.a"
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && $(CMAKE_COMMAND) -P CMakeFiles/utils.dir/cmake_clean_target.cmake
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/utils.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libutils.a"
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && $(CMAKE_COMMAND) -P CMakeFiles/utils.dir/cmake_clean_target.cmake
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/utils.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 includes/utils/CMakeFiles/utils.dir/build: includes/utils/libutils.a
 .PHONY : includes/utils/CMakeFiles/utils.dir/build
 
 includes/utils/CMakeFiles/utils.dir/clean:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" && $(CMAKE_COMMAND) -P CMakeFiles/utils.dir/cmake_clean.cmake
+	cd "/home/dimitris/Documents/project emiris/project2/includes/utils" && $(CMAKE_COMMAND) -P CMakeFiles/utils.dir/cmake_clean.cmake
 .PHONY : includes/utils/CMakeFiles/utils.dir/clean
 
 includes/utils/CMakeFiles/utils.dir/depend:
-	cd "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils" "/home/dimitris/Documents/project emiris/CGALMultipleSourceAsLibs/includes/utils/CMakeFiles/utils.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/home/dimitris/Documents/project emiris/project2" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2/includes/utils" "/home/dimitris/Documents/project emiris/project2" "/home/dimitris/Documents/project emiris/project2/includes/utils" "/home/dimitris/Documents/project emiris/project2/includes/utils/CMakeFiles/utils.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : includes/utils/CMakeFiles/utils.dir/depend
 
