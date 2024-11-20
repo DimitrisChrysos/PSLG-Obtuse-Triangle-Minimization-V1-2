@@ -58,8 +58,12 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
   // Check if the inserted vertex is inside the convex hull
   CDT::Face_handle located_face = cdt.locate(pericenter);
-  if (!cdt.is_infinite(located_face)) {
+  if (!cdt.is_infinite(located_face) && (CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), pericenter) == CGAL::ON_BOUNDED_SIDE)) {
     cdt.insert_no_flip(pericenter);
+  }
+  else {
+    obt_point ret(9999, pericenter);
+    return ret;
   }
 
   obt_point ret(count_obtuse_triangles(cdt), pericenter);
@@ -352,15 +356,17 @@ Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vect
 
 using namespace read_write_file;
 
-int main() {
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    std::cout << "Wrong number of arguments\n";
+    return 1;
+  }
   
   namespace pt = boost::property_tree; // namespace alias
   pt::ptree root; // create a root node
 
   // Choose the file to read
-  pt::read_json("input.json", root); // read the json file
-  // pt::read_json("test_instances/instance_test_12.json", root); // read the json file
-  // pt::read_json("tests/instance_7.json", root); // read the json file
+  pt::read_json(argv[1], root); // read the json file
   
   // Read the json file
   std::string instance_uid = get_instance_uid(root);

@@ -109,7 +109,8 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
     double x1 = static_cast<double>(CGAL::to_double(x));
     // If value is an int
     if (x1 == static_cast<double>(static_cast<int>(x1))) {
-      steiner_x_json.push_back(static_cast<int>(x1));
+      int x11 = static_cast<int>(x1);
+      steiner_x_json.push_back(boost::json::value(std::to_string(x11)));
     }
     else {
       // const auto exact_coord = CGAL::exact(x);
@@ -126,7 +127,8 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
   for (const auto& y : cdt.steiner_y) {
     double y1 = static_cast<double>(CGAL::to_double(y));
     if (y1 == static_cast<double>(static_cast<int>(y1))) {
-      steiner_y_json.push_back(static_cast<int>(y1));
+      int y11 = static_cast<int>(y1);
+      steiner_y_json.push_back(boost::json::value(std::to_string(y11)));
     }
     else {
       // const auto exact_coord = CGAL::exact(y);
