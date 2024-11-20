@@ -65,6 +65,29 @@ std::list<std::pair<int, int>> read_write_file::get_additional_constraints(boost
   return additional_constraints;
 }
 
+//
+// std::string read_write_file::get_method(boost::property_tree::ptree root) {
+//   return root.get<std::string>("method");
+// }
+
+// std::list<std::pair<std::string, double>> read_write_file::get_parameters(boost::property_tree::ptree root) {
+//   std::list<std::pair<std::string, double>> parameters;
+//   for (boost::property_tree::ptree::value_type &row : root.get_child("parameters")) {
+//     auto it = row.second.begin();
+//     std::string first = it->second.get_value<std::string>();
+//     ++it;
+//     double second = it->second.get_value<double>();
+//     parameters.push_back(std::make_pair(first, second));
+//   }
+
+//   return parameters;
+// }
+
+// bool read_write_file::get_delaunay(boost::property_tree::ptree root) {
+//   return root.get<bool>("delaunay");
+// }
+//
+
 std::string return_frac_string(const CGAL::Epeck::FT &x) {
 
   const auto exact_coord = CGAL::exact(x);

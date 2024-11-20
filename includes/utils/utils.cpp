@@ -320,7 +320,16 @@ void utils::remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_poin
   
   // Remove the points
   for (CDT::Vertex_handle v : to_remove_points) {
-    removed_points.push_back(v->point()); 
+    std::cout << "Removing point: " << v->point() << std::endl;
+    removed_points.push_back(v->point());
     cdt.remove(v);
   }
+}
+
+// Checks if the points are the same
+bool utils::equal_points(Point a, Point b) {
+  if (a.x() == b.x() && a.y() == b.y()) {
+    return true;
+  }
+  return false;
 }

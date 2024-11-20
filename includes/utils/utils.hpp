@@ -63,6 +63,9 @@ namespace utils {
 
   // Remove the points given from the CDT
   void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points);
+
+  // Checks if the points are the same
+  bool equal_points(Point a, Point b);
 }
 
 #endif // UTILS_HPP

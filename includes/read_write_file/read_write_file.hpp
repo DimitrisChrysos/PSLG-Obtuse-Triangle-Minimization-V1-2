@@ -29,6 +29,12 @@ namespace read_write_file {
 
     std::list<std::pair<int, int>> get_additional_constraints(boost::property_tree::ptree root, std::list<int> region_boundary);
 
+    // std::string get_method(boost::property_tree::ptree root);
+
+    // std::list<std::pair<std::string, double>> get_parameters(boost::property_tree::ptree root);
+
+    // bool get_delaunay(boost::property_tree::ptree root);
+
     // Create the output file
     void write_output(CDT& cdt, std::vector<Point> points);
 }

@@ -56,15 +56,121 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   Point c = f1->vertex(2)->point();
   Point pericenter = CGAL::circumcenter(a, b, c);
 
-  // Check if the inserted vertex is inside the convex hull
+  // Check if the point to be inserted will be inside the region_boundary_polygon
   CDT::Face_handle located_face = cdt.locate(pericenter);
-  if (!cdt.is_infinite(located_face) && (CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), pericenter) == CGAL::ON_BOUNDED_SIDE)) {
-    cdt.insert_no_flip(pericenter);
-  }
-  else {
+  if (cdt.is_infinite(located_face) || !(CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), pericenter) == CGAL::ON_BOUNDED_SIDE)) {    
     obt_point ret(9999, pericenter);
     return ret;
   }
+
+  std::cout << "\n\n\n\n\n\n\nStart:\n";
+  // CGAL::draw(cdt);
+
+  // Start the process of inserting the point if possible
+  Point obtuse_point = f1->vertex(find_obtuse_vertex_id(f1))->point();
+  Segment main_segment(pericenter, obtuse_point);
+  std::set<CDT::Vertex_handle> to_remove_points;
+  std::vector<std::pair<Point, Point>> edges_made_constrained;
+  std::vector<std::pair<Point, Point>> false_removed_edges;
+  for (const Edge& e : cdt.finite_edges()) {
+    // Get the vertexes and the points of the edge
+    CDT::Face_handle face1 = e.first;
+    int index = e.second;
+    CDT::Vertex_handle v1 = face1->vertex((index + 1) % 3);
+    CDT::Vertex_handle v2 = face1->vertex((index + 2) % 3);
+    Point edge_point1 = v1->point();
+    Point edge_point2 = v2->point();
+    Segment edge_segment(edge_point1, edge_point2);
+    
+    // Check if they intersect
+    if (CGAL::do_intersect(main_segment, edge_segment) && 
+        !equal_points(obtuse_point, edge_point1) && 
+        !equal_points(obtuse_point, edge_point2)) {
+      
+      // If an interected edge is constrained, the method fails
+      std::cout << "edge_point1: " << edge_point1 << " edge_point2: " << edge_point2 << std::endl;
+      std:: cout << "circumcenter: " << pericenter << std::endl;
+      std::cout << "obtuse_point: " << obtuse_point << std::endl;
+      std::cout << "main_segment: " << main_segment << std::endl;
+      std::cout << "edge_segment: " << edge_segment << std::endl;
+      if (cdt.is_constrained(e)) {
+        obt_point ret(9999, pericenter);
+        return ret;
+      }
+
+      // If the edge is not constrained, mark the points to be removed
+      to_remove_points.insert(v1);
+      to_remove_points.insert(v2);
+      edges_made_constrained.push_back(std::make_pair(edge_point1, edge_point2));
+
+
+      // Check if any of the points is part of a constrained edge and save them
+      for (const Edge& e : cdt.finite_edges()) {
+        if (cdt.is_constrained(e)) {
+          CDT::Face_handle face = e.first;
+          int index = e.second;
+          Point p1 = face->vertex((index + 1) % 3)->point();
+          Point p2 = face->vertex((index + 2) % 3)->point();
+
+          if ((p1.x() == edge_point1.x() && p1.y() == edge_point1.y())
+          || (p2.x() == edge_point1.x() && p2.y() == edge_point1.y())) {
+            false_removed_edges.push_back(std::make_pair(p1, p2));
+            cdt.remove_constrained_edge(face, index);
+            std::cout << "Just removed edge: " << p1 << " " << p2 << std::endl;
+            // CGAL::draw(cdt);
+          }
+          if ((p1.x() == edge_point2.x() && p1.y() == edge_point2.y())
+          || (p2.x() == edge_point2.x() && p2.y() == edge_point2.y())) {
+            false_removed_edges.push_back(std::make_pair(p1, p2));
+            cdt.remove_constrained_edge(face, index);
+            std::cout << "Just removed edge: " << p1 << " " << p2 << std::endl;
+            // CGAL::draw(cdt);
+          }
+        }
+      }
+    }
+  }
+
+  // 1. Remove the points
+  std::vector<Point> removed_points;
+  remove_points(cdt, to_remove_points, removed_points);
+  std::cout << "1. removed points\n";;
+  // CGAL::draw(cdt);
+
+  // 2. Add the circumcenter point
+  cdt.insert_no_flip(pericenter);
+  std::cout << "2. inserted point\n";;
+  // CGAL::draw(cdt);
+
+  // 3. Add the removed edges as constrained edges
+  std::vector<CDT::Constraint_id> constraint_ids;
+  for (const auto& edge : edges_made_constrained) {
+    std::cout << "xaxa1.\n";
+    std::cout << "edge.first: " << edge.first << " edge.second: " << edge.second << std::endl;
+    CDT::Constraint_id cid = cdt.insert_constraint(edge.first, edge.second);
+    std::cout << "xaxa2.\n";
+    constraint_ids.push_back(cid);
+    std::cout << "xaxa3.\n";
+  }
+  std::cout << "3. added the removed edges as constrained edges\n";;
+  // CGAL::draw(cdt);
+
+  // 4. Add the false removed edges as constrained edges
+  for (const auto& edge : false_removed_edges) {
+    cdt.insert_constraint(edge.first, edge.second);
+  }
+  std::cout << "4. added the false removed edges as constrained edges\n";;
+  // CGAL::draw(cdt);
+
+  // 5. Remove the constrains from the 3.
+  for (const auto& cid : constraint_ids) {
+    cdt.remove_constraint(cid);
+  }
+  std::cout << "5. removed the constrains from the 3\n";;
+  // CGAL::draw(cdt);
+
+  std::cout << "\n\n\n\n\n\n\nFinish:\n";
+
 
   obt_point ret(count_obtuse_triangles(cdt), pericenter);
   return ret;
@@ -260,7 +366,6 @@ obt_point insert_mid(CDT& cdt, CDT::Face_handle f1) {
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
   Point c = f1->vertex(2)->point();
-  Point mid;
 
   // Calculate the length of the edges
   K::FT l0 = CGAL::squared_distance(a, b);
@@ -292,6 +397,7 @@ int steiner_insertion(CDT& cdt) {
   CDT::Face_handle f1;
   obt_point best_steiner(9999, a);
   obt_face of(9999, f1);
+  bool is_steiner_circumcenter = false;
 
   // Iterate the faces of the cdt
   for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
@@ -305,23 +411,28 @@ int steiner_insertion(CDT& cdt) {
       obt_point calc_insert_proj = insert_projection(copy, f);
       if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
         best_steiner = calc_insert_proj;
+        is_steiner_circumcenter = false;
       }
 
       CDT copy1(cdt);
       obt_point calc_insert_mid = insert_mid(copy1, f);
       if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+        is_steiner_circumcenter = false;
         best_steiner = calc_insert_mid;
       }
 
       CDT copy2(cdt);
       obt_point calc_insert_centr = insert_centroid(copy2, f);
       if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+        is_steiner_circumcenter = false;
         best_steiner = calc_insert_centr;
       }
 
       CDT copy3(cdt);
       obt_point calc_insert_circ = insert_circumcenter(copy3, f);
       if (best_steiner.obt_count > calc_insert_circ.obt_count) {
+        is_steiner_circumcenter = true;
+        f1 = f;
         best_steiner = calc_insert_circ;
       }
 
@@ -333,7 +444,12 @@ int steiner_insertion(CDT& cdt) {
     }
   }
   if (best_steiner.obt_count <= of.obt_count && best_steiner.obt_count <= count_obtuse_triangles(cdt)) {
-    cdt.insert_no_flip(best_steiner.insrt_pt);
+    if (is_steiner_circumcenter) {
+      insert_circumcenter(cdt, f1);
+    }
+    else {
+      cdt.insert_no_flip(best_steiner.insrt_pt);
+    }
     cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
     return 1;
   }
@@ -376,6 +492,9 @@ int main(int argc, char *argv[]) {
   std::list<int> region_boundary = get_region_boundary(root);
   std::string num_constraints = get_num_constraints(root);
   std::list<std::pair<int, int>> additional_constraints = get_additional_constraints(root, region_boundary);
+  // std::string method = get_method(root);
+  // std::list<std::pair<std::string, double>> parameters = get_parameters(root);
+  // bool delaunay = get_delaunay(root);
 
   // Create the Constrained Delaunay Triangulation (CDT)
   CDT cdt;
