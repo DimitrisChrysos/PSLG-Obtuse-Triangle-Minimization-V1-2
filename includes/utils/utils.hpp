@@ -66,6 +66,12 @@ namespace utils {
 
   // Checks if the points are the same
   bool equal_points(Point a, Point b);
+
+  // Get point from edge
+  Point get_point_from_edge(Edge e, int point_number);
+
+  // Get vertex from edge
+  CDT::Vertex_handle get_vertex_from_edge(Edge e, int vertex_number);
 }
 
 #endif // UTILS_HPP

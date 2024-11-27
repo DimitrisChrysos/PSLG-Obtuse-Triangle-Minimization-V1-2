@@ -322,7 +322,8 @@ void utils::remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_poin
   for (CDT::Vertex_handle v : to_remove_points) {
     std::cout << "Removing point: " << v->point() << std::endl;
     removed_points.push_back(v->point());
-    cdt.remove(v);
+    // cdt.remove(v);
+    cdt.remove_no_flip(v);
   }
 }
 
@@ -332,4 +333,18 @@ bool utils::equal_points(Point a, Point b) {
     return true;
   }
   return false;
+}
+
+// Get point from edge
+Point utils::get_point_from_edge(Edge e, int point_number) {
+  CDT::Face_handle face = e.first;
+  int index = e.second;
+  return face->vertex((index + point_number) % 3)->point();
+}
+
+// Get vertex from edge
+CDT::Vertex_handle utils::get_vertex_from_edge(Edge e, int vertex_number) {
+  CDT::Face_handle face = e.first;
+  int index = e.second;
+  return face->vertex((index + vertex_number) % 3);
 }

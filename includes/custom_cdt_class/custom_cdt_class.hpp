@@ -95,11 +95,14 @@ namespace custom_cdt_class {
 
 
       void insert_steiner_x_y(K::FT x, K::FT y) {
+
         steiner_x.push_back(x);
         steiner_y.push_back(y);
+
       }
 
       bool my_is_flippable(const typename Base::Edge& e) {
+        
         Face_handle f1 = e.first; 
         int i = e.second; 
         Face_handle f2 = f1->neighbor(i);
@@ -109,8 +112,14 @@ namespace custom_cdt_class {
         else if (this->is_constrained(e)) {
             return false;
         }
-
         return true;
+
+      }
+
+      void remove_no_flip(Vertex_handle v) {
+
+        this->Base::Ctr::remove(v);
+
       }
   };
 }
