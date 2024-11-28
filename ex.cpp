@@ -24,7 +24,10 @@ void make_flips(CDT& cdt) {
     auto v1 = f1->vertex((i+1)%3);
     auto v2 = f1->vertex((i+2)%3);
 
-    // Test is the flip possible or if it is worth doing
+    // Test if the flip is possible or if it is worth doing
+    if (cdt.is_constrained(e) || !utils::is_convex(cdt, f1, f2)) {
+      continue;
+    }
     bool do_flip = utils::test_the_flip(cdt, v1->point(), v2->point());
 
     // If the flip is possible and worth it, do it
@@ -403,29 +406,29 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     }
   }
 
-  
-  // Check if any of the points is part of a constrained edge and save them
-  std::vector<std::pair<Point, Point>> false_removed_edges;
-  for (const Edge& e : cdt.finite_edges()) {
-    if (cdt.is_constrained(e)) {
-      CDT::Face_handle face = e.first;
-      int index = e.second;
-      Point p1 = face->vertex((index + 1) % 3)->point();
-      Point p2 = face->vertex((index + 2) % 3)->point();
+  // Initialize the points to be removed
+  std::set<CDT::Vertex_handle> to_remove_points;
+  to_remove_points.insert(v1);
+  to_remove_points.insert(v2);
 
-      if ((p1.x() == intersect_point1.x() && p1.y() == intersect_point1.y())
-      || (p2.x() == intersect_point1.x() && p2.y() == intersect_point1.y())) {
-        false_removed_edges.push_back(std::make_pair(p1, p2));
+  // Iterate over the faces of the points to be removed:
+  // Check if a point is part of a constrained edge
+  // If it is, remove the constrained edge and re-test if the point is part of a constrained edge
+  // If not, continue checking the next point
+  std::vector<std::pair<Point, Point>> false_removed_edges;
+  for (const CDT::Vertex_handle temp_vertex : to_remove_points) {
+
+    Point point = temp_vertex->point();
+
+    bool active = true;
+    while(active) {
+      Edge constrained_edge;
+      if (point_part_of_contrained_edge(cdt, point, false_removed_edges, constrained_edge)) {
+        CDT::Face_handle face = constrained_edge.first;
+        int index = constrained_edge.second;
         cdt.remove_constrained_edge(face, index);
-        std::cout << "Just removed edge: " << p1 << " " << p2 << std::endl;
-        // CGAL::draw(cdt);
-      }
-      if ((p1.x() == intersect_point2.x() && p1.y() == intersect_point2.y())
-      || (p2.x() == intersect_point2.x() && p2.y() == intersect_point2.y())) {
-        false_removed_edges.push_back(std::make_pair(p1, p2));
-        cdt.remove_constrained_edge(face, index);
-        std::cout << "Just removed edge: " << p1 << " " << p2 << std::endl;
-        // CGAL::draw(cdt);
+      } else {
+        active = false;
       }
     }
   }
@@ -450,7 +453,7 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   cdt.remove_constraint(cid);
   // CGAL::draw(cdt);
 
-  std::cout << "Finished insert_circumcenter\n";
+  // std::cout << "Finished insert_circumcenter\n";
 
   obt_point ret(count_obtuse_triangles(cdt), pericenter);
   return ret;
@@ -475,8 +478,8 @@ obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1) {
 // Merge triangles if possible
 obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 
-  obt_face ret(-1, f1);
-
+  obt_face ret(9999, f1);
+  
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
@@ -523,13 +526,13 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Mark points to be removed
-    CDT::Vertex_handle v1 = e1.first->vertex((e1.second+1)%3);
-    CDT::Vertex_handle v2 = e1.first->vertex((e1.second+2)%3);
+    CDT::Vertex_handle v1 = get_vertex_from_edge(e1, 1);
+    CDT::Vertex_handle v2 = get_vertex_from_edge(e1, 2);
     Point a = v1->point();
     Point b = v2->point();
     edges_made_constrained.push_back(std::make_pair(a, b));
-    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
+    to_remove_points.insert(v1);
+    to_remove_points.insert(v2);
     faces.push_back(neigh1);
   }
   if (mergable_neigh2) {
@@ -541,13 +544,13 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Mark points to be removed
-    CDT::Vertex_handle v1 = e2.first->vertex((e2.second+1)%3);
-    CDT::Vertex_handle v2 = e2.first->vertex((e2.second+2)%3);
+    CDT::Vertex_handle v1 = get_vertex_from_edge(e2, 1);
+    CDT::Vertex_handle v2 = get_vertex_from_edge(e2, 2);
     Point a = v1->point();
     Point b = v2->point();
     edges_made_constrained.push_back(std::make_pair(a, b));
-    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
+    to_remove_points.insert(v1);
+    to_remove_points.insert(v2);
     faces.push_back(neigh2);
   }
   if (mergable_neigh3) {
@@ -559,20 +562,14 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
 
     // Mark points to be removed
-    CDT::Vertex_handle v1 = e3.first->vertex((e3.second+1)%3);
-    CDT::Vertex_handle v2 = e3.first->vertex((e3.second+2)%3);
+    CDT::Vertex_handle v1 = get_vertex_from_edge(e3, 1);
+    CDT::Vertex_handle v2 = get_vertex_from_edge(e3, 2);
     Point a = v1->point();
     Point b = v2->point();
     edges_made_constrained.push_back(std::make_pair(a, b));
-    if(!point_part_of_contrained_edge(cdt, a)) to_remove_points.insert(v1);
-    if(!point_part_of_contrained_edge(cdt, b)) to_remove_points.insert(v2);
+    to_remove_points.insert(v1);
+    to_remove_points.insert(v2);
     faces.push_back(neigh3);
-  }
-
-
-  // If to_remove_points is empty, return
-  if (to_remove_points.empty()) {
-    return ret;
   }
 
   // Check if the polygon is convex:
@@ -585,9 +582,34 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
     }
   }
 
+  // Iterate over the faces of the points to be removed:
+  // Check if a point is part of a constrained edge
+  // If it is, remove the constrained edge and re-test if the point is part of a constrained edge
+  // If not, continue checking the next point
+  std::vector<std::pair<Point, Point>> false_removed_edges;
+  for (const CDT::Vertex_handle temp_vertex : to_remove_points) {
+
+    Point point = temp_vertex->point();
+
+    bool active = true;
+    while(active) {
+      Edge constrained_edge;
+      if (point_part_of_contrained_edge(cdt, point, false_removed_edges, constrained_edge)) {
+        CDT::Face_handle face = constrained_edge.first;
+        int index = constrained_edge.second;
+        cdt.remove_constrained_edge(face, index);
+      } else {
+        active = false;
+      }
+    }
+  }
+
+
+
   // Remove the points
-  std::vector<Point> removed_points;
-  remove_points(cdt, to_remove_points, removed_points);
+  for (CDT::Vertex_handle v : to_remove_points) {
+    cdt.remove_no_flip(v);
+  }
 
   // Add the centroid (or mean point) of the polygon
   std::vector<Point> points = {
@@ -622,14 +644,17 @@ obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   cdt.insert_no_flip(centroid);
   cdt.insert_steiner_x_y(centroid.x(), centroid.y());
   
-  // Add the removed edge as a constrained edge
+  // Add the false removed edges and the edges that were intentionally removed as constrained edges
   std::vector<CDT::Constraint_id> constraint_ids;
   for (const auto& edge : edges_made_constrained) {
     CDT::Constraint_id cid = cdt.insert_constraint(edge.first, edge.second);
     constraint_ids.push_back(cid);
   }
+  for (const auto& edge : false_removed_edges) {
+    cdt.insert_constraint(edge.first, edge.second);
+  }
 
-  // Remove the constraint edge
+  // Remove the constraint edges the should be removed
   for (const auto& cid : constraint_ids) {
     cdt.remove_constraint(cid);
   }
@@ -798,7 +823,7 @@ int steiner_insertion(CDT& cdt) {
 
       CDT copy4(cdt);
       obt_face temp_merge_face = merge_obtuse(copy4, f);
-      if (temp_merge_face.obt_count != -1 && best_steiner.obt_count > temp_merge_face.obt_count) {
+      if (best_steiner.obt_count > temp_merge_face.obt_count) {
         merge_face = temp_merge_face;
         best_method = InsertionMethod::MERGE_OBTUSE;
       }
@@ -886,7 +911,7 @@ int main(int argc, char *argv[]) {
   CGAL::draw(cdt);
 
   // Make flips
-  make_flips(cdt);
+  // make_flips(cdt);
   std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
@@ -905,8 +930,8 @@ int main(int argc, char *argv[]) {
       consec_insertions = 0;
     }
     count_obt = count_obtuse_triangles(cdt);
-    if (consec_insertions > 40) break;
-    std::cout << "After try to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+    // if (consec_insertions > 40) break;
+    std::cout << "After try " << i << " to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   }
   std::cout << "After " << steps << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   CGAL::draw(cdt);

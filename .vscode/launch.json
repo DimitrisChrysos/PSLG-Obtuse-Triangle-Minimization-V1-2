@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "C++ Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/exec", // Replace with your executable path
+        // "args": ["tests/instance_6.json"],
+        "args": ["input.json"],
+        // "args": ["test_instances/instance_test_14.json"],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          },
+          {
+            "text": "set follow-fork-mode child"
+          },
+          {
+            "text": "set detach-on-fork on"
+          },
+          {
+            "text": "set pagination off"
+          },
+          {
+            "description": "Skip specific libraries",
+            "text": "skip file /usr/*"
+          },
+          {
+            "description": "Skip system libraries",
+            "text": "skip file /usr/*"
+          },
+          {
+            "description": "Disable breaking on system calls",
+            "text": "handle SIGTRAP nostop noprint"
+          }
+        ],
+        "preLaunchTask": "CMake: build",
+        "miDebuggerPath": "/usr/bin/gdb" // Update if gdb is not in /usr/bin
+      }
+    ]
+  }

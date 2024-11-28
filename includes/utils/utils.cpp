@@ -217,17 +217,19 @@ Point utils::find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex
 }
 
 // Check if a point is part of a constraint edge
-bool utils::point_part_of_contrained_edge(CDT& cdt, Point p) {
+bool utils::point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pair<Point, Point>>& false_removed_edges, Edge& constrained_edge) {
   for (const Edge& e : cdt.finite_edges()) {
     if (cdt.is_constrained(e)) {
-      CDT::Face_handle face = e.first;
-      int index = e.second;
-      Point edge_point1 = face->vertex((index + 1) % 3)->point();
-      Point edge_point2 = face->vertex((index + 2) % 3)->point();
+      Point edge_point1 = get_point_from_edge(e, 1);
+      Point edge_point2 = get_point_from_edge(e, 2);
 
-      if ((edge_point1.x() == p.x() && edge_point1.y() == p.y()) 
-        || (edge_point2.x() == p.x() && edge_point2.y() == p.y()))
+      if ((edge_point1.x() == p.x() && edge_point1.y() == p.y()) || 
+          (edge_point2.x() == p.x() && edge_point2.y() == p.y())) {
+        false_removed_edges.push_back(std::make_pair(edge_point1, edge_point2));
+        constrained_edge = e;
+        // std::cout << "Will removed edge: " << edge_point1 << " | " << edge_point2 << std::endl;
         return true;
+      }
     }
   }
   return false;
@@ -240,15 +242,15 @@ bool utils::are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh
   if (!has_obtuse_angle(neigh) || cdt.is_constrained(shared_edge))
     return false;
 
-  // Get the points of the shared_edge
-  CDT::Face_handle face1 = shared_edge.first;
-  int index = shared_edge.second;
-  Point edge_point1 = face1->vertex((index + 1) % 3)->point();
-  Point edge_point2 = face1->vertex((index + 2) % 3)->point();
+  // // Get the points of the shared_edge
+  // CDT::Face_handle face1 = shared_edge.first;
+  // int index = shared_edge.second;
+  // Point edge_point1 = face1->vertex((index + 1) % 3)->point();
+  // Point edge_point2 = face1->vertex((index + 2) % 3)->point();
 
-  // If both of the points of the shared_edge are part of a constrained edge the triangles are not mergable
-  if (point_part_of_contrained_edge(cdt, edge_point1) && point_part_of_contrained_edge(cdt, edge_point2))
-    return false;
+  // // If both of the points of the shared_edge are part of a constrained edge the triangles are not mergable
+  // if (point_part_of_contrained_edge(cdt, edge_point1) && point_part_of_contrained_edge(cdt, edge_point2))
+  //   return false;
 
   return true;
 }
@@ -323,7 +325,7 @@ void utils::remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_poin
     std::cout << "Removing point: " << v->point() << std::endl;
     removed_points.push_back(v->point());
     // cdt.remove(v);
-    cdt.remove_no_flip(v);
+    cdt.remove(v);
   }
 }
 

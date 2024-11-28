@@ -54,3 +54,6 @@ if (CGAL_Qt5_FOUND)
   add_definitions(-DCGAL_USE_BASIC_VIEWER) # Enable viewer functionality
   target_link_libraries(exec PRIVATE CGAL::CGAL_Qt5)
 endif()
+
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")

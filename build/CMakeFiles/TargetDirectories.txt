@@ -1,0 +1,14 @@
+/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/CGAL_Qt5_moc_and_resources.dir
+/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/exec.dir
+/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/edit_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/rebuild_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/custom_cdt_class/CMakeFiles/edit_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/custom_cdt_class/CMakeFiles/rebuild_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/utils/CMakeFiles/utils.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/utils/CMakeFiles/edit_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/utils/CMakeFiles/rebuild_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/read_write_file.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/edit_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/rebuild_cache.dir

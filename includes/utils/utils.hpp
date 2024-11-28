@@ -50,7 +50,7 @@ namespace utils {
   Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx);
 
   // Check if a point is part of a constraint edge
-  bool point_part_of_contrained_edge(CDT& cdt, Point p);
+  bool point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pair<Point, Point>>& false_removed_edges, Edge& constrained_edge);
 
   // Returns if two triangles are mergable
   bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge);

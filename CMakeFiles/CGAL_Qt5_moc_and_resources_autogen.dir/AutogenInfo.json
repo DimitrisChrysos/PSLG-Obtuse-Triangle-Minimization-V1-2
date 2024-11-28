@@ -243,7 +243,6 @@
 		"CGAL_USE_GMPXX=1",
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
-		"QT_NO_DEBUG",
 		"QT_OPENGL_LIB",
 		"QT_WIDGETS_LIB"
 	],

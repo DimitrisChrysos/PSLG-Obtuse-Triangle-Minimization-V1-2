@@ -68,7 +68,7 @@ include CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/progress.make
 
 CMakeFiles/CGAL_Qt5_moc_and_resources_autogen:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target CGAL_Qt5_moc_and_resources"
-	/usr/bin/cmake -E cmake_autogen "/home/dimitris/Documents/project emiris/project2/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/AutogenInfo.json" ""
+	/usr/bin/cmake -E cmake_autogen "/home/dimitris/Documents/project emiris/project2/CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/AutogenInfo.json" Debug
 
 CGAL_Qt5_moc_and_resources_autogen: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen
 CGAL_Qt5_moc_and_resources_autogen: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/build.make

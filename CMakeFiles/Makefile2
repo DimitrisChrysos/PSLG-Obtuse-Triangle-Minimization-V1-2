@@ -159,10 +159,10 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 # Target rules for target CMakeFiles/exec.dir
 
 # All Build rule for target.
-CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
 CMakeFiles/exec.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
 CMakeFiles/exec.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
 CMakeFiles/exec.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
+CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=15,16 "Built target exec"
