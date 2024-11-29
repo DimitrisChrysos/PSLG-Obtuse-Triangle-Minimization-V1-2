@@ -12,33 +12,36 @@ typedef K::Segment_2 Segment;
 typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
-// Make flips in the CDT if possible and worth it
-void make_flips(CDT& cdt) {
-  int count = 0;
-  for (const Edge& e : cdt.finite_edges()) {
-
-    // Get the edge points
-    CDT::Face_handle f1 = e.first;
-    int i = e.second;
-    CDT::Face_handle f2 = f1->neighbor(i);
-    auto v1 = f1->vertex((i+1)%3);
-    auto v2 = f1->vertex((i+2)%3);
-
-    // Test if the flip is possible or if it is worth doing
-    if (cdt.is_constrained(e) || !utils::is_convex(cdt, f1, f2)) {
-      continue;
-    }
-    bool do_flip = utils::test_the_flip(cdt, v1->point(), v2->point());
-
-    // If the flip is possible and worth it, do it
-    if (do_flip) {
-      cdt.tds().flip(f1, i);
-      count++;
-    }
-  }
-}
-
 using namespace utils;
+
+// // Make flips in the CDT if possible and worth it
+// void make_flips(CDT& cdt) {
+//   for (const Edge& e : cdt.finite_edges()) {
+
+//     // Get the edge points
+//     CDT::Face_handle f1 = e.first;
+//     int i = e.second;
+//     CDT::Face_handle f2 = f1->neighbor(i);
+//     Point a = get_point_from_edge(e, 1);
+//     Point b = get_point_from_edge(e, 2);
+
+//     // Test if the flip is possible or if it is worth doing
+//     std::cout << "point a: " << a << " | point b: " << b << std::endl;
+//     if (cdt.is_constrained(e) || !is_convex(cdt, f1, f2)) {
+//       continue;
+//     }
+
+
+//     // If the flip is possible and worth it, do it
+//     CDT copy(cdt);
+//     if (test_the_flip(copy, a, b)) {
+//       CGAL::draw(cdt);
+//       cdt.tds().flip(f1, i);
+//       cdt.remove_constrained_edge(f1, i);
+//       CGAL::draw(cdt);
+//     }
+//   }
+// }
 
 // Insert the projection point of the obtuse vertex onto the opposite edge
 obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
@@ -792,25 +795,11 @@ int steiner_insertion(CDT& cdt) {
 
     if (has_obtuse_angle(f)) {
       
-      CDT copy(cdt);
-      obt_point calc_insert_proj = insert_projection(copy, f);
-      if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
-        best_steiner = calc_insert_proj;
-        best_method = InsertionMethod::PROJECTION;
-      }
-
-      CDT copy1(cdt);
-      obt_point calc_insert_mid = insert_mid(copy1, f);
-      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
-        best_steiner = calc_insert_mid;
-        best_method = InsertionMethod::MIDPOINT;
-      }
-
-      CDT copy2(cdt);
-      obt_point calc_insert_centr = insert_centroid(copy2, f);
-      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
-        best_steiner = calc_insert_centr;
-        best_method = InsertionMethod::CENTROID;
+      CDT copy4(cdt);
+      obt_face temp_merge_face = merge_obtuse(copy4, f);
+      if (best_steiner.obt_count > temp_merge_face.obt_count) {
+        merge_face = temp_merge_face;
+        best_method = InsertionMethod::MERGE_OBTUSE;
       }
 
       CDT copy3(cdt);
@@ -821,11 +810,25 @@ int steiner_insertion(CDT& cdt) {
         best_method = InsertionMethod::CIRCUMCENTER;
       }
 
-      CDT copy4(cdt);
-      obt_face temp_merge_face = merge_obtuse(copy4, f);
-      if (best_steiner.obt_count > temp_merge_face.obt_count) {
-        merge_face = temp_merge_face;
-        best_method = InsertionMethod::MERGE_OBTUSE;
+      CDT copy2(cdt);
+      obt_point calc_insert_centr = insert_centroid(copy2, f);
+      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+        best_steiner = calc_insert_centr;
+        best_method = InsertionMethod::CENTROID;
+      }
+
+      CDT copy1(cdt);
+      obt_point calc_insert_mid = insert_mid(copy1, f);
+      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+        best_steiner = calc_insert_mid;
+        best_method = InsertionMethod::MIDPOINT;
+      }
+
+      CDT copy(cdt);
+      obt_point calc_insert_proj = insert_projection(copy, f);
+      if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
+        best_steiner = calc_insert_proj;
+        best_method = InsertionMethod::PROJECTION;
       }
     }
   }
@@ -907,12 +910,13 @@ int main(int argc, char *argv[]) {
   region_boundary_polygon = make_region_boundary_polygon(region_boundary, points);
 
   // Count the obtuse triangles
-  std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+  // std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
   CGAL::draw(cdt);
 
   // Make flips
   // make_flips(cdt);
-  std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+  // CGAL::draw(cdt);
+  // std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
   int steps = 0;

@@ -6,8 +6,8 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/exec", // Replace with your executable path
-        // "args": ["tests/instance_6.json"],
-        "args": ["input.json"],
+        "args": ["tests/instance_6.json"],
+        // "args": ["input.json"],
         // "args": ["test_instances/instance_test_14.json"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

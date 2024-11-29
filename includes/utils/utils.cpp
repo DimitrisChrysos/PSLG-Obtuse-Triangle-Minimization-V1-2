@@ -262,8 +262,7 @@ bool utils::is_convex_polygon(const std::vector<Point>& points) {
 
 // Test if the flip is possible
 bool utils::test_the_flip(CDT& cdt, Point v1, Point v2) {
-  CDT copy(cdt);
-  for (const Edge& e : copy.finite_edges()) {
+  for (const Edge& e : cdt.finite_edges()) {
 
     // Get the edge points
     CDT::Face_handle f1 = e.first; 
@@ -275,17 +274,18 @@ bool utils::test_the_flip(CDT& cdt, Point v1, Point v2) {
     Point p2_point = p2->point();
 
     // Check if the edge is the one we are looking for
-    if (!(v1.x() == p1_point.x() && v1.y() == p1_point.y() && v2.x() == p2_point.x() && v2.y() == p2_point.y())) {
+    if (!(equal_points(v1, p1_point) && equal_points(v2, p2_point)) &&
+        !(equal_points(v1, p2_point) && equal_points(v2, p1_point))) {
       continue;
     }
 
     // Check if the polygon created is convex
-    if (!is_convex(copy, f1, f2)) {
+    if (!is_convex(cdt, f1, f2)) {
       return false;
     };
 
     // Check if the edge is flippable
-    if (!copy.my_is_flippable(e)) {
+    if (!cdt.my_is_flippable(e)) {
       return false;
     }
 
@@ -298,7 +298,7 @@ bool utils::test_the_flip(CDT& cdt, Point v1, Point v2) {
     if (obt) {
 
       // Make the flip
-      copy.tds().flip(f1, i);
+      cdt.tds().flip(f1, i);
 
       // Check if the triangles formed by the edge have obtuse angles after the flip
       int obt2 = 0;
