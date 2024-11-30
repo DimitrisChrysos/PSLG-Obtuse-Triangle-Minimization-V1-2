@@ -38,7 +38,7 @@ namespace utils {
   Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh);
 
   // Count the number of obtuse triangles in the CDT
-  int count_obtuse_triangles(CDT cdt);
+  int count_obtuse_triangles(CDT& cdt);
 
   // Find the obtuse vertex of a triangle
   int find_obtuse_vertex_id(CDT::Face_handle face);

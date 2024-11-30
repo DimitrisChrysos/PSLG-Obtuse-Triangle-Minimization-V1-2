@@ -5,6 +5,7 @@
 // #include <boost/json.hpp>
 // #include <boost/property_tree/ptree.hpp>
 // #include <boost/property_tree/json_parser.hpp>
+#include <chrono>
 
 typedef CGAL::Constrained_triangulation_plus_2<custom_cdt_class::Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
 typedef CGAL::Polygon_2<K> Polygon_2;
@@ -163,7 +164,9 @@ obt_point insert_projection(CDT& cdt, CDT::Face_handle f1) {
 
 
 // Insert a point at the circumcenter of the triangle
-obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
+obt_face insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
+
+  obt_face ret(9999, f1);
 
   // Calculate the circumcenter of the triangle
   Point a = f1->vertex(0)->point();
@@ -174,7 +177,6 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   // Check if the point to be inserted will be inside the region_boundary_polygon
   CDT::Face_handle located_face = cdt.locate(pericenter);
   if (cdt.is_infinite(located_face) || !(CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), pericenter) == CGAL::ON_BOUNDED_SIDE)) {    
-    obt_point ret(-1, pericenter);
     return ret;
   }
 
@@ -208,13 +210,11 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
       // or there are more than one intersecteed edges
       // the method fails
       if (cdt.is_constrained(e) || count_intersect > 1) {
-        obt_point ret(-1, pericenter);
         return ret;
       }
     }
   }
 
-  // std::cout << "1..\n";
 
   // Remove the points able to be removed
   // If no points have the ability to be removed, return failure
@@ -230,24 +230,26 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     fail = false;
   }
   if (fail) {
-    obt_point ret(-1, pericenter);
     return ret;
   }
 
-  // std::cout << "2..\n";
 
   // Add the circumcenter point
   cdt.insert_no_flip(pericenter);
+  cdt.insert_steiner_x_y(pericenter.x(), pericenter.y());
 
-  // std::cout << "3..\n";
 
-
-  // Add constrains to all the edges of the polygon, except the shared one
+  // Add constrains to all the edges of the polygon created, except the shared one
   std::vector<CDT::Constraint_id> cids;
   CDT::Face_handle neigh = f1->neighbor(intersected_edge.second);
   for (int i = 0; i < 3; ++i) {
     CDT::Vertex_handle start = neigh->vertex(CDT::ccw(i));
     CDT::Vertex_handle end = neigh->vertex(CDT::cw(i));
+    // std::cout << "1.\n";
+    // Point start_point = neigh->vertex((i + 1) % 3)->point();
+    // Point end_point = neigh->vertex((i + 2) % 3)->point();
+    // std::cout << "start_point: " << start_point << " | end_point: " << end_point << std::endl;
+    // std::cout << "2.\n";
     Point start_point = start->point();
     Point end_point = end->point();
     if (!equal_edges(start_point, end_point, intersect_point1, intersect_point2)) {
@@ -269,7 +271,6 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   }
   // CGAL::draw(cdt);
 
-  // std::cout << "4..\n";
 
   // Remove the constrained edges
   for (const auto& cid : cids) {
@@ -277,9 +278,7 @@ obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   }
   // CGAL::draw(cdt);
 
-  // std::cout << "5..\n";
-
-  obt_point ret(count_obtuse_triangles(cdt), pericenter);
+  ret.obt_count = count_obtuse_triangles(cdt);
   return ret;
 }
 
@@ -535,7 +534,7 @@ int steiner_insertion(CDT& cdt) {
   CDT::Face_handle starting_face;
   obt_point best_steiner(9999, starting_point);
   obt_face merge_face(9999, starting_face);
-  CDT::Face_handle circumcenter_face;
+  obt_face circumcenter_face(9999, starting_face);
   InsertionMethod best_method = InsertionMethod::NONE;
 
   // Iterate the faces of the cdt
@@ -546,40 +545,34 @@ int steiner_insertion(CDT& cdt) {
 
     if (has_obtuse_angle(f)) {
       
-      // std::cout << "1..\n";
       CDT copy4(cdt);
       obt_face temp_merge_face = merge_obtuse(copy4, f);
-      if (best_steiner.obt_count > temp_merge_face.obt_count) {
+      if (best_steiner.obt_count >= temp_merge_face.obt_count) {
         merge_face = temp_merge_face;
         best_method = InsertionMethod::MERGE_OBTUSE;
       }
 
-      // std::cout << "2..\n";
       CDT copy3(cdt);
-      obt_point calc_insert_circ = insert_circumcenter(copy3, f);
-      if (calc_insert_circ.obt_count != -1 && best_steiner.obt_count > calc_insert_circ.obt_count) {
-        circumcenter_face = f;
-        best_steiner = calc_insert_circ;
+      obt_face temp_circ_face = insert_circumcenter(copy3, f);
+      if (best_steiner.obt_count >= temp_circ_face.obt_count) {
+        circumcenter_face = temp_circ_face;
         best_method = InsertionMethod::CIRCUMCENTER;
       }
 
-      // std::cout << "3..\n";
       CDT copy2(cdt);
       obt_point calc_insert_centr = insert_centroid(copy2, f);
-      if (best_steiner.obt_count > calc_insert_centr.obt_count) {
+      if (best_steiner.obt_count >= calc_insert_centr.obt_count) {
         best_steiner = calc_insert_centr;
         best_method = InsertionMethod::CENTROID;
       }
 
-      // std::cout << "4..\n";
       CDT copy1(cdt);
       obt_point calc_insert_mid = insert_mid(copy1, f);
-      if (best_steiner.obt_count > calc_insert_mid.obt_count) {
+      if (best_steiner.obt_count >= calc_insert_mid.obt_count) {
         best_steiner = calc_insert_mid;
         best_method = InsertionMethod::MIDPOINT;
       }
 
-      // std::cout << "5..\n";
       CDT copy(cdt);
       obt_point calc_insert_proj = insert_projection(copy, f);
       if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
@@ -596,8 +589,7 @@ int steiner_insertion(CDT& cdt) {
     return 1;
   }
   else if (best_method == InsertionMethod::CIRCUMCENTER) {
-    insert_circumcenter(cdt, circumcenter_face);
-    cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
+    insert_circumcenter(cdt, circumcenter_face.face);
     return 1;
   }
   else if (best_method == InsertionMethod::MERGE_OBTUSE) {

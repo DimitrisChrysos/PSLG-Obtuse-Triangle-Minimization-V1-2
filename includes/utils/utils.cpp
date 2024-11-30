@@ -5,13 +5,13 @@ namespace utils {
 }
 
 utils::obt_point::obt_point(int count, Point pt) {
-  obt_count = count;
-  insrt_pt = pt;
+  this->obt_count = count;
+  this->insrt_pt = pt;
 }
 
 utils::obt_face::obt_face(int count, CDT::Face_handle f) {
-  obt_count = count;
-  face = f;
+  this->obt_count = count;
+  this->face = f;
 }
 
 // Check if a triangle is inside the region boundary
@@ -72,7 +72,7 @@ Edge utils::get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neig
 }
 
 // Count the number of obtuse triangles in the CDT
-int utils::count_obtuse_triangles(CDT cdt) {
+int utils::count_obtuse_triangles(CDT& cdt) {
   int count = 0;
   for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
     CDT::Face_handle face = fit;
@@ -252,6 +252,17 @@ bool utils::are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh
   // If the neighbor is not obtused or their shared edge is constrained return false
   if (!has_obtuse_angle(neigh) || cdt.is_constrained(shared_edge))
     return false;
+
+  // If both points of the shared_edge are part of a constrained edge return false
+  Point p1 = get_point_from_edge(shared_edge, 1);
+  Point p2 = get_point_from_edge(shared_edge, 2);
+  Edge constrained_edge;
+  std::vector<std::pair<Point, Point>> removed_edges;
+  if (point_part_of_contrained_edge(cdt, p1, removed_edges, constrained_edge) &&
+      point_part_of_contrained_edge(cdt, p2, removed_edges, constrained_edge)) {
+    return false;
+  }
+
 
   return true;
 }
