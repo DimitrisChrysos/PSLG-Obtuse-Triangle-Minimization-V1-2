@@ -223,16 +223,27 @@ bool utils::point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pa
       Point edge_point1 = get_point_from_edge(e, 1);
       Point edge_point2 = get_point_from_edge(e, 2);
 
-      if ((edge_point1.x() == p.x() && edge_point1.y() == p.y()) || 
-          (edge_point2.x() == p.x() && edge_point2.y() == p.y())) {
+      if ((equal_points(edge_point1, p) || equal_points(edge_point2, p))) {
         false_removed_edges.push_back(std::make_pair(edge_point1, edge_point2));
         constrained_edge = e;
-        // std::cout << "Will removed edge: " << edge_point1 << " | " << edge_point2 << std::endl;
         return true;
       }
     }
   }
   return false;
+}
+
+// Find an edge of a cdt by the points given
+void utils::find_edge_by_points(CDT& cdt, Edge& edge, Point p1, Point p2) {
+  for (const Edge& e : cdt.finite_edges()) {
+    Point edge_point1 = get_point_from_edge(e, 1);
+    Point edge_point2 = get_point_from_edge(e, 2);
+    if ((equal_points(edge_point1, p1) && equal_points(edge_point2, p2)) || 
+        (equal_points(edge_point1, p2) && equal_points(edge_point2, p1))) {
+      edge = e;
+      return;
+    }
+  }  
 }
 
 // Returns if two triangles are mergable
@@ -241,16 +252,6 @@ bool utils::are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh
   // If the neighbor is not obtused or their shared edge is constrained return false
   if (!has_obtuse_angle(neigh) || cdt.is_constrained(shared_edge))
     return false;
-
-  // // Get the points of the shared_edge
-  // CDT::Face_handle face1 = shared_edge.first;
-  // int index = shared_edge.second;
-  // Point edge_point1 = face1->vertex((index + 1) % 3)->point();
-  // Point edge_point2 = face1->vertex((index + 2) % 3)->point();
-
-  // // If both of the points of the shared_edge are part of a constrained edge the triangles are not mergable
-  // if (point_part_of_contrained_edge(cdt, edge_point1) && point_part_of_contrained_edge(cdt, edge_point2))
-  //   return false;
 
   return true;
 }
@@ -322,16 +323,66 @@ void utils::remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_poin
   
   // Remove the points
   for (CDT::Vertex_handle v : to_remove_points) {
-    std::cout << "Removing point: " << v->point() << std::endl;
     removed_points.push_back(v->point());
     // cdt.remove(v);
     cdt.remove(v);
   }
 }
 
+// Insert a point at the center of a polygon from cdt
+Point utils::calculate_centroid_coords(CDT& cdt, Point& p1, Point& p2, Point& p3,
+                                    bool mergable_neigh1, 
+                                    bool mergable_neigh2, 
+                                    bool mergable_neigh3,
+                                    CDT::Face_handle& neigh1, 
+                                    CDT::Face_handle& neigh2, 
+                                    CDT::Face_handle& neigh3) {
+
+  // Add the centroid (or mean point) of the polygon
+  std::vector<Point> points = {
+    p1, p2, p3
+  };
+  if (mergable_neigh1) {
+    points.push_back(neigh1->vertex(0)->point());
+    points.push_back(neigh1->vertex(1)->point());
+    points.push_back(neigh1->vertex(2)->point());
+  }
+  if (mergable_neigh2) {
+    points.push_back(neigh2->vertex(0)->point());
+    points.push_back(neigh2->vertex(1)->point());
+    points.push_back(neigh2->vertex(2)->point());
+  }
+  if (mergable_neigh3) {
+    points.push_back(neigh3->vertex(0)->point());
+    points.push_back(neigh3->vertex(1)->point());
+    points.push_back(neigh3->vertex(2)->point());
+  }
+
+  K::FT mean_x = 0;
+  K::FT mean_y = 0;
+  for (const auto& point : points) {
+    mean_x += point.x();
+    mean_y += point.y();
+  }
+  K::FT points_size = points.size();
+  mean_x /= points_size;
+  mean_y /= points_size;
+  Point centroid(mean_x, mean_y);
+  return centroid;
+}
+
 // Checks if the points are the same
 bool utils::equal_points(Point a, Point b) {
   if (a.x() == b.x() && a.y() == b.y()) {
+    return true;
+  }
+  return false;
+}
+
+// Check if two sets of points are the same
+bool utils::equal_edges(Point a1, Point a2, Point b1, Point b2) {
+  if ((equal_points(a1, b1) && equal_points(a2, b2)) || 
+      (equal_points(a1, b2) && equal_points(a2, b1))) {
     return true;
   }
   return false;
@@ -349,4 +400,36 @@ CDT::Vertex_handle utils::get_vertex_from_edge(Edge e, int vertex_number) {
   CDT::Face_handle face = e.first;
   int index = e.second;
   return face->vertex((index + vertex_number) % 3);
+}
+
+void utils::mark_points_to_remove(CDT& cdt, 
+                                  Edge e, 
+                                  CDT::Face_handle neigh, 
+                                  std::vector<std::pair<Point, Point>>& edges_to_remove, 
+                                  std::set<CDT::Vertex_handle>& to_remove_points, 
+                                  CDT& polygon_cdt,
+                                  std::vector<CDT::Face_handle>& faces) {
+
+  CDT::Vertex_handle v1 = get_vertex_from_edge(e, 1);
+  CDT::Vertex_handle v2 = get_vertex_from_edge(e, 2);
+  Point a = v1->point();
+  Point b = v2->point();
+  Edge constrained_edge;
+  std::vector<std::pair<Point, Point>> removed_edges;
+  int save_size = to_remove_points.size();
+  if (!point_part_of_contrained_edge(cdt, a, removed_edges, constrained_edge)) {
+    to_remove_points.insert(v1);
+  }
+  if (!point_part_of_contrained_edge(cdt, b, removed_edges, constrained_edge)) {
+    to_remove_points.insert(v2);
+  }
+  if (save_size < to_remove_points.size()) {
+    edges_to_remove.push_back(std::make_pair(a, b));
+    for (int i = 0; i < 3; ++i) {
+      Point temp_p1 = neigh->vertex((i + 1) % 3)->point();
+      Point temp_p2 = neigh->vertex((i + 2) % 3)->point();
+      polygon_cdt.insert_constraint(temp_p1, temp_p2);
+    }
+    faces.push_back(neigh);
+  }
 }

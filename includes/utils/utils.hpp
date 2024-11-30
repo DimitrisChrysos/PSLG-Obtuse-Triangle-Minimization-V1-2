@@ -52,6 +52,9 @@ namespace utils {
   // Check if a point is part of a constraint edge
   bool point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pair<Point, Point>>& false_removed_edges, Edge& constrained_edge);
 
+  // Find an edge of a cdt by the points given
+  void find_edge_by_points(CDT& cdt, Edge& edge, Point p1, Point p2);
+
   // Returns if two triangles are mergable
   bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge);
 
@@ -64,14 +67,35 @@ namespace utils {
   // Remove the points given from the CDT
   void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points);
 
+  // Insert a point at the center of a polygon from cdt
+  Point calculate_centroid_coords(CDT& cdt, Point& p1, Point& p2, Point& p3,
+                                    bool mergable_neigh1, 
+                                    bool mergable_neigh2, 
+                                    bool mergable_neigh3,
+                                    CDT::Face_handle& neigh1, 
+                                    CDT::Face_handle& neigh2, 
+                                    CDT::Face_handle& neigh3);
+
   // Checks if the points are the same
   bool equal_points(Point a, Point b);
+
+  // Check if two sets of points are the same
+  bool equal_edges(Point a1, Point a2, Point b1, Point b2);
 
   // Get point from edge
   Point get_point_from_edge(Edge e, int point_number);
 
   // Get vertex from edge
   CDT::Vertex_handle get_vertex_from_edge(Edge e, int vertex_number);
+
+  // Mark points to be removed
+  void mark_points_to_remove(CDT& cdt,
+                              Edge e, 
+                              CDT::Face_handle neigh, 
+                              std::vector<std::pair<Point, Point>>& edges_to_remove, 
+                              std::set<CDT::Vertex_handle>& to_remove_points, 
+                              CDT& polygon_cdt,
+                              std::vector<CDT::Face_handle>& faces);
 }
 
 #endif // UTILS_HPP
