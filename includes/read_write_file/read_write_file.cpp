@@ -65,28 +65,27 @@ std::list<std::pair<int, int>> read_write_file::get_additional_constraints(boost
   return additional_constraints;
 }
 
-//
-// std::string read_write_file::get_method(boost::property_tree::ptree root) {
-//   return root.get<std::string>("method");
-// }
 
-// std::list<std::pair<std::string, double>> read_write_file::get_parameters(boost::property_tree::ptree root) {
-//   std::list<std::pair<std::string, double>> parameters;
-//   for (boost::property_tree::ptree::value_type &row : root.get_child("parameters")) {
-//     auto it = row.second.begin();
-//     std::string first = it->second.get_value<std::string>();
-//     ++it;
-//     double second = it->second.get_value<double>();
-//     parameters.push_back(std::make_pair(first, second));
-//   }
+std::string read_write_file::get_method(boost::property_tree::ptree root) {
+  return root.get<std::string>("method");
+}
 
-//   return parameters;
-// }
+std::list<std::pair<std::string, double>> read_write_file::get_parameters(boost::property_tree::ptree root) {
+  std::list<std::pair<std::string, double>> parameters;
+  for (boost::property_tree::ptree::value_type &row : root.get_child("parameters")) {
+    std::string first = row.first;
+    double second = row.second.get_value<double>();
 
-// bool read_write_file::get_delaunay(boost::property_tree::ptree root) {
-//   return root.get<bool>("delaunay");
-// }
-//
+    parameters.push_back(std::make_pair(first, second));
+  }
+
+  return parameters;
+}
+
+bool read_write_file::get_delaunay(boost::property_tree::ptree root) {
+  return root.get<bool>("delaunay");
+}
+
 
 std::string return_frac_string(const CGAL::Epeck::FT &x) {
 
@@ -121,7 +120,7 @@ std::string return_frac_string(const CGAL::Epeck::FT &x) {
 }
 
 // Create the output file
-void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
+void read_write_file::write_output(CDT& cdt, std::vector<Point> points, std::string method, std::list<std::pair<std::string, double>> parameters) {
   boost::json::object root1;
   root1["content_type"] = "CG_SHOP_2025_Solution";
   root1["instance_uid"] = "some_instance_uid";
@@ -143,7 +142,7 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
   }
 
   // Add steiner_x JSON array to root object
-  root1["steiner_x"] = steiner_x_json;
+  root1["steiner_points_x"] = steiner_x_json;
 
   // JSON array to hold steiner_y values
   boost::json::array steiner_y_json;
@@ -161,7 +160,7 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
   }
 
   // Add steiner_x JSON array to root object
-  root1["steiner_y"] = steiner_y_json;
+  root1["steiner_points_y"] = steiner_y_json;
 
   boost::json::array edges_array;
 
@@ -223,6 +222,15 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points) {
 
   }
   root1["edges"] = edges_array;
+
+  // Add obtuse count to root object
+  root1["obtuse_count"] = count_obtuse_triangles(cdt);
+
+  // Add method to root object
+  root1["method"] = method;
+
+  // Add parameters to root object
+  // boost::json::object parameters_json;
 
   // Serialize the whole JSON object
   std::string json_string = boost::json::serialize(root1);
