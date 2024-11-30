@@ -194,6 +194,19 @@ read_write_file/fast:
 	$(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/build
 .PHONY : read_write_file/fast
 
+#=============================================================================
+# Target rules for targets named steiner_methods
+
+# Build rule for target.
+steiner_methods: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 steiner_methods
+.PHONY : steiner_methods
+
+# fast build rule for target.
+steiner_methods/fast:
+	$(MAKE) $(MAKESILENT) -f includes/steiner_methods/CMakeFiles/steiner_methods.dir/build.make includes/steiner_methods/CMakeFiles/steiner_methods.dir/build
+.PHONY : steiner_methods/fast
+
 CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o: CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.cpp.o
 .PHONY : CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o
 
@@ -351,6 +364,7 @@ help:
 	@echo "... custom_cdt_class"
 	@echo "... exec"
 	@echo "... read_write_file"
+	@echo "... steiner_methods"
 	@echo "... utils"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.o"
 	@echo "... CGAL_Qt5_moc_and_resources_autogen/mocs_compilation.i"

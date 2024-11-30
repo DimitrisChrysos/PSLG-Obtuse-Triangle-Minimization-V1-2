@@ -95,6 +95,7 @@ exec: CMakeFiles/exec.dir/build.make
 exec: includes/custom_cdt_class/libcustom_cdt_class.a
 exec: includes/utils/libutils.a
 exec: includes/read_write_file/libread_write_file.a
+exec: includes/steiner_methods/libsteiner_methods.a
 exec: libCGAL_Qt5_moc_and_resources.a
 exec: /usr/lib/x86_64-linux-gnu/libgmpxx.so
 exec: /usr/lib/x86_64-linux-gnu/libmpfr.so

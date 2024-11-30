@@ -67,12 +67,14 @@ all: CMakeFiles/exec.dir/all
 all: includes/custom_cdt_class/all
 all: includes/utils/all
 all: includes/read_write_file/all
+all: includes/steiner_methods/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: includes/custom_cdt_class/preinstall
 preinstall: includes/utils/preinstall
 preinstall: includes/read_write_file/preinstall
+preinstall: includes/steiner_methods/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
@@ -82,6 +84,7 @@ clean: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean
 clean: includes/custom_cdt_class/clean
 clean: includes/utils/clean
 clean: includes/read_write_file/clean
+clean: includes/steiner_methods/clean
 .PHONY : clean
 
 #=============================================================================
@@ -113,6 +116,21 @@ includes/read_write_file/preinstall:
 # Recursive "clean" directory target.
 includes/read_write_file/clean: includes/read_write_file/CMakeFiles/read_write_file.dir/clean
 .PHONY : includes/read_write_file/clean
+
+#=============================================================================
+# Directory level rules for directory includes/steiner_methods
+
+# Recursive "all" directory target.
+includes/steiner_methods/all: includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
+.PHONY : includes/steiner_methods/all
+
+# Recursive "preinstall" directory target.
+includes/steiner_methods/preinstall:
+.PHONY : includes/steiner_methods/preinstall
+
+# Recursive "clean" directory target.
+includes/steiner_methods/clean: includes/steiner_methods/CMakeFiles/steiner_methods.dir/clean
+.PHONY : includes/steiner_methods/clean
 
 #=============================================================================
 # Directory level rules for directory includes/utils
@@ -159,10 +177,11 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 # Target rules for target CMakeFiles/exec.dir
 
 # All Build rule for target.
-CMakeFiles/exec.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
 CMakeFiles/exec.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
 CMakeFiles/exec.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
 CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
+CMakeFiles/exec.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
+CMakeFiles/exec.dir/all: includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=15,16 "Built target exec"
@@ -170,7 +189,7 @@ CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/exec.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 20
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/exec.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
 .PHONY : CMakeFiles/exec.dir/rule
@@ -243,7 +262,7 @@ includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/clean:
 includes/utils/CMakeFiles/utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f includes/utils/CMakeFiles/utils.dir/build.make includes/utils/CMakeFiles/utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=19,20 "Built target utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=21,22 "Built target utils"
 .PHONY : includes/utils/CMakeFiles/utils.dir/all
 
 # Build rule for subdir invocation for target.
@@ -287,6 +306,32 @@ read_write_file: includes/read_write_file/CMakeFiles/read_write_file.dir/rule
 includes/read_write_file/CMakeFiles/read_write_file.dir/clean:
 	$(MAKE) $(MAKESILENT) -f includes/read_write_file/CMakeFiles/read_write_file.dir/build.make includes/read_write_file/CMakeFiles/read_write_file.dir/clean
 .PHONY : includes/read_write_file/CMakeFiles/read_write_file.dir/clean
+
+#=============================================================================
+# Target rules for target includes/steiner_methods/CMakeFiles/steiner_methods.dir
+
+# All Build rule for target.
+includes/steiner_methods/CMakeFiles/steiner_methods.dir/all:
+	$(MAKE) $(MAKESILENT) -f includes/steiner_methods/CMakeFiles/steiner_methods.dir/build.make includes/steiner_methods/CMakeFiles/steiner_methods.dir/depend
+	$(MAKE) $(MAKESILENT) -f includes/steiner_methods/CMakeFiles/steiner_methods.dir/build.make includes/steiner_methods/CMakeFiles/steiner_methods.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/CMakeFiles" --progress-num=19,20 "Built target steiner_methods"
+.PHONY : includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
+
+# Build rule for subdir invocation for target.
+includes/steiner_methods/CMakeFiles/steiner_methods.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/CMakeFiles" 0
+.PHONY : includes/steiner_methods/CMakeFiles/steiner_methods.dir/rule
+
+# Convenience name for target.
+steiner_methods: includes/steiner_methods/CMakeFiles/steiner_methods.dir/rule
+.PHONY : steiner_methods
+
+# clean rule for target.
+includes/steiner_methods/CMakeFiles/steiner_methods.dir/clean:
+	$(MAKE) $(MAKESILENT) -f includes/steiner_methods/CMakeFiles/steiner_methods.dir/build.make includes/steiner_methods/CMakeFiles/steiner_methods.dir/clean
+.PHONY : includes/steiner_methods/CMakeFiles/steiner_methods.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

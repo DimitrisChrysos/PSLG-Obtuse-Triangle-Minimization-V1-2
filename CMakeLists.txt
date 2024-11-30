@@ -33,10 +33,11 @@ endif()
 add_subdirectory(includes/custom_cdt_class)
 add_subdirectory(includes/utils)
 add_subdirectory(includes/read_write_file)
+add_subdirectory(includes/steiner_methods)
 
 
 # add libraries to EXTRA_LIBS
-list(APPEND EXTRA_LIBS custom_cdt_class utils read_write_file)
+list(APPEND EXTRA_LIBS custom_cdt_class utils read_write_file steiner_methods)
 
 # include for local package
 

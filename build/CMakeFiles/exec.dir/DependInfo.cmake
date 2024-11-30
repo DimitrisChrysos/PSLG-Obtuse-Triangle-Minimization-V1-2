@@ -16,6 +16,7 @@ set(CMAKE_TARGET_LINKED_INFO_FILES
   "/home/dimitris/Documents/project emiris/project2/build/includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/DependInfo.cmake"
   "/home/dimitris/Documents/project emiris/project2/build/includes/utils/CMakeFiles/utils.dir/DependInfo.cmake"
   "/home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/read_write_file.dir/DependInfo.cmake"
+  "/home/dimitris/Documents/project emiris/project2/build/includes/steiner_methods/CMakeFiles/steiner_methods.dir/DependInfo.cmake"
   "/home/dimitris/Documents/project emiris/project2/build/CMakeFiles/CGAL_Qt5_moc_and_resources.dir/DependInfo.cmake"
   )
 

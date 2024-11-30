@@ -16,6 +16,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "icons/Triangulation_2.qrc"
   "includes/custom_cdt_class/CMakeLists.txt"
   "includes/read_write_file/CMakeLists.txt"
+  "includes/steiner_methods/CMakeLists.txt"
   "includes/utils/CMakeLists.txt"
   "resources/CGAL.qrc"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt5/Qt5Config.cmake"
@@ -143,6 +144,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "includes/custom_cdt_class/CMakeFiles/CMakeDirectoryInformation.cmake"
   "includes/utils/CMakeFiles/CMakeDirectoryInformation.cmake"
   "includes/read_write_file/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "includes/steiner_methods/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -153,4 +155,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/DependInfo.cmake"
   "includes/utils/CMakeFiles/utils.dir/DependInfo.cmake"
   "includes/read_write_file/CMakeFiles/read_write_file.dir/DependInfo.cmake"
+  "includes/steiner_methods/CMakeFiles/steiner_methods.dir/DependInfo.cmake"
   )

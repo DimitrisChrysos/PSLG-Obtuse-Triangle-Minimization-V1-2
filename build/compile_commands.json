@@ -26,7 +26,7 @@
 },
 {
   "directory": "/home/dimitris/Documents/project emiris/project2/build",
-  "command": "/usr/bin/c++ -DCGAL_USE_BASIC_VIEWER -DCGAL_USE_GMPXX=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -I\"/home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class\" -I\"/home/dimitris/Documents/project emiris/project2/includes/utils\" -I\"/home/dimitris/Documents/project emiris/project2/includes/read_write_file\" -I\"/home/dimitris/Documents/project emiris/project2/build\" -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -g -g -frounding-math -Wno-deprecated-copy -Wno-cast-function-type -fPIC -o CMakeFiles/exec.dir/ex.cpp.o -c \"/home/dimitris/Documents/project emiris/project2/ex.cpp\"",
+  "command": "/usr/bin/c++ -DCGAL_USE_BASIC_VIEWER -DCGAL_USE_GMPXX=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -I\"/home/dimitris/Documents/project emiris/project2/includes/custom_cdt_class\" -I\"/home/dimitris/Documents/project emiris/project2/includes/utils\" -I\"/home/dimitris/Documents/project emiris/project2/includes/read_write_file\" -I\"/home/dimitris/Documents/project emiris/project2/includes/steiner_methods\" -I\"/home/dimitris/Documents/project emiris/project2/build\" -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -g -g -frounding-math -Wno-deprecated-copy -Wno-cast-function-type -fPIC -o CMakeFiles/exec.dir/ex.cpp.o -c \"/home/dimitris/Documents/project emiris/project2/ex.cpp\"",
   "file": "/home/dimitris/Documents/project emiris/project2/ex.cpp"
 },
 {
@@ -43,5 +43,10 @@
   "directory": "/home/dimitris/Documents/project emiris/project2/build/includes/read_write_file",
   "command": "/usr/bin/c++  -I\"/home/dimitris/Documents/project emiris/project2/includes/read_write_file\" -g -o CMakeFiles/read_write_file.dir/read_write_file.cpp.o -c \"/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp\"",
   "file": "/home/dimitris/Documents/project emiris/project2/includes/read_write_file/read_write_file.cpp"
+},
+{
+  "directory": "/home/dimitris/Documents/project emiris/project2/build/includes/steiner_methods",
+  "command": "/usr/bin/c++  -I\"/home/dimitris/Documents/project emiris/project2/includes/steiner_methods\" -g -o CMakeFiles/steiner_methods.dir/steiner_methods.cpp.o -c \"/home/dimitris/Documents/project emiris/project2/includes/steiner_methods/steiner_methods.cpp\"",
+  "file": "/home/dimitris/Documents/project emiris/project2/includes/steiner_methods/steiner_methods.cpp"
 }
 ]

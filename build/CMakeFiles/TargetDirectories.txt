@@ -12,3 +12,6 @@
 /home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/read_write_file.dir
 /home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/edit_cache.dir
 /home/dimitris/Documents/project emiris/project2/build/includes/read_write_file/CMakeFiles/rebuild_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/steiner_methods/CMakeFiles/steiner_methods.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/steiner_methods/CMakeFiles/edit_cache.dir
+/home/dimitris/Documents/project emiris/project2/build/includes/steiner_methods/CMakeFiles/rebuild_cache.dir
