@@ -61,9 +61,6 @@ namespace utils {
   // Check if a polygon is convex from the points given
   bool is_convex_polygon(const std::vector<Point>& points);
 
-  // Test if the flip is possible
-  bool test_the_flip(CDT& cdt, Point v1, Point v2);
-
   // Remove the points given from the CDT
   void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points);
 

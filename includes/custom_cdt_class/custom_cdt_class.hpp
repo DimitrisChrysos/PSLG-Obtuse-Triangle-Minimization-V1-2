@@ -107,10 +107,10 @@ namespace custom_cdt_class {
         int i = e.second; 
         Face_handle f2 = f1->neighbor(i);
         if (this->is_infinite(f1) || this->is_infinite(f2)) {
-            return false;
+          return false;
         }
         else if (this->is_constrained(e)) {
-            return false;
+          return false;
         }
         return true;
 

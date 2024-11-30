@@ -12,40 +12,6 @@ typedef CDT::Edge Edge;
 using namespace utils;
 using namespace steiner_methods;
 
-// // Make flips in the CDT if possible and worth it
-// void make_flips(CDT& cdt) {
-//   for (const Edge& e : cdt.finite_edges()) {
-
-//     // Get the edge points
-//     CDT::Face_handle f1 = e.first;
-//     int i = e.second;
-//     CDT::Face_handle f2 = f1->neighbor(i);
-//     Point a = get_point_from_edge(e, 1);
-//     Point b = get_point_from_edge(e, 2);
-
-//     // Test if the flip is possible or if it is worth doing
-//     std::cout << "point a: " << a << " | point b: " << b << std::endl;
-//     if (cdt.is_constrained(e) || !is_convex(cdt, f1, f2)) {
-//       continue;
-//     }
-
-
-//     // If the flip is possible and worth it, do it
-//     CDT copy(cdt);
-//     if (test_the_flip(copy, a, b)) {
-//       CGAL::draw(cdt);
-//       cdt.tds().flip(f1, i);
-//       cdt.remove_constrained_edge(f1, i);
-//       CGAL::draw(cdt);
-//     }
-//   }
-// }
-
-
-
-
-
-
 
 
 
@@ -182,13 +148,8 @@ int main(int argc, char *argv[]) {
   region_boundary_polygon = make_region_boundary_polygon(region_boundary, points);
 
   // Count the obtuse triangles
-  // std::cout << "Before flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "Before steiners: " << count_obtuse_triangles(cdt) << std::endl;
   CGAL::draw(cdt);
-
-  // Make flips
-  // make_flips(cdt);
-  // CGAL::draw(cdt);
-  // std::cout << "After flips | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
   int steps = 0;
