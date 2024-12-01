@@ -166,12 +166,13 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
           }
         }
       }
-      std::cout<<"10.\n";
+
+      if (count_obtuse_triangles(cdt) == 0) {
+        std::cout << "current obtuse triangles: 0\n" << std::endl;
+        return;
+      }
 
       T = T - (double)((double)1 / (double)L);
-
-      std::cout<<"11.\n";
-      std::cout << "L: " << L << std::endl;
       std::cout << "After try | obt_triangles: " << count_obtuse_triangles(cdt) << " | steiner_counter: " << steiner_counter << "| T: " << T << std::endl;
     }
     
