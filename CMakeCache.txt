@@ -186,7 +186,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=exec
+CMAKE_PROJECT_NAME:STATIC=opt_triangulation
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -311,6 +311,15 @@ exec_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 exec_SOURCE_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
+
+//Value Computed by CMake
+opt_triangulation_BINARY_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
+
+//Value Computed by CMake
+opt_triangulation_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+opt_triangulation_SOURCE_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
 
 
 ########################

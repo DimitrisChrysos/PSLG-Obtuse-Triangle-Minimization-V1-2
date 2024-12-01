@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.1...3.23)
 
 # Define project name
-project( exec )
+project( opt_triangulation )
 
 
 # CGAL and its components
@@ -45,15 +45,15 @@ list(APPEND EXTRA_LIBS custom_cdt_class utils read_write_file steiner_methods)
 # Creating entries for target: polyg
 # ############################
 
-add_executable(exec  ex.cpp)
+add_executable(opt_triangulation  ex.cpp)
 
 # Link the executable to CGAL and third-party libraries
-target_link_libraries(exec PRIVATE CGAL::CGAL ${EXTRA_LIBS})
+target_link_libraries(opt_triangulation PRIVATE CGAL::CGAL ${EXTRA_LIBS})
 
 # Link Qt5 libraries only if CGAL_Qt5 is found
 if (CGAL_Qt5_FOUND)
   add_definitions(-DCGAL_USE_BASIC_VIEWER) # Enable viewer functionality
-  target_link_libraries(exec PRIVATE CGAL::CGAL_Qt5)
+  target_link_libraries(opt_triangulation PRIVATE CGAL::CGAL_Qt5)
 endif()
 
 set(CMAKE_BUILD_TYPE Debug)

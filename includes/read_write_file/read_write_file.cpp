@@ -1,5 +1,9 @@
 #include "read_write_file.hpp"
 #include <boost/json/src.hpp>
+#include <filesystem>
+// #include <iomanip>
+// #include <sstream>
+// #include <string>
 
 // Read JSON functions
 std::string read_write_file::get_instance_uid(boost::property_tree::ptree root) {
@@ -120,7 +124,11 @@ std::string return_frac_string(const CGAL::Epeck::FT &x) {
 }
 
 // Create the output file
-void read_write_file::write_output(CDT& cdt, std::vector<Point> points, std::string method, std::list<std::pair<std::string, double>> parameters) {
+void read_write_file::write_output(CDT& cdt, 
+                                    std::vector<Point> points, 
+                                    std::string method, 
+                                    std::list<std::pair<std::string, double>> parameters,
+                                    const std::string& output_file) {
   boost::json::object root1;
   root1["content_type"] = "CG_SHOP_2025_Solution";
   root1["instance_uid"] = "some_instance_uid";
@@ -229,8 +237,14 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points, std::str
   // Add method to root object
   root1["method"] = method;
 
-  // Add parameters to root object
-  // boost::json::object parameters_json;
+  // Convert the list of <string, double> pairs to a JSON array
+  boost::json::object parameters_json;
+  for (const std::pair<std::string, double>& parameter : parameters) {
+    parameters_json[parameter.first] = parameter.second;
+  }
+
+  // Add parameters to the root object
+  root1["parameters"] = parameters_json;
 
   // Serialize the whole JSON object
   std::string json_string = boost::json::serialize(root1);
@@ -280,8 +294,16 @@ void read_write_file::write_output(CDT& cdt, std::vector<Point> points, std::str
     prev = ch;
   }
   
+  // Ensure the directory exists
+  std::filesystem::path output_path(output_file);
+  std::filesystem::path directory = output_path.parent_path();
+
+  if (!directory.empty() && !std::filesystem::exists(directory)) {
+      std::filesystem::create_directories(directory);
+  }
+
   // Write to file
-  std::ofstream file("output.json");
+  std::ofstream file(output_file);
   file << pretty_json;
   file.close();
 }

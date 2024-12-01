@@ -24,164 +24,164 @@ bool accept_or_decline(double prob) {
   return dist(gen);
 }
 
-int sim_annealing(CDT& cdt, double a, double b, int L) {
-  int steiner_counter;
-  double cur_en = a * count_obtuse_triangles(cdt) + b * steiner_counter;
-  double T = 1;
-  double new_en, de;
-  double e = std::exp(1);
-  while (T >= 0) {
-    bool flag = true;
+// int sim_annealing(CDT& cdt, double a, double b, int L) {
+//   int steiner_counter;
+//   double cur_en = a * count_obtuse_triangles(cdt) + b * steiner_counter;
+//   double T = 1;
+//   double new_en, de;
+//   double e = std::exp(1);
+//   while (T >= 0) {
+//     bool flag = true;
 
-    while (flag) {
-      flag = false;
+//     while (flag) {
+//       flag = false;
 
-      // Iterate the faces of the cdt
-      for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
+//       // Iterate the faces of the cdt
+//       for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
 
-        if (!is_triangle_inside_region_boundary(f))
-          continue;
+//         if (!is_triangle_inside_region_boundary(f))
+//           continue;
 
-        if (has_obtuse_angle(f)) {
+//         if (has_obtuse_angle(f)) {
           
-          CDT copy(cdt);
-          obt_point calc_insert_proj = insert_projection(copy, f);
-          steiner_counter++;
-          new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
-          de = new_en - cur_en;
-          if (de < 0) {
-            insert_projection(cdt, f);
-            cur_en = new_en;
-            flag = true;
-            break;
-          }
-          else {
-            double exponent = (-1*de) / T;
-            double prob = std::pow(e, exponent);
-            bool acc = accept_or_decline(prob);
-            if (acc) {
-              insert_projection(cdt, f);
-              cur_en = new_en;
-              flag = true;
-              break;
-            }
-            else {
-              steiner_counter--;
-            }
-          }
+//           CDT copy(cdt);
+//           obt_point calc_insert_proj = insert_projection(copy, f);
+//           steiner_counter++;
+//           new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
+//           de = new_en - cur_en;
+//           if (de < 0) {
+//             insert_projection(cdt, f);
+//             cur_en = new_en;
+//             flag = true;
+//             break;
+//           }
+//           else {
+//             double exponent = (-1*de) / T;
+//             double prob = std::pow(e, exponent);
+//             bool acc = accept_or_decline(prob);
+//             if (acc) {
+//               insert_projection(cdt, f);
+//               cur_en = new_en;
+//               flag = true;
+//               break;
+//             }
+//             else {
+//               steiner_counter--;
+//             }
+//           }
 
-          CDT copy1(cdt);
-          obt_point calc_insert_mid = insert_mid(copy1, f);
-          steiner_counter++;
-          new_en = a * calc_insert_mid.obt_count + b * steiner_counter;
-          de = new_en - cur_en;
-          if (de < 0) {
-            insert_mid(cdt, f);
-            cur_en = new_en;
-            flag = true;
-            break;
-          }
-          else {
-            double exponent = (-1*de) / T;
-            double prob = std::pow(e, exponent);
-            bool acc = accept_or_decline(prob);
-            if (acc) {
-              insert_mid(cdt, f);
-              cur_en = new_en;
-              flag = true;
-              break;
-            }
-            else {
-              steiner_counter--;
-            }
-          }
+//           CDT copy1(cdt);
+//           obt_point calc_insert_mid = insert_mid(copy1, f);
+//           steiner_counter++;
+//           new_en = a * calc_insert_mid.obt_count + b * steiner_counter;
+//           de = new_en - cur_en;
+//           if (de < 0) {
+//             insert_mid(cdt, f);
+//             cur_en = new_en;
+//             flag = true;
+//             break;
+//           }
+//           else {
+//             double exponent = (-1*de) / T;
+//             double prob = std::pow(e, exponent);
+//             bool acc = accept_or_decline(prob);
+//             if (acc) {
+//               insert_mid(cdt, f);
+//               cur_en = new_en;
+//               flag = true;
+//               break;
+//             }
+//             else {
+//               steiner_counter--;
+//             }
+//           }
 
-          CDT copy2(cdt);
-          obt_point calc_insert_centr = insert_centroid(copy2, f);
-          steiner_counter++;
-          new_en = a * calc_insert_centr.obt_count + b * steiner_counter;
-          de = new_en - cur_en;
-          if (de < 0) {
-            insert_centroid(cdt, f);
-            cur_en = new_en;
-            flag = true;
-            break;
-          }
-          else {
-            double exponent = (-1*de) / T;
-            double prob = std::pow(e, exponent);
-            bool acc = accept_or_decline(prob);
-            if (acc) {
-              insert_centroid(cdt, f);
-              cur_en = new_en;
-              flag = true;
-              break;
-            }
-            else {
-              steiner_counter--;
-            }
-          }
+//           CDT copy2(cdt);
+//           obt_point calc_insert_centr = insert_centroid(copy2, f);
+//           steiner_counter++;
+//           new_en = a * calc_insert_centr.obt_count + b * steiner_counter;
+//           de = new_en - cur_en;
+//           if (de < 0) {
+//             insert_centroid(cdt, f);
+//             cur_en = new_en;
+//             flag = true;
+//             break;
+//           }
+//           else {
+//             double exponent = (-1*de) / T;
+//             double prob = std::pow(e, exponent);
+//             bool acc = accept_or_decline(prob);
+//             if (acc) {
+//               insert_centroid(cdt, f);
+//               cur_en = new_en;
+//               flag = true;
+//               break;
+//             }
+//             else {
+//               steiner_counter--;
+//             }
+//           }
 
-          CDT copy3(cdt);
-          obt_point calc_insert_circ = insert_circumcenter(copy3, f);
-          if (calc_insert_circ.obt_count == 9999) continue;
-          steiner_counter++;
-          new_en = a * calc_insert_circ.obt_count + b * steiner_counter;
-          de = new_en - cur_en;
-          if (de < 0) {
-            insert_circumcenter(cdt, f);
-            cur_en = new_en;
-            flag = true;
-            break;
-          }
-          else {
-            double exponent = (-1*de) / T;
-            double prob = std::pow(e, exponent);
-            bool acc = accept_or_decline(prob);
-            if (acc) {
-              insert_circumcenter(cdt, f);
-              cur_en = new_en;
-              flag = true;
-              break;
-            }
-            else {
-              steiner_counter--;
-            }
-          }
+//           CDT copy3(cdt);
+//           obt_point calc_insert_circ = insert_circumcenter(copy3, f);
+//           if (calc_insert_circ.obt_count == 9999) continue;
+//           steiner_counter++;
+//           new_en = a * calc_insert_circ.obt_count + b * steiner_counter;
+//           de = new_en - cur_en;
+//           if (de < 0) {
+//             insert_circumcenter(cdt, f);
+//             cur_en = new_en;
+//             flag = true;
+//             break;
+//           }
+//           else {
+//             double exponent = (-1*de) / T;
+//             double prob = std::pow(e, exponent);
+//             bool acc = accept_or_decline(prob);
+//             if (acc) {
+//               insert_circumcenter(cdt, f);
+//               cur_en = new_en;
+//               flag = true;
+//               break;
+//             }
+//             else {
+//               steiner_counter--;
+//             }
+//           }
           
 
-          CDT copy4(cdt);
-          obt_face temp = merge_obtuse(copy4, f);
-          if (temp.obt_count == 9999) continue;
-          steiner_counter++;
-          new_en = a * temp.obt_count + b * steiner_counter;
-          de = new_en - cur_en;
-          if (de < 0) {
-            merge_obtuse(cdt, f);
-            cur_en = new_en;
-            flag = true;
-            break;
-          }
-          else {
-            double exponent = (-1*de) / T;
-            double prob = std::pow(e, exponent);
-            bool acc = accept_or_decline(prob);
-            if (acc) {
-              merge_obtuse(cdt, f);
-              cur_en = new_en;
-              flag = true;
-              break;
-            }
-            else {
-              steiner_counter--;
-            }
-          }
-        }
-      }
-      T = T - (1 / L);
-    }
-  }
-}
+//           CDT copy4(cdt);
+//           obt_face temp = merge_obtuse(copy4, f);
+//           if (temp.obt_count == 9999) continue;
+//           steiner_counter++;
+//           new_en = a * temp.obt_count + b * steiner_counter;
+//           de = new_en - cur_en;
+//           if (de < 0) {
+//             merge_obtuse(cdt, f);
+//             cur_en = new_en;
+//             flag = true;
+//             break;
+//           }
+//           else {
+//             double exponent = (-1*de) / T;
+//             double prob = std::pow(e, exponent);
+//             bool acc = accept_or_decline(prob);
+//             if (acc) {
+//               merge_obtuse(cdt, f);
+//               cur_en = new_en;
+//               flag = true;
+//               break;
+//             }
+//             else {
+//               steiner_counter--;
+//             }
+//           }
+//         }
+//       }
+//       T = T - (1 / L);
+//     }
+//   }
+// }
 
 
 // Local Search for steiner insertions
@@ -288,7 +288,7 @@ void handle_methods(CDT& cdt,
     double beta = it->second;
     it++;
     double L = it->second;
-    //
+    // sim_annealing(cdt, alpha, beta, L);
   }
   else if (method == "ant") {
     auto it = parameters.begin();
@@ -312,7 +312,7 @@ void handle_methods(CDT& cdt,
 using namespace read_write_file;
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
+  if (argc != 5) {
     std::cout << "Wrong number of arguments\n";
     return 1;
   }
@@ -321,7 +321,7 @@ int main(int argc, char *argv[]) {
   pt::ptree root; // create a root node
 
   // Choose the file to read
-  pt::read_json(argv[1], root); // read the json file
+  pt::read_json(argv[2], root); // read the json file
   
   // Read the json file
   std::string instance_uid = get_instance_uid(root);
@@ -364,7 +364,7 @@ int main(int argc, char *argv[]) {
   CGAL::draw(cdt);
   handle_methods(cdt, method, parameters, delaunay);
 
-  write_output(cdt, points, method, parameters);
+  write_output(cdt, points, method, parameters, argv[4]);
   CGAL::draw(cdt);
   
   return 0;

@@ -130,17 +130,17 @@ CGAL_Qt5_moc_and_resources/fast:
 .PHONY : CGAL_Qt5_moc_and_resources/fast
 
 #=============================================================================
-# Target rules for targets named exec
+# Target rules for targets named opt_triangulation
 
 # Build rule for target.
-exec: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 exec
-.PHONY : exec
+opt_triangulation: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 opt_triangulation
+.PHONY : opt_triangulation
 
 # fast build rule for target.
-exec/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
-.PHONY : exec/fast
+opt_triangulation/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/build
+.PHONY : opt_triangulation/fast
 
 #=============================================================================
 # Target rules for targets named CGAL_Qt5_moc_and_resources_autogen
@@ -236,7 +236,7 @@ ex.o: ex.cpp.o
 
 # target to build an object file
 ex.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/ex.cpp.o
 .PHONY : ex.cpp.o
 
 ex.i: ex.cpp.i
@@ -244,7 +244,7 @@ ex.i: ex.cpp.i
 
 # target to preprocess a source file
 ex.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/ex.cpp.i
 .PHONY : ex.cpp.i
 
 ex.s: ex.cpp.s
@@ -252,7 +252,7 @@ ex.s: ex.cpp.s
 
 # target to generate assembly for a file
 ex.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/ex.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/ex.cpp.s
 .PHONY : ex.cpp.s
 
 qrc_CGAL.o: qrc_CGAL.cpp.o
@@ -362,7 +362,7 @@ help:
 	@echo "... CGAL_Qt5_moc_and_resources_autogen"
 	@echo "... CGAL_Qt5_moc_and_resources"
 	@echo "... custom_cdt_class"
-	@echo "... exec"
+	@echo "... opt_triangulation"
 	@echo "... read_write_file"
 	@echo "... steiner_methods"
 	@echo "... utils"

@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = "/home/dimitris/Documents/project emiris/project2/build"
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/exec.dir/all
+all: CMakeFiles/opt_triangulation.dir/all
 all: includes/custom_cdt_class/all
 all: includes/utils/all
 all: includes/read_write_file/all
@@ -79,7 +79,7 @@ preinstall: includes/steiner_methods/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean
-clean: CMakeFiles/exec.dir/clean
+clean: CMakeFiles/opt_triangulation.dir/clean
 clean: CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir/clean
 clean: includes/custom_cdt_class/clean
 clean: includes/utils/clean
@@ -174,34 +174,34 @@ CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean:
 .PHONY : CMakeFiles/CGAL_Qt5_moc_and_resources.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/exec.dir
+# Target rules for target CMakeFiles/opt_triangulation.dir
 
 # All Build rule for target.
-CMakeFiles/exec.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
-CMakeFiles/exec.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
-CMakeFiles/exec.dir/all: includes/utils/CMakeFiles/utils.dir/all
-CMakeFiles/exec.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
-CMakeFiles/exec.dir/all: includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/build/CMakeFiles" --progress-num=15,16 "Built target exec"
-.PHONY : CMakeFiles/exec.dir/all
+CMakeFiles/opt_triangulation.dir/all: CMakeFiles/CGAL_Qt5_moc_and_resources.dir/all
+CMakeFiles/opt_triangulation.dir/all: includes/custom_cdt_class/CMakeFiles/custom_cdt_class.dir/all
+CMakeFiles/opt_triangulation.dir/all: includes/utils/CMakeFiles/utils.dir/all
+CMakeFiles/opt_triangulation.dir/all: includes/read_write_file/CMakeFiles/read_write_file.dir/all
+CMakeFiles/opt_triangulation.dir/all: includes/steiner_methods/CMakeFiles/steiner_methods.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/dimitris/Documents/project emiris/project2/build/CMakeFiles" --progress-num=15,16 "Built target opt_triangulation"
+.PHONY : CMakeFiles/opt_triangulation.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/exec.dir/rule: cmake_check_build_system
+CMakeFiles/opt_triangulation.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/build/CMakeFiles" 22
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/exec.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/opt_triangulation.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/dimitris/Documents/project emiris/project2/build/CMakeFiles" 0
-.PHONY : CMakeFiles/exec.dir/rule
+.PHONY : CMakeFiles/opt_triangulation.dir/rule
 
 # Convenience name for target.
-exec: CMakeFiles/exec.dir/rule
-.PHONY : exec
+opt_triangulation: CMakeFiles/opt_triangulation.dir/rule
+.PHONY : opt_triangulation
 
 # clean rule for target.
-CMakeFiles/exec.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/exec.dir/build.make CMakeFiles/exec.dir/clean
-.PHONY : CMakeFiles/exec.dir/clean
+CMakeFiles/opt_triangulation.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opt_triangulation.dir/build.make CMakeFiles/opt_triangulation.dir/clean
+.PHONY : CMakeFiles/opt_triangulation.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/CGAL_Qt5_moc_and_resources_autogen.dir

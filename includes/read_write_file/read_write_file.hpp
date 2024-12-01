@@ -39,7 +39,11 @@ namespace read_write_file {
     bool get_delaunay(boost::property_tree::ptree root);
 
     // Create the output file
-    void write_output(CDT& cdt, std::vector<Point> points, std::string method, std::list<std::pair<std::string, double>> parameters);
+    void write_output(CDT& cdt, 
+                        std::vector<Point> points, 
+                        std::string method, 
+                        std::list<std::pair<std::string, double>> parameters,
+                        const std::string& output_file);
 }
 
 

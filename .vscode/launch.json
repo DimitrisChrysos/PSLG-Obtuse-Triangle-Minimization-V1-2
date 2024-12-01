@@ -7,7 +7,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/exec", // Replace with your executable path
         // "args": ["tests/instance_6.json"],
-        "args": ["input.json"],
+        "args": ["input_ant.json"],
         // "args": ["test_instances/instance_test_14.json"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

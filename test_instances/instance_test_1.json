@@ -38,5 +38,8 @@
         9
     ],
     "num_constraints": 0,
-    "additional_constraints": []
+    "additional_constraints": [],
+    "method": "local",
+    "parameters": {"L": 80 },
+    "delaunay": true
 }
