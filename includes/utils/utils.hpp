@@ -93,6 +93,9 @@ namespace utils {
                               std::set<CDT::Vertex_handle>& to_remove_points, 
                               CDT& polygon_cdt,
                               std::vector<CDT::Face_handle>& faces);
+
+  // Find a face that matches the given face
+  CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
 }
 
 #endif // UTILS_HPP

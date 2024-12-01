@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include <random>
 
 namespace utils {
   Polygon_2 region_boundary_polygon;
@@ -375,4 +376,46 @@ void utils::mark_points_to_remove(CDT& cdt,
     }
     faces.push_back(neigh);
   }
+}
+
+// Find a face that matches the given face
+CDT::Face_handle utils::find_matching_face(CDT& cdt, CDT::Face_handle startFace) {
+  for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
+    std::cout << ":((\n";
+    CDT::Face_handle f = fit;
+    std::cout << ":)) 1.!\n";
+    Point a = f->vertex(0)->point();
+    std::cout << ":)) 2.!\n";
+    Point b = f->vertex(1)->point();
+    std::cout << ":)) 3.!\n";
+    Point c = f->vertex(2)->point();
+    std::cout << ":)) 4.!\n";
+    Point a1 = startFace->vertex(0)->point();
+    std::cout << ":)) 5.!\n";
+    Point b1 = startFace->vertex(1)->point();
+    std::cout << ":)) 6.!\n";
+    Point c1 = startFace->vertex(2)->point();
+    std::cout << ":)) 7.!\n";
+    if (equal_points(a, a1) && equal_points(b, b1) && equal_points(c, c1)) {
+      std::cout << ":)) 7.1!\n";
+      return f;
+    }
+    else if (equal_points(a, a1) && equal_points(b, c1) && equal_points(c, b1)) {
+      return f;
+    }
+    else if (equal_points(a, b1) && equal_points(b, a1) && equal_points(c, c1)) {
+      return f;
+    }
+    else if (equal_points(a, b1) && equal_points(b, c1) && equal_points(c, a1)) {
+      return f;
+    }
+    else if (equal_points(a, c1) && equal_points(b, a1) && equal_points(c, b1)) {
+      return f;
+    }
+    else if (equal_points(a, c1) && equal_points(b, b1) && equal_points(c, a1)) {
+      return f;
+    }
+  }
+  std::cout << ":)) 8.!\n";
+  return startFace;
 }

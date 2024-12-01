@@ -12,6 +12,6 @@
    [15,16], [18,19], [19,0]
     ],
     "method": "local",
-    "parameters": {"L": 80 },
+    "parameters": {"L": 65 },
     "delaunay": true
 }

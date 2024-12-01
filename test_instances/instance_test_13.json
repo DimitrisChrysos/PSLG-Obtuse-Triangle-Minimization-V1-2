@@ -47,5 +47,8 @@
             4,
             9
         ]
-    ]
+    ],
+    "method": "local",
+    "parameters": {"L": 80 },
+    "delaunay": true
 }

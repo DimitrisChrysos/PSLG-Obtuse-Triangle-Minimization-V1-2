@@ -123,11 +123,19 @@ std::string return_frac_string(const CGAL::Epeck::FT &x) {
   return frac;
 }
 
+boost::json::object ptree_to_json(const boost::property_tree::ptree& pt) {
+  boost::json::object obj;
+  for (const auto& item : pt) {
+      obj[item.first] = item.second.get_value<std::string>();
+  }
+  return obj;
+}
+
 // Create the output file
 void read_write_file::write_output(CDT& cdt, 
                                     std::vector<Point> points, 
                                     std::string method, 
-                                    std::list<std::pair<std::string, double>> parameters,
+                                    boost::property_tree::ptree parameters_for_output,
                                     const std::string& output_file) {
   boost::json::object root1;
   root1["content_type"] = "CG_SHOP_2025_Solution";
@@ -238,12 +246,18 @@ void read_write_file::write_output(CDT& cdt,
   root1["method"] = method;
 
   // Convert the list of <string, double> pairs to a JSON array
-  boost::json::object parameters_json;
-  for (const std::pair<std::string, double>& parameter : parameters) {
-    parameters_json[parameter.first] = parameter.second;
-  }
+  // boost::json::object parameters_json;
+  // for (const std::pair<std::string, double>& parameter : parameters) {
+  //   parameters_json[parameter.first] = parameter.second;
+  // }
 
-  // Add parameters to the root object
+  // // Add parameters to the root object
+  // root1["parameters"] = parameters_json;
+  
+  // Assuming parameters_for_output is a boost::property_tree::ptree
+  boost::json::object parameters_json = ptree_to_json(parameters_for_output);
+
+  // Add the JSON object to the root object
   root1["parameters"] = parameters_json;
 
   // Serialize the whole JSON object

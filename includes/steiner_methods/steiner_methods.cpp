@@ -61,19 +61,27 @@ obt_point steiner_methods::insert_mid(CDT& cdt, CDT::Face_handle f1) {
 // Insert a point at the circumcenter of the triangle
 obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
+  std::cout << "3.1 karavai\n";
+
+  // Initialize the return value
   obt_face ret(9999, f1);
 
   // Calculate the circumcenter of the triangle
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
   Point c = f1->vertex(2)->point();
+  std::cout << "3.1.1 karavai\n";
   Point pericenter = CGAL::circumcenter(a, b, c);
+  std::cout << "3.2 karavai\n";
 
   // Check if the point to be inserted will be inside the region_boundary_polygon
   CDT::Face_handle located_face = cdt.locate(pericenter);
   if (cdt.is_infinite(located_face) || !(CGAL::bounded_side_2(region_boundary_polygon.vertices_begin(), region_boundary_polygon.vertices_end(), pericenter) == CGAL::ON_BOUNDED_SIDE)) {    
     return ret;
   }
+
+  std::cout << "3.3 karavai\n";
+
 
   // Get the edge to be removed and
   // check how many edges the main segment intersects
@@ -110,6 +118,7 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     }
   }
 
+  std::cout << "3.4 karavai\n";
 
   // Remove the points able to be removed
   // If no points have the ability to be removed, return failure
@@ -128,16 +137,21 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     return ret;
   }
 
+  std::cout << "3.5 karavai\n";
+
 
   // Add the circumcenter point
   cdt.insert_no_flip(pericenter);
   cdt.insert_steiner_x_y(pericenter.x(), pericenter.y());
 
+  std::cout << "3.6 karavai\n";
 
   // Add constrains to all the edges of the polygon created, except the shared one
   std::vector<CDT::Constraint_id> cids;
   CDT::Face_handle neigh = f1->neighbor(intersected_edge.second);
+  std::cout << "3.7 karavai\n";
   for (int i = 0; i < 3; ++i) {
+    std::cout << "3.7.1 karavai\n";
     CDT::Vertex_handle start = neigh->vertex(CDT::ccw(i));
     CDT::Vertex_handle end = neigh->vertex(CDT::cw(i));
     // std::cout << "1.\n";
@@ -145,8 +159,10 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     // Point end_point = neigh->vertex((i + 2) % 3)->point();
     // std::cout << "start_point: " << start_point << " | end_point: " << end_point << std::endl;
     // std::cout << "2.\n";
+    std::cout << "3.7.2 karavai\n";
     Point start_point = start->point();
     Point end_point = end->point();
+    std::cout << "3.7.3 karavai\n";
     if (!equal_edges(start_point, end_point, intersect_point1, intersect_point2)) {
       CDT::Constraint_id cid = cdt.insert_constraint(start_point, end_point);
       cids.push_back(cid);
@@ -166,6 +182,8 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   }
   // CGAL::draw(cdt);
 
+  // std::cout << "3.5\n";
+  std::cout << "3.8 karavai\n";
 
   // Remove the constrained edges
   for (const auto& cid : cids) {
@@ -173,24 +191,34 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   }
   // CGAL::draw(cdt);
 
+  // std::cout << "3.6\n";
+  std::cout << "3.9 karavai\n";
+
+
   ret.obt_count = count_obtuse_triangles(cdt);
   return ret;
 }
 
 // Merge triangles if possible
 obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
-
+  
+  // Initialize the return value
   obt_face ret(9999, f1);
   
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
   Point p3 = f1->vertex(2)->point();
+  
+  std::cout << "2 karavai\n";
 
   // Get the neighbors of the triangle
   CDT::Face_handle neigh1 = f1->neighbor(0);
   CDT::Face_handle neigh2 = f1->neighbor(1);
   CDT::Face_handle neigh3 = f1->neighbor(2);
+
+  std::cout << "2.1 karavai\n";
+
 
   // Get the shared edges of the triangle
   Edge e1 = get_shared_edge(cdt, f1, neigh1);

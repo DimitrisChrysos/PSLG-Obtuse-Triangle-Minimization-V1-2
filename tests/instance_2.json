@@ -55,5 +55,8 @@
         16
     ],
     "num_constraints": 0,
-    "additional_constraints": []
+    "additional_constraints": [],
+    "method": "local",
+    "parameters": {"L": 65 },
+    "delaunay": true
 }

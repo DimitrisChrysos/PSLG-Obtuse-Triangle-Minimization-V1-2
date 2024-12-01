@@ -42,7 +42,7 @@ namespace read_write_file {
     void write_output(CDT& cdt, 
                         std::vector<Point> points, 
                         std::string method, 
-                        std::list<std::pair<std::string, double>> parameters,
+                        boost::property_tree::ptree parameters_for_output,
                         const std::string& output_file);
 }
 

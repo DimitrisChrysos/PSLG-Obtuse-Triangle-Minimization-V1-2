@@ -15,6 +15,8 @@ using namespace steiner_methods;
 
 
 
+
+// Accept or decline something with the given probability
 bool accept_or_decline(double prob) {
   std::random_device rd; // Seed for random number generator
   std::mt19937 gen(rd()); // Mersenne Twister random number generator
@@ -24,164 +26,158 @@ bool accept_or_decline(double prob) {
   return dist(gen);
 }
 
-// int sim_annealing(CDT& cdt, double a, double b, int L) {
-//   int steiner_counter;
-//   double cur_en = a * count_obtuse_triangles(cdt) + b * steiner_counter;
-//   double T = 1;
-//   double new_en, de;
-//   double e = std::exp(1);
-//   while (T >= 0) {
-//     bool flag = true;
+InsertionMethod choose_steiner_method() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, static_cast<int>(InsertionMethod::MERGE_OBTUSE));
+  int selected = dis(gen);
+  if (selected == static_cast<int>(InsertionMethod::PROJECTION)) {
+    return InsertionMethod::PROJECTION;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::MIDPOINT)) {
+    return InsertionMethod::MIDPOINT;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::CENTROID)) {
+    return InsertionMethod::CENTROID;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::CIRCUMCENTER)) {
+    return InsertionMethod::CIRCUMCENTER;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::MERGE_OBTUSE)) {
+    return InsertionMethod::MERGE_OBTUSE;
+  }
 
-//     while (flag) {
-//       flag = false;
+  return InsertionMethod::NONE;
+}
 
-//       // Iterate the faces of the cdt
-//       for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
+using SteinerMethodObtPoint = obt_point (*)(CDT&, CDT::Face_handle);
+using SteinerMethodObtFace = obt_face (*)(CDT&, CDT::Face_handle);
 
-//         if (!is_triangle_inside_region_boundary(f))
-//           continue;
+void sim_annealing(CDT& cdt, double a, double b, int L) {
+  int steiner_counter = 0;
+  double cur_en = a * count_obtuse_triangles(cdt) + b * steiner_counter;
+  double T = 1;
+  double new_en, de;
+  double e = std::exp(1);
+  while (T >= 0) {
+    
+    bool flag = true;
 
-//         if (has_obtuse_angle(f)) {
+    while (flag) {
+      flag = false;
+
+      if (T < 0) {
+        break;
+      }
+
+      // Iterate the faces of the cdt
+      for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
+
+        CDT::Face_handle f = fit;
+
+        if (!is_triangle_inside_region_boundary(f))
+          continue;
+
+        if (has_obtuse_angle(f)) {
           
-//           CDT copy(cdt);
-//           obt_point calc_insert_proj = insert_projection(copy, f);
-//           steiner_counter++;
-//           new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
-//           de = new_en - cur_en;
-//           if (de < 0) {
-//             insert_projection(cdt, f);
-//             cur_en = new_en;
-//             flag = true;
-//             break;
-//           }
-//           else {
-//             double exponent = (-1*de) / T;
-//             double prob = std::pow(e, exponent);
-//             bool acc = accept_or_decline(prob);
-//             if (acc) {
-//               insert_projection(cdt, f);
-//               cur_en = new_en;
-//               flag = true;
-//               break;
-//             }
-//             else {
-//               steiner_counter--;
-//             }
-//           }
+          std::cout<<"1.\n";
 
-//           CDT copy1(cdt);
-//           obt_point calc_insert_mid = insert_mid(copy1, f);
-//           steiner_counter++;
-//           new_en = a * calc_insert_mid.obt_count + b * steiner_counter;
-//           de = new_en - cur_en;
-//           if (de < 0) {
-//             insert_mid(cdt, f);
-//             cur_en = new_en;
-//             flag = true;
-//             break;
-//           }
-//           else {
-//             double exponent = (-1*de) / T;
-//             double prob = std::pow(e, exponent);
-//             bool acc = accept_or_decline(prob);
-//             if (acc) {
-//               insert_mid(cdt, f);
-//               cur_en = new_en;
-//               flag = true;
-//               break;
-//             }
-//             else {
-//               steiner_counter--;
-//             }
-//           }
+          CDT copy(cdt);
+          InsertionMethod steiner_method = choose_steiner_method();
+          std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
+          if (steiner_method == InsertionMethod::PROJECTION || 
+              steiner_method == InsertionMethod::MIDPOINT || 
+              steiner_method == InsertionMethod::CENTROID) {
 
-//           CDT copy2(cdt);
-//           obt_point calc_insert_centr = insert_centroid(copy2, f);
-//           steiner_counter++;
-//           new_en = a * calc_insert_centr.obt_count + b * steiner_counter;
-//           de = new_en - cur_en;
-//           if (de < 0) {
-//             insert_centroid(cdt, f);
-//             cur_en = new_en;
-//             flag = true;
-//             break;
-//           }
-//           else {
-//             double exponent = (-1*de) / T;
-//             double prob = std::pow(e, exponent);
-//             bool acc = accept_or_decline(prob);
-//             if (acc) {
-//               insert_centroid(cdt, f);
-//               cur_en = new_en;
-//               flag = true;
-//               break;
-//             }
-//             else {
-//               steiner_counter--;
-//             }
-//           }
+            SteinerMethodObtPoint method;
+            if (steiner_method == InsertionMethod::PROJECTION) method = insert_projection;
+            else if (steiner_method == InsertionMethod::MIDPOINT) method = insert_mid;
+            else if (steiner_method == InsertionMethod::CENTROID) method = insert_centroid;
 
-//           CDT copy3(cdt);
-//           obt_point calc_insert_circ = insert_circumcenter(copy3, f);
-//           if (calc_insert_circ.obt_count == 9999) continue;
-//           steiner_counter++;
-//           new_en = a * calc_insert_circ.obt_count + b * steiner_counter;
-//           de = new_en - cur_en;
-//           if (de < 0) {
-//             insert_circumcenter(cdt, f);
-//             cur_en = new_en;
-//             flag = true;
-//             break;
-//           }
-//           else {
-//             double exponent = (-1*de) / T;
-//             double prob = std::pow(e, exponent);
-//             bool acc = accept_or_decline(prob);
-//             if (acc) {
-//               insert_circumcenter(cdt, f);
-//               cur_en = new_en;
-//               flag = true;
-//               break;
-//             }
-//             else {
-//               steiner_counter--;
-//             }
-//           }
-          
+            std::cout<<"2.\n";
 
-//           CDT copy4(cdt);
-//           obt_face temp = merge_obtuse(copy4, f);
-//           if (temp.obt_count == 9999) continue;
-//           steiner_counter++;
-//           new_en = a * temp.obt_count + b * steiner_counter;
-//           de = new_en - cur_en;
-//           if (de < 0) {
-//             merge_obtuse(cdt, f);
-//             cur_en = new_en;
-//             flag = true;
-//             break;
-//           }
-//           else {
-//             double exponent = (-1*de) / T;
-//             double prob = std::pow(e, exponent);
-//             bool acc = accept_or_decline(prob);
-//             if (acc) {
-//               merge_obtuse(cdt, f);
-//               cur_en = new_en;
-//               flag = true;
-//               break;
-//             }
-//             else {
-//               steiner_counter--;
-//             }
-//           }
-//         }
-//       }
-//       T = T - (1 / L);
-//     }
-//   }
-// }
+            obt_point calc_insert_proj = method(copy, f);
+            steiner_counter++;
+            new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
+            de = new_en - cur_en;
+            if (de < 0) {
+              method(cdt, f);
+              cur_en = new_en;
+              std::cout<<"3.1.\n";
+              flag = true;
+              break;
+            }
+            else {
+              double exponent = (-1*de) / T;
+              double prob = std::pow(e, exponent);
+              bool acc = accept_or_decline(prob);
+              std::cout<<"3.2.\n";
+              if (acc) {
+                method(cdt, f);
+                cur_en = new_en;
+                flag = true;
+                break;
+              }
+              else {
+                steiner_counter--;
+              }
+            }
+          }
+          else if (steiner_method == InsertionMethod::CIRCUMCENTER ||
+                    steiner_method == InsertionMethod::MERGE_OBTUSE) {
+
+            SteinerMethodObtFace method;
+            if (steiner_method == InsertionMethod::CIRCUMCENTER) method = insert_circumcenter;
+            else if (steiner_method == InsertionMethod::MERGE_OBTUSE) method = merge_obtuse;
+
+            std::cout<<"4.\n";
+            //TODO EDO EIMASTE!!!!
+            obt_face temp = method(copy, f);
+            std::cout<<"4.123\n";
+            if (temp.obt_count == 9999) continue;
+            steiner_counter++;
+            new_en = a * temp.obt_count + b * steiner_counter;
+            de = new_en - cur_en;
+            std::cout<<"5.\n";
+            if (de < 0) {
+              method(cdt, f);
+              cur_en = new_en;
+              std::cout<<"5.1\n";
+              flag = true;
+              break;
+            }
+            else {
+              double exponent = (-1*de) / T;
+              double prob = std::pow(e, exponent);
+              bool acc = accept_or_decline(prob);
+              std::cout<<"5.2\n";
+              if (acc) {
+                std::cout<<"5.2.1\n";
+                method(cdt, f);
+                cur_en = new_en;
+                std::cout<<"5.2.2\n";
+                flag = true;
+                break;
+              }
+              else {
+                steiner_counter--;
+              }
+            }
+          }
+        }
+      }
+      std::cout<<"10.\n";
+
+      T = T - (double)((double)1 / (double)L);
+
+      std::cout<<"11.\n";
+      std::cout << "L: " << L << std::endl;
+      std::cout << "After try | obt_triangles: " << count_obtuse_triangles(cdt) << " | steiner_counter: " << steiner_counter << "| T: " << T << std::endl;
+    }
+    
+    // }
+  }
+}
 
 
 // Local Search for steiner insertions
@@ -203,43 +199,49 @@ void local_search(CDT& cdt, int L) {
 
     // Iterate the faces of the cdt
     for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
+      
+      // CDT::Face_handle f = fit;
+      
 
       if (!is_triangle_inside_region_boundary(f))
         continue;
 
       if (has_obtuse_angle(f)) {
         
+
         CDT copy4(cdt);
+        // CDT::Face_handle copy_face1 = find_matching_face(copy4, f);
         obt_face temp_merge_face = merge_obtuse(copy4, f);
-        if (best_steiner.obt_count >= temp_merge_face.obt_count) {
+        if (best_steiner.obt_count > temp_merge_face.obt_count) {
           merge_face = temp_merge_face;
           best_method = InsertionMethod::MERGE_OBTUSE;
         }
 
+        // CDT::Face_handle copy_face2 = find_matching_face(copy3, f);
         CDT copy3(cdt);
         obt_face temp_circ_face = insert_circumcenter(copy3, f);
-        if (best_steiner.obt_count >= temp_circ_face.obt_count) {
+        if (best_steiner.obt_count > temp_circ_face.obt_count) {
           circumcenter_face = temp_circ_face;
           best_method = InsertionMethod::CIRCUMCENTER;
         }
 
         CDT copy2(cdt);
         obt_point calc_insert_centr = insert_centroid(copy2, f);
-        if (best_steiner.obt_count >= calc_insert_centr.obt_count) {
+        if (best_steiner.obt_count > calc_insert_centr.obt_count) {
           best_steiner = calc_insert_centr;
           best_method = InsertionMethod::CENTROID;
         }
 
         CDT copy1(cdt);
         obt_point calc_insert_mid = insert_mid(copy1, f);
-        if (best_steiner.obt_count >= calc_insert_mid.obt_count) {
+        if (best_steiner.obt_count > calc_insert_mid.obt_count) {
           best_steiner = calc_insert_mid;
           best_method = InsertionMethod::MIDPOINT;
         }
 
         CDT copy(cdt);
         obt_point calc_insert_proj = insert_projection(copy, f);
-        if (best_steiner.obt_count >= calc_insert_proj.obt_count) {
+        if (best_steiner.obt_count > calc_insert_proj.obt_count) {
           best_steiner = calc_insert_proj;
           best_method = InsertionMethod::PROJECTION;
         }
@@ -288,7 +290,7 @@ void handle_methods(CDT& cdt,
     double beta = it->second;
     it++;
     double L = it->second;
-    // sim_annealing(cdt, alpha, beta, L);
+    sim_annealing(cdt, alpha, beta, L);
   }
   else if (method == "ant") {
     auto it = parameters.begin();
@@ -333,6 +335,7 @@ int main(int argc, char *argv[]) {
   std::list<std::pair<int, int>> additional_constraints = get_additional_constraints(root, region_boundary);
   std::string method = get_method(root);
   std::list<std::pair<std::string, double>> parameters = get_parameters(root);
+  boost::property_tree::ptree parameters_for_output = root.get_child("parameters");
   bool delaunay = get_delaunay(root);
 
   // Create the Constrained Delaunay Triangulation (CDT)
@@ -364,7 +367,7 @@ int main(int argc, char *argv[]) {
   CGAL::draw(cdt);
   handle_methods(cdt, method, parameters, delaunay);
 
-  write_output(cdt, points, method, parameters, argv[4]);
+  write_output(cdt, points, method, parameters_for_output, argv[4]);
   CGAL::draw(cdt);
   
   return 0;

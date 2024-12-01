@@ -52,4 +52,10 @@
 	[1,19],
 	[19,0]],
 "obtuse_count": 21,"method": "ant",
-"parameters": {"alpha": 2E0,"beta": 5E0,"xi": 1E0,"psi": 3E0,"lambda": 5E-1,"kappa": 1E1,"L": 3E1}}
+"parameters": {"alpha": "2.0",
+"beta": "5.0",
+"xi": "1.0",
+"psi": "3.0",
+"lambda": "0.5",
+"kappa": "10",
+"L": "30"}}

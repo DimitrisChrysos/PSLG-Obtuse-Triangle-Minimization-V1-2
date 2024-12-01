@@ -5,9 +5,9 @@
         "name": "C++ Debug",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/exec", // Replace with your executable path
+        "program": "${workspaceFolder}/build/opt_triangulation", // Replace with your executable path
         // "args": ["tests/instance_6.json"],
-        "args": ["input_ant.json"],
+        "args": ["–i", "input.json", "–o", "outputs/output.json"],
         // "args": ["test_instances/instance_test_14.json"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
