@@ -15,7 +15,10 @@ using namespace utils;
 using namespace steiner_methods;
 
 
+void ant_colony_optimization(CDT& cdt, double alpha, double beta, double xi, 
+                              double psi, double lambda, double kappa, int L) {
 
+}
 
 // Accept or decline something with the given probability
 bool accept_or_decline(double prob) {
@@ -60,8 +63,10 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
   double T = 1;
   double new_en, de;
   double e = std::exp(1);
+  int tries = 0;
   while (T >= 0) {
     
+    tries++;
     bool flag = true;
 
     while (flag) {
@@ -81,10 +86,10 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 
         if (has_obtuse_angle(f)) {
           
-          std::cout<<"1.\n";
+          // std::cout<<"1.\n";
 
           InsertionMethod steiner_method = choose_steiner_method();
-          std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
+          // std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
           if (steiner_method == InsertionMethod::PROJECTION || 
               steiner_method == InsertionMethod::MIDPOINT || 
               steiner_method == InsertionMethod::CENTROID) {
@@ -94,7 +99,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             else if (steiner_method == InsertionMethod::MIDPOINT) method = insert_mid;
             else if (steiner_method == InsertionMethod::CENTROID) method = insert_centroid;
 
-            std::cout<<"2.\n";
+            // std::cout<<"2.\n";
 
             CDT copy(cdt);
             obt_point calc_insert_proj = method(copy, f);
@@ -104,7 +109,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             if (de < 0) {
               method(cdt, f);
               cur_en = new_en;
-              std::cout<<"3.1.\n";
+              // std::cout<<"3.1.\n";
               flag = true;
               break;
             }
@@ -112,7 +117,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
               double exponent = (-1*de) / T;
               double prob = std::pow(e, exponent);
               bool acc = accept_or_decline(prob);
-              std::cout<<"3.2.\n";
+              // std::cout<<"3.2.\n";
               if (acc) {
                 method(cdt, f);
                 cur_en = new_en;
@@ -131,20 +136,20 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             if (steiner_method == InsertionMethod::CIRCUMCENTER) method = insert_circumcenter;
             else if (steiner_method == InsertionMethod::MERGE_OBTUSE) method = merge_obtuse;
 
-            std::cout<<"4.\n";
+            // std::cout<<"4.\n";
             //TODO EDO EIMASTE!!!!
             CDT copy(cdt);
             obt_face temp = method(copy, f);
-            std::cout<<"4.123\n";
+            // std::cout<<"4.123\n";
             if (temp.obt_count == 9999) continue;
             steiner_counter++;
             new_en = a * temp.obt_count + b * steiner_counter;
             de = new_en - cur_en;
-            std::cout<<"5.\n";
+            // std::cout<<"5.\n";
             if (de < 0) {
               method(cdt, f);
               cur_en = new_en;
-              std::cout<<"5.1\n";
+              // std::cout<<"5.1\n";
               flag = true;
               break;
             }
@@ -152,12 +157,12 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
               double exponent = (-1*de) / T;
               double prob = std::pow(e, exponent);
               bool acc = accept_or_decline(prob);
-              std::cout<<"5.2\n";
+              // std::cout<<"5.2\n";
               if (acc) {
-                std::cout<<"5.2.1\n";
+                // std::cout<<"5.2.1\n";
                 method(cdt, f);
                 cur_en = new_en;
-                std::cout<<"5.2.2\n";
+                // std::cout<<"5.2.2\n";
                 flag = true;
                 break;
               }
@@ -175,7 +180,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
       }
 
       T = T - (double)((double)1 / (double)L);
-      std::cout << "After try | obt_triangles: " << count_obtuse_triangles(cdt) << " | steiner_counter: " << steiner_counter << "| T: " << T << std::endl;
+      std::cout << "After sa try " << tries << " -> obt_triangles: " << count_obtuse_triangles(cdt) << " | steiner_counter: " << steiner_counter << "| T: " << T << std::endl;
     }
     
     // }
@@ -275,7 +280,7 @@ void local_search(CDT& cdt, int L) {
     else if (best_method == InsertionMethod::MERGE_OBTUSE) {
       merge_obtuse(cdt, merge_face.face);
     }
-    std::cout << "After try " << i << " to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+    std::cout << "After local search try " << i << "-> obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     if (elapsed.count() > 1) {
@@ -352,10 +357,10 @@ void handle_methods(CDT& cdt,
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }
-      // ant method
+      ant_colony_optimization(cdt, alpha, beta, xi, psi, lambda, kappa, L);
     }
     else {
-      // ant method
+      ant_colony_optimization(cdt, alpha, beta, xi, psi, lambda, kappa, L);
     }
   }
 }
