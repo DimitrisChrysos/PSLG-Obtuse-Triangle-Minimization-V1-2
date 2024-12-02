@@ -38,6 +38,6 @@
     "num_constraints": 0,
     "additional_constraints": [],
     "method": "sa",
-    "parameters": {"alpha": 2.0, "beta": 0.5, "L": 300 },
+    "parameters": {"alpha": 2.8, "beta": 0.3, "L": 200 },
     "delaunay": true
 }

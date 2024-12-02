@@ -67,6 +67,6 @@
         ]
     ],
     "method": "sa",
-    "parameters": {"alpha": 2.0, "beta": 0.5, "L": 300 },
+    "parameters": {"alpha": 3, "beta": 0.3, "L": 200 },
     "delaunay": true
 }

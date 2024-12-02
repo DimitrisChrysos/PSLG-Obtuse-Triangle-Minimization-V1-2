@@ -19,6 +19,9 @@ utils::obt_face::obt_face(int count, CDT::Face_handle f) {
 bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
 
   // Get the vertices of the triangle
+  // if (f1->vertex(0) == nullptr || f1->vertex(1) == nullptr || f1->vertex(2) == nullptr) {
+  //   return false;
+  // }
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
   Point p3 = f1->vertex(2)->point();

@@ -1,0 +1,181 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3
+					]
+				},
+				{
+					"build" : "includes/custom_cdt_class",
+					"jsonFile" : "directory-includes.custom_cdt_class-Debug-4ea12394b595dce0cff1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "includes/custom_cdt_class",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "includes/utils",
+					"jsonFile" : "directory-includes.utils-Debug-2f306115f92334fdc804.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "includes/utils",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "includes/read_write_file",
+					"jsonFile" : "directory-includes.read_write_file-Debug-9b3f6c3d4ce5fe1879dd.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "includes/read_write_file",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "includes/steiner_methods",
+					"jsonFile" : "directory-includes.steiner_methods-Debug-a761949408ada58e562a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "includes/steiner_methods",
+					"targetIndexes" : 
+					[
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					],
+					"name" : "opt_triangulation",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CGAL_Qt5_moc_and_resources::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CGAL_Qt5_moc_and_resources-Debug-10b5bcc84b0bbd13f03e.json",
+					"name" : "CGAL_Qt5_moc_and_resources",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "CGAL_Qt5_moc_and_resources_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CGAL_Qt5_moc_and_resources_autogen-Debug-da956be82cf28d7a41a1.json",
+					"name" : "CGAL_Qt5_moc_and_resources_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "custom_cdt_class::@74b41ca097053fe6659c",
+					"jsonFile" : "target-custom_cdt_class-Debug-b8aea98db360f0edd839.json",
+					"name" : "custom_cdt_class",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "opt_triangulation::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-opt_triangulation-Debug-1b0a0937a584c7972367.json",
+					"name" : "opt_triangulation",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "read_write_file::@7c100fee2798dfa0cfcf",
+					"jsonFile" : "target-read_write_file-Debug-79925d86f1b88556cfd1.json",
+					"name" : "read_write_file",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "steiner_methods::@095cfc5493c9015dbc8e",
+					"jsonFile" : "target-steiner_methods-Debug-3cd702a88c12853c70fb.json",
+					"name" : "steiner_methods",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "utils::@291b27f7754d9c212ab5",
+					"jsonFile" : "target-utils-Debug-8b6e61a0d4381763fa9b.json",
+					"name" : "utils",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/dimitris/Documents/project emiris/project2/build",
+		"source" : "/home/dimitris/Documents/project emiris/project2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -82,7 +82,6 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
           
           std::cout<<"1.\n";
 
-          CDT copy(cdt);
           InsertionMethod steiner_method = choose_steiner_method();
           std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
           if (steiner_method == InsertionMethod::PROJECTION || 
@@ -96,6 +95,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 
             std::cout<<"2.\n";
 
+            CDT copy(cdt);
             obt_point calc_insert_proj = method(copy, f);
             steiner_counter++;
             new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
@@ -132,6 +132,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 
             std::cout<<"4.\n";
             //TODO EDO EIMASTE!!!!
+            CDT copy(cdt);
             obt_face temp = method(copy, f);
             std::cout<<"4.123\n";
             if (temp.obt_count == 9999) continue;
@@ -226,12 +227,17 @@ void local_search(CDT& cdt, int L) {
           best_method = InsertionMethod::CIRCUMCENTER;
         }
 
+        // std::cout << "1. XAAX!\n";
+
         CDT copy2(cdt);
         obt_point calc_insert_centr = insert_centroid(copy2, f);
         if (best_steiner.obt_count > calc_insert_centr.obt_count) {
           best_steiner = calc_insert_centr;
           best_method = InsertionMethod::CENTROID;
         }
+
+        // std::cout << "2. XAAX!\n";
+
 
         CDT copy1(cdt);
         obt_point calc_insert_mid = insert_mid(copy1, f);
@@ -240,12 +246,18 @@ void local_search(CDT& cdt, int L) {
           best_method = InsertionMethod::MIDPOINT;
         }
 
+        // std::cout << "3. XAAX!\n";
+
+
         CDT copy(cdt);
         obt_point calc_insert_proj = insert_projection(copy, f);
         if (best_steiner.obt_count > calc_insert_proj.obt_count) {
           best_steiner = calc_insert_proj;
           best_method = InsertionMethod::PROJECTION;
         }
+
+        // std::cout << "4. XAAX!\n";
+
       }
     }
     if (best_method == InsertionMethod::PROJECTION || 
@@ -365,11 +377,11 @@ int main(int argc, char *argv[]) {
   std::cout << "Starting obtuse counter: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
   handle_methods(cdt, method, parameters, delaunay);
 
   write_output(cdt, points, method, parameters_for_output, argv[4]);
-  CGAL::draw(cdt);
+  // CGAL::draw(cdt);
   
   return 0;
 }

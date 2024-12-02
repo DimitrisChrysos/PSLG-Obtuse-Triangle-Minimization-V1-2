@@ -12,6 +12,6 @@
    [15,16], [18,19], [19,0]
     ],
     "method": "sa",
-    "parameters": {"alpha": 2.0, "beta": 0.5, "L": 300 },
+    "parameters": {"alpha": 2.8, "beta": 0.2, "L": 200 },
     "delaunay": true
 } 

@@ -70,7 +70,11 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
   Point c = f1->vertex(2)->point();
-  // std::cout << "3.1.1 karavai\n";
+
+  // Edge bc = std::make_pair(f1, 0);
+  // Edge ac = std::make_pair(f1, 1);
+  // Edge ab = std::make_pair(f1, 2);
+  
   Point pericenter = CGAL::circumcenter(a, b, c);
   // std::cout << "3.2 karavai\n";
 
@@ -147,10 +151,17 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
   // std::cout << "3.6 karavai\n";
 
   // Add constrains to all the edges of the polygon created, except the shared one
+  // std::set<Edge> edges_to_remove;
   std::vector<CDT::Constraint_id> cids;
   CDT::Face_handle neigh = f1->neighbor(intersected_edge.second);
   // std::cout << "3.7 karavai\n";
   for (int i = 0; i < 3; ++i) {
+    // std::cout << "3.8e karavai\n";
+    // // CDT::Vertex_handle start = neigh->vertex(CDT::ccw(i));
+    // // CDT::Vertex_handle end = neigh->vertex(CDT::cw(i));
+    // Point start_point = neigh->vertex((i + 1) % 3)->point();
+    // Point end_point = neigh->vertex((i + 2) % 3)->point();
+    // Edge e = std::make_pair(neigh, i);
     // std::cout << "3.7.1 karavai\n";
     CDT::Vertex_handle start = neigh->vertex(CDT::ccw(i));
     CDT::Vertex_handle end = neigh->vertex(CDT::cw(i));
@@ -163,36 +174,52 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
     Point start_point = start->point();
     Point end_point = end->point();
     // std::cout << "3.7.3 karavai\n";
+
     if (!equal_edges(start_point, end_point, intersect_point1, intersect_point2)) {
+      // if (cdt.is_constrained(e)) { // If the edge is constrained, skip
+      //   continue;
+      // }
+      // cdt.insert_constraint(start_point, end_point);
+      // edges_to_remove.insert(e);
       CDT::Constraint_id cid = cdt.insert_constraint(start_point, end_point);
       cids.push_back(cid);
+
     }
   }
+  // if (!equal_edges(a, b, intersect_point1, intersect_point2)){//} && !cdt.is_constrained(ab)) {
+  //   cdt.insert_constraint(a, b);
+  //   edges_to_remove.insert(ab);
+  // }
   if (!equal_edges(a, b, intersect_point1, intersect_point2)) {
     CDT::Constraint_id cid = cdt.insert_constraint(a, b);
     cids.push_back(cid);
   }
+  // if (!equal_edges(a, c, intersect_point1, intersect_point2)){// && !cdt.is_constrained(ac)) {
+  //   cdt.insert_constraint(a, c);
+  //   edges_to_remove.insert(ac);
+  // }
   if (!equal_edges(a, c, intersect_point1, intersect_point2)) {
     CDT::Constraint_id cid = cdt.insert_constraint(a, c);
     cids.push_back(cid);
   }
+  // if (!equal_edges(b, c, intersect_point1, intersect_point2)){// && !cdt.is_constrained(bc)) {
+  //   cdt.insert_constraint(b, c);
+  //   edges_to_remove.insert(bc);
+  // }
   if (!equal_edges(b, c, intersect_point1, intersect_point2)) {
     CDT::Constraint_id cid = cdt.insert_constraint(b, c);
     cids.push_back(cid);
   }
-  // CGAL::draw(cdt);
 
-  // std::cout << "3.5\n";
-  // std::cout << "3.8 karavai\n";
+  // std::cout << "3.8.5 karavai\n";
 
   // Remove the constrained edges
+  // for (const auto& edge : edges_to_remove) {
+  //   cdt.remove_constrained_edge(edge.first, edge.second);
+  // }
   for (const auto& cid : cids) {
     cdt.remove_constraint(cid);
   }
-  // CGAL::draw(cdt);
-
-  // std::cout << "3.6\n";
-  // std::cout << "3.9 karavai\n";
 
 
   ret.obt_count = count_obtuse_triangles(cdt);
@@ -205,12 +232,14 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   // Initialize the return value
   obt_face ret(9999, f1);
   
+  // std::cout << "2.0 karavai\n";
+
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
   Point p3 = f1->vertex(2)->point();
   
-  // std::cout << "2 karavai\n";
+  // std::cout << "2.05 karavai\n";
 
   // Get the neighbors of the triangle
   CDT::Face_handle neigh1 = f1->neighbor(0);
@@ -221,6 +250,9 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
 
 
   // Get the shared edges of the triangle
+  // Edge e1 = std::make_pair(f1, f1->index(neigh1));
+  // Edge e2 = std::make_pair(f1, f1->index(neigh2));
+  // Edge e3 = std::make_pair(f1, f1->index(neigh3));
   Edge e1 = get_shared_edge(cdt, f1, neigh1);
   Edge e2 = get_shared_edge(cdt, f1, neigh2);
   Edge e3 = get_shared_edge(cdt, f1, neigh3);
@@ -286,11 +318,19 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   cdt.insert_steiner_x_y(centroid.x(), centroid.y());
 
   // Add all the edges of the merged faces, except from the shared edges as constrains
+  // std::set<Edge> edges_made_constrained;
   std::set<std::pair<Point, Point>> edges_made_constrained;
+
   for (const auto& face : faces) {
     for (int i = 0; i < 3; ++i) {
+
       Point temp_p1 = face->vertex((i + 1) % 3)->point();
       Point temp_p2 = face->vertex((i + 2) % 3)->point();
+      // Edge e = std::make_pair(face, i);
+      
+      // if (cdt.is_constrained(e)) { // if the edge is already constrained skip
+      //   continue;
+      // }
 
       bool to_remove = false;
       for (const auto& edge : edges_to_remove) {
@@ -302,16 +342,21 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
       if (!to_remove) {
         cdt.insert_constraint(temp_p1, temp_p2);
         edges_made_constrained.insert(std::make_pair(temp_p1, temp_p2));
+        // edges_made_constrained.insert(e);
         break;
       }
     }
   }
 
+  // std::cout << "1. re si ftano edo?\n";
+
   // Remove the shared edges as constraints
+  // for (const auto& e : edges_made_constrained) {
+  //   cdt.remove_constrained_edge(e.first, e.second);
+  // }
   for (const auto& pair : edges_made_constrained) {
     Edge e;
     find_edge_by_points(cdt, e, pair.first, pair.second);
-    cdt.remove_constrained_edge(e.first, e.second);
   }
 
   ret.obt_count = count_obtuse_triangles(cdt);
