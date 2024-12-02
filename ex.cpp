@@ -3,6 +3,7 @@
 #include "includes/read_write_file/read_write_file.hpp"
 #include "includes/steiner_methods/steiner_methods.hpp"
 #include <random>
+#include <chrono>
 
 typedef CGAL::Constrained_triangulation_plus_2<custom_cdt_class::Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
 typedef CGAL::Polygon_2<K> Polygon_2;
@@ -199,6 +200,8 @@ void local_search(CDT& cdt, int L) {
     obt_face circumcenter_face(9999, starting_face);
     InsertionMethod best_method = InsertionMethod::NONE;
 
+    auto start = std::chrono::high_resolution_clock::now();
+    
     // Iterate the faces of the cdt
     for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
       
@@ -273,6 +276,12 @@ void local_search(CDT& cdt, int L) {
       merge_obtuse(cdt, merge_face.face);
     }
     std::cout << "After try " << i << " to insert Steiner | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    if (elapsed.count() > 1) {
+      std::cout << "Time limit reached\n";
+      break;
+    }
   }
   std::cout << "After " << i << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 }
@@ -294,7 +303,16 @@ void handle_methods(CDT& cdt,
   if (method == "local") {
     auto it = parameters.begin();
     double L = it->second;
-    local_search(cdt, L);
+    if (!delaunay) {
+      local_search(cdt, 30);
+      if (count_obtuse_triangles(cdt) == 0) {
+        return;
+      }
+      local_search(cdt, L);
+    }
+    else {
+      local_search(cdt, L);
+    }
   }
   else if (method == "sa") {
     auto it = parameters.begin();
@@ -303,7 +321,16 @@ void handle_methods(CDT& cdt,
     double beta = it->second;
     it++;
     double L = it->second;
-    sim_annealing(cdt, alpha, beta, L);
+    if (!delaunay) {
+      local_search(cdt, 30);
+      if (count_obtuse_triangles(cdt) == 0) {
+        return;
+      }
+      sim_annealing(cdt, alpha, beta, L);
+    }
+    else {
+      sim_annealing(cdt, alpha, beta, L);
+    }
   }
   else if (method == "ant") {
     auto it = parameters.begin();
@@ -320,7 +347,16 @@ void handle_methods(CDT& cdt,
     double kappa = it->second;
     it++;
     double L = it->second;
-    //
+    if (!delaunay) {
+      local_search(cdt, 30);
+      if (count_obtuse_triangles(cdt) == 0) {
+        return;
+      }
+      // ant method
+    }
+    else {
+      // ant method
+    }
   }
 }
 
