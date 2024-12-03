@@ -14,48 +14,222 @@ typedef CDT::Edge Edge;
 using namespace utils;
 using namespace steiner_methods;
 
+bool eucledean_distance(Point p1, Point p2) {
+  double p1x = CGAL::to_double(p1.x());
+  double p1y = CGAL::to_double(p1.y());
+  double p2x = CGAL::to_double(p2.x());
+  double p2y = CGAL::to_double(p2.y());
+  return std::sqrt(std::pow(p1x - p2x, 2) + std::pow(p1y - p2y, 2));
+}
+
+bool largest_edge_length(CDT::Face_handle face) {
+  // Get the vertices of the triangle
+  Point a = face->vertex(0)->point();
+  Point b = face->vertex(1)->point();
+  Point c = face->vertex(2)->point();
+
+  // Calculate the length of the edges
+  double l0 = eucledean_distance(a, b);
+  double l1 = eucledean_distance(a, c);
+  double l2 = eucledean_distance(b, c);
+
+  // Return largest edge length 
+  if (l0 >= l1 && l0 >= l2) {
+    return l0;
+  }
+  else if (l1 >= l2) {
+    return l1;
+  }
+  else {
+    return l2;
+  }
+}
+
+bool triangle_height_from_longest_side(CDT::Face_handle face) {
+  Point p1 = face->vertex(0)->point();
+  Point p2 = face->vertex(1)->point();
+  Point p3 = face->vertex(2)->point();
+  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE) {
+    int obt_id = 1;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p2, projection);
+  }
+  else if (CGAL::angle(p2,p3,p1) == CGAL::OBTUSE) {
+    int obt_id = 2;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p3, projection);
+  }
+  else if (CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
+    int obt_id = 0;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p1, projection);
+  }
+}
+
+// Calculate the radius-to-height ratio
+double calculate_r_to_h(CDT::Face_handle face) {
+  return (double)(( (double)largest_edge_length(face) / (double)2) / (double)triangle_height_from_longest_side(face));
+}
+
+bool more_or_equal_to_2_adjacent_obtuse_faces(CDT& cdt, CDT::Face_handle face) {
+  int obtuse_count = 0;
+  for (int i = 0; i < 3; i++) {
+    CDT::Face_handle neigh = face->neighbor(i);
+    if (has_obtuse_angle(neigh)) {
+      obtuse_count++;
+    }
+  }
+  return obtuse_count >= 2;
+}
+
+
+
+double calculate_posibility(double t, double h, double xi, double psi, double sum) {
+  return (double)( std::pow(t, xi) * std::pow(h, psi) ) / sum;
+}
+
+InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k, double xi, double psi,
+                                double t_projection, double t_midpoint, double t_centroid, 
+                                double t_circumcenter, double t_merge_obtuse) {
+
+  // Calculate the radius-to-height ratio
+  double r_to_h = calculate_r_to_h(face);
+
+  // Heuristics
+  double h_projection = std::max(0.0 , (double)(r_to_h - (double)1) / r_to_h );
+  double h_circumcenter = (double) r_to_h / (double)((double)2 + r_to_h);
+  double h_midpoint = std::max(0.0, ((double)3 - (double)((double)2 * r_to_h) ) / (double)3 );
+  double h_merge_obtuse = more_or_equal_to_2_adjacent_obtuse_faces(cdt, face) ? 1 : 0;
+
+  // Posibilities
+  double sum = pow(t_projection, xi)*pow(h_projection, psi) + 
+                pow(t_circumcenter, xi)*pow(h_circumcenter, psi) + 
+                pow(t_midpoint, xi)*pow(h_midpoint, psi) + 
+                pow(t_merge_obtuse, xi)*pow(h_merge_obtuse, psi);
+  double p_projection = calculate_posibility(t_projection, h_projection, xi, psi, sum);
+  double p_circumcenter = calculate_posibility(t_circumcenter, h_circumcenter, xi, psi, sum);
+  double p_midpoint = calculate_posibility(t_midpoint, h_midpoint, xi, psi, sum);
+  double p_merge_obtuse = calculate_posibility(t_merge_obtuse, h_merge_obtuse, xi, psi, sum);
+
+  // Choose the method
+  double sum_of_probabilities = p_projection + p_circumcenter + p_midpoint + p_merge_obtuse;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0.0, sum_of_probabilities);
+  double random_number = dis(gen);
+  if (random_number <= p_projection) {
+    return InsertionMethod::PROJECTION;
+  }
+  else if (random_number <= p_projection + p_circumcenter) {
+    return InsertionMethod::CIRCUMCENTER;
+  }
+  else if (random_number <= p_projection + p_circumcenter + p_midpoint) {
+    return InsertionMethod::MIDPOINT;
+  }
+  else {
+    return InsertionMethod::MERGE_OBTUSE;
+  }
+}
+
+void improve_trianglulation(CDT& cdt, double k, double xi, double psi,
+                                double t_projection, double t_midpoint, double t_centroid, 
+                                double t_circumcenter, double t_merge_obtuse) {
+
+  // Get a random face
+  std::list<CDT::Face_handle> obtuse_faces;
+  for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
+    if (is_triangle_inside_region_boundary(f) && has_obtuse_angle(f)) {
+      obtuse_faces.push_back(f);
+    }
+  }
+  if (obtuse_faces.empty()) return;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, obtuse_faces.size() - 1);
+  int random_index = dis(gen);
+  auto it = std::next(obtuse_faces.begin(), random_index);
+  CDT::Face_handle random_face = *it;
+
+  // Choose a steienr method:
+  InsertionMethod steiner_method = choose_steiner_method(cdt, random_face, k, xi, psi, t_projection, t_midpoint, t_centroid, t_circumcenter, t_merge_obtuse);
+
+  // If the choosen method fails, pick the centroid method
+  SteinerMethodObtPoint method_point;
+  SteinerMethodObtFace method_face;
+  if (steiner_method == InsertionMethod::PROJECTION) method_point = insert_projection;
+  else if (steiner_method == InsertionMethod::MIDPOINT) method_point = insert_mid;
+  else if (steiner_method == InsertionMethod::CENTROID) method_point = insert_centroid;
+  else if (steiner_method == InsertionMethod::CIRCUMCENTER) method_face = insert_circumcenter;
+  else if (steiner_method == InsertionMethod::MERGE_OBTUSE) method_face = merge_obtuse;
+  if (steiner_method == InsertionMethod::CIRCUMCENTER || steiner_method == InsertionMethod::MERGE_OBTUSE) {
+    CDT copy(cdt);
+    obt_face temp = method_face(copy, random_face);
+    if (temp.obt_count == 9999) {
+      steiner_method = InsertionMethod::CENTROID;
+      method_point = insert_centroid;
+    }
+  }
+
+  // Implement the method
+  if (steiner_method == InsertionMethod::PROJECTION || 
+      steiner_method == InsertionMethod::MIDPOINT || 
+      steiner_method == InsertionMethod::CENTROID) {
+    method_point(cdt, random_face);
+  }
+  else if (steiner_method == InsertionMethod::CIRCUMCENTER || 
+           steiner_method == InsertionMethod::MERGE_OBTUSE) {
+    method_face(cdt, random_face);
+  }
+}
+
+class best_ant {
+    public:
+      int obt_count;
+      int ant;
+
+      best_ant(int obt_count, int ant) {
+        obt_count = obt_count;
+        ant = ant;
+      }
+};
 
 void ant_colony_optimization(CDT& cdt, double alpha, double beta, double xi, 
                               double psi, double lambda, double kappa, int L) {
 
+  double t_projection = 0.5;
+  double t_midpoint = 0.5;
+  double t_centroid = 0.5;
+  double t_circumcenter = 0.5;
+  double t_merge_obtuse = 0.5;
+  best_ant best_ant(count_obtuse_triangles(cdt), 0);
+  if (best_ant.obt_count == 0) return;
+
+  for (int c = 1 ; c <= L ; c++) {  // c -> cycle
+    for (int k = 1 ; k <= kappa ; k++) { // k -> ant
+
+      improve_trianglulation(cdt, k, xi, psi, t_projection, t_midpoint, t_centroid, t_circumcenter, t_merge_obtuse);
+      
+      // EvaluateTriangulation(k)
+      int obt_count = count_obtuse_triangles(cdt);
+      if (obt_count < best_ant.obt_count) {
+        best_ant.obt_count = obt_count;
+        best_ant.ant = k;
+      }
+    }
+    // SaveBestTriangulation(c)
+
+    // UpdatePheromones(c)
+
+  }
 }
 
 // Accept or decline something with the given probability
 bool accept_or_decline(double prob) {
-  std::random_device rd; // Seed for random number generator
-  std::mt19937 gen(rd()); // Mersenne Twister random number generator
-  std::bernoulli_distribution dist(prob); // Bernoulli distribution
-  
-  // Generate the random value
-  return dist(gen);
-}
-
-InsertionMethod choose_steiner_method() {
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(0, static_cast<int>(InsertionMethod::MERGE_OBTUSE));
-  int selected = dis(gen);
-  if (selected == static_cast<int>(InsertionMethod::PROJECTION)) {
-    return InsertionMethod::PROJECTION;
-  }
-  else if (selected == static_cast<int>(InsertionMethod::MIDPOINT)) {
-    return InsertionMethod::MIDPOINT;
-  }
-  else if (selected == static_cast<int>(InsertionMethod::CENTROID)) {
-    return InsertionMethod::CENTROID;
-  }
-  else if (selected == static_cast<int>(InsertionMethod::CIRCUMCENTER)) {
-    return InsertionMethod::CIRCUMCENTER;
-  }
-  else if (selected == static_cast<int>(InsertionMethod::MERGE_OBTUSE)) {
-    return InsertionMethod::MERGE_OBTUSE;
-  }
-
-  return InsertionMethod::NONE;
+  std::bernoulli_distribution dist(prob);
+  return dist(gen); // Generate the random value
 }
-
-using SteinerMethodObtPoint = obt_point (*)(CDT&, CDT::Face_handle);
-using SteinerMethodObtFace = obt_face (*)(CDT&, CDT::Face_handle);
 
 void sim_annealing(CDT& cdt, double a, double b, int L) {
   int steiner_counter = 0;
@@ -88,7 +262,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
           
           // std::cout<<"1.\n";
 
-          InsertionMethod steiner_method = choose_steiner_method();
+          InsertionMethod steiner_method = choose_random_steiner_method();
           // std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
           if (steiner_method == InsertionMethod::PROJECTION || 
               steiner_method == InsertionMethod::MIDPOINT || 

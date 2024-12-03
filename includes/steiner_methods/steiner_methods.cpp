@@ -1,5 +1,29 @@
 #include "steiner_methods.hpp"
 
+steiner_methods::InsertionMethod steiner_methods::choose_random_steiner_method() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, static_cast<int>(InsertionMethod::MERGE_OBTUSE));
+  int selected = dis(gen);
+  if (selected == static_cast<int>(InsertionMethod::PROJECTION)) {
+    return InsertionMethod::PROJECTION;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::MIDPOINT)) {
+    return InsertionMethod::MIDPOINT;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::CENTROID)) {
+    return InsertionMethod::CENTROID;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::CIRCUMCENTER)) {
+    return InsertionMethod::CIRCUMCENTER;
+  }
+  else if (selected == static_cast<int>(InsertionMethod::MERGE_OBTUSE)) {
+    return InsertionMethod::MERGE_OBTUSE;
+  }
+
+  return InsertionMethod::NONE;
+}
+
 // Insert the projection point of the obtuse vertex onto the opposite edge
 obt_point steiner_methods::insert_projection(CDT& cdt, CDT::Face_handle f1) {
   int obt_id = find_obtuse_vertex_id(f1);
