@@ -15,6 +15,12 @@ utils::obt_face::obt_face(int count, CDT::Face_handle f) {
   this->face = f;
 }
 
+utils::obt_face::obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_handle> affected_faces) {
+  this->obt_count = count;
+  this->face = f;
+  this->affected_faces = affected_faces;
+}
+
 // Check if a triangle is inside the region boundary
 bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
 
@@ -421,4 +427,37 @@ CDT::Face_handle utils::find_matching_face(CDT& cdt, CDT::Face_handle startFace)
   }
   std::cout << ":)) 8.!\n";
   return startFace;
+}
+
+// Checks if the faces are the same
+bool utils::same_faces(CDT::Face_handle f1, CDT::Face_handle f2) {
+  // Points from face f1
+  Point a = f1->vertex(0)->point();
+  Point b = f1->vertex(1)->point();
+  Point c = f1->vertex(2)->point();
+
+  // Points from face f2
+  Point a1 = f2->vertex(0)->point();
+  Point b1 = f2->vertex(1)->point();
+  Point c1 = f2->vertex(2)->point();
+
+  // If a combination of the points are the same return true
+  if (equal_points(a, a1) && equal_points(b, b1) && equal_points(c, c1)) {
+    return true;
+  }
+  else if (equal_points(a, a1) && equal_points(b, c1) && equal_points(c, b1)) {
+    return true;
+  }
+  else if (equal_points(a, b1) && equal_points(b, a1) && equal_points(c, c1)) {
+    return true;
+  }
+  else if (equal_points(a, b1) && equal_points(b, c1) && equal_points(c, a1)) {
+    return true;
+  }
+  else if (equal_points(a, c1) && equal_points(b, a1) && equal_points(c, b1)) {
+    return true;
+  }
+  else if (equal_points(a, c1) && equal_points(b, b1) && equal_points(c, a1)) {
+    return true;
+  }
 }

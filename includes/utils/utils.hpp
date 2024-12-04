@@ -22,8 +22,11 @@ namespace utils {
     public:
       int obt_count;
       CDT::Face_handle face;
+      std::list<CDT::Face_handle> affected_faces;
 
       obt_face(int count, CDT::Face_handle f);
+
+      obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_handle> affected_faces);
   };
 
   extern Polygon_2 region_boundary_polygon;
@@ -96,6 +99,9 @@ namespace utils {
 
   // Find a face that matches the given face
   CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
+
+  // Checks if the faces are the same
+  bool same_faces(CDT::Face_handle f1, CDT::Face_handle f2);
 }
 
 #endif // UTILS_HPP

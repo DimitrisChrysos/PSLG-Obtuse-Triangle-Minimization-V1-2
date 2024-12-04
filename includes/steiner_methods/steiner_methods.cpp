@@ -247,6 +247,10 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, CDT::Face_handle f1) {
 
 
   ret.obt_count = count_obtuse_triangles(cdt);
+  std::list<CDT::Face_handle> affected_faces;
+  affected_faces.push_back(f1);
+  affected_faces.push_back(neigh);
+  ret.affected_faces = affected_faces;
   return ret;
 }
 
@@ -384,5 +388,11 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, CDT::Face_handle f1) {
   }
 
   ret.obt_count = count_obtuse_triangles(cdt);
+  std::list<CDT::Face_handle> affected_faces;
+  affected_faces.push_back(f1);
+  if (mergable_neigh1) affected_faces.push_back(neigh1);
+  if (mergable_neigh2) affected_faces.push_back(neigh2);
+  if (mergable_neigh3) affected_faces.push_back(neigh3);
+  ret.affected_faces = affected_faces;
   return ret;
 }
