@@ -15,11 +15,8 @@ utils::obt_face::obt_face(int count, CDT::Face_handle f) {
   this->face = f;
 }
 
-utils::obt_face::obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_handle> affected_faces) {
-  this->obt_count = count;
-  this->face = f;
-  this->affected_faces = affected_faces;
-}
+utils::obt_face::obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_handle> affected_faces) 
+  : obt_count(count), face(f), affected_faces(std::move(affected_faces)) {}
 
 // Check if a triangle is inside the region boundary
 bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
@@ -430,7 +427,7 @@ CDT::Face_handle utils::find_matching_face(CDT& cdt, CDT::Face_handle startFace)
 }
 
 // Checks if the faces are the same
-bool utils::same_faces(CDT::Face_handle f1, CDT::Face_handle f2) {
+bool utils::same_faces(CDT::Face_handle& f1, CDT::Face_handle& f2) {
   // Points from face f1
   Point a = f1->vertex(0)->point();
   Point b = f1->vertex(1)->point();
@@ -460,4 +457,5 @@ bool utils::same_faces(CDT::Face_handle f1, CDT::Face_handle f2) {
   else if (equal_points(a, c1) && equal_points(b, b1) && equal_points(c, a1)) {
     return true;
   }
+  return false;
 }

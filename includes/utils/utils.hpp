@@ -101,7 +101,7 @@ namespace utils {
   CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
 
   // Checks if the faces are the same
-  bool same_faces(CDT::Face_handle f1, CDT::Face_handle f2);
+  bool same_faces(CDT::Face_handle& f1, CDT::Face_handle& f2);
 }
 
 #endif // UTILS_HPP

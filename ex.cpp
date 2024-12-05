@@ -25,13 +25,13 @@ class ant_parameters {
       double L;
 
       ant_parameters(double alpha, double beta, double xi, double psi, double lambda, double kappa, double L) {
-        alpha = alpha;
-        beta = beta;
-        xi = xi;
-        psi = psi;
-        lambda = lambda;
-        kappa = kappa;
-        L = L;
+        this->alpha = alpha;
+        this->beta = beta;
+        this->xi = xi;
+        this->psi = psi;
+        this->lambda = lambda;
+        this->kappa = kappa;
+        this->L = L;
       }
 };
 
@@ -44,11 +44,11 @@ class t_sp {
       double merge_obtuse;
 
       t_sp(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
-        projection = projection;
-        midpoint = midpoint;
-        centroid = centroid;
-        circumcenter = circumcenter;
-        merge_obtuse = merge_obtuse;
+        this->projection = projection;
+        this->midpoint = midpoint;
+        this->centroid = centroid;
+        this->circumcenter = circumcenter;
+        this->merge_obtuse = merge_obtuse;
       }
 };
 
@@ -61,16 +61,18 @@ class dt {
       double merge_obtuse;
 
       dt(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
-        projection = projection;
-        midpoint = midpoint;
-        centroid = centroid;
-        circumcenter = circumcenter;
-        merge_obtuse = merge_obtuse;
+        this->projection = projection;
+        this->midpoint = midpoint;
+        this->centroid = centroid;
+        this->circumcenter = circumcenter;
+        this->merge_obtuse = merge_obtuse;
       }
 };
 
+int ant_id = 0;
 class effective_ant {
     public:
+      int id;
       int obt_count;
       int steiner_count;
       InsertionMethod sp_method;
@@ -78,15 +80,15 @@ class effective_ant {
       Point insrt_pt;
       CDT::Face_handle face_for_sp_method;
 
-      effective_ant(int obt_count, int steiner_count, InsertionMethod sp_method, std::list<CDT::Face_handle> affected_faces) {
-        obt_count = obt_count;
-        steiner_count = steiner_count;
-        sp_method = sp_method;
-        affected_faces = affected_faces;
+      effective_ant(int obt_count, int steiner_count, InsertionMethod sp_method, std::list<CDT::Face_handle> affected_faces)
+        : id(ant_id++), obt_count(obt_count), steiner_count(steiner_count), sp_method(sp_method), affected_faces(std::move(affected_faces)) {}
+
+      bool operator==(const effective_ant& other) const {
+        return id == other.id;
       }
 };
 
-bool eucledean_distance(Point p1, Point p2) {
+double eucledean_distance(Point p1, Point p2) {
   double p1x = CGAL::to_double(p1.x());
   double p1y = CGAL::to_double(p1.y());
   double p2x = CGAL::to_double(p2.x());
@@ -94,7 +96,7 @@ bool eucledean_distance(Point p1, Point p2) {
   return std::sqrt(std::pow(p1x - p2x, 2) + std::pow(p1y - p2y, 2));
 }
 
-bool largest_edge_length(CDT::Face_handle face) {
+double largest_edge_length(CDT::Face_handle face) {
   // Get the vertices of the triangle
   Point a = face->vertex(0)->point();
   Point b = face->vertex(1)->point();
@@ -117,7 +119,7 @@ bool largest_edge_length(CDT::Face_handle face) {
   }
 }
 
-bool triangle_height_from_longest_side(CDT::Face_handle face) {
+double triangle_height_from_longest_side(CDT::Face_handle face) {
   Point p1 = face->vertex(0)->point();
   Point p2 = face->vertex(1)->point();
   Point p3 = face->vertex(2)->point();
@@ -136,6 +138,7 @@ bool triangle_height_from_longest_side(CDT::Face_handle face) {
     Point projection = find_perpendicular_projection(face, obt_id);
     return eucledean_distance(p1, projection);
   }
+  return -1;
 }
 
 // Calculate the radius-to-height ratio
@@ -147,7 +150,9 @@ bool more_or_equal_to_2_adjacent_obtuse_faces(CDT& cdt, CDT::Face_handle face) {
   int obtuse_count = 0;
   for (int i = 0; i < 3; i++) {
     CDT::Face_handle neigh = face->neighbor(i);
-    if (has_obtuse_angle(neigh)) {
+    Edge e = get_shared_edge(cdt, face, neigh);
+
+    if (has_obtuse_angle(neigh) && are_mergable(cdt, face, neigh, e)) {
       obtuse_count++;
     }
   }
@@ -210,7 +215,9 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
       obtuse_faces.push_back(f);
     }
   }
-  if (obtuse_faces.empty()) return;
+  if (obtuse_faces.empty()) { // Fails because the triangluation is already optimal
+    return effective_ant(0, 0, InsertionMethod::NONE, std::list<CDT::Face_handle>());
+  }
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(0, obtuse_faces.size() - 1);
@@ -300,8 +307,8 @@ void update_pheromones(t_sp& tsp, ant_parameters ant_params, dt Dt) {
 // Handles conflicts, returns true if it encounters a conflict
 bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effective_ant& new_ant) {
   for (effective_ant& ant : effective_ants) {
-    for (const CDT::Face_handle face1 : ant.affected_faces) {
-      for (const CDT::Face_handle face2 : new_ant.affected_faces) {
+    for (CDT::Face_handle face1 : ant.affected_faces) {
+      for (CDT::Face_handle face2 : new_ant.affected_faces) {
         if (same_faces(face1, face2)) {
           int obt_count_old_ant = ant.obt_count;
           int obt_count_new_ant = new_ant.obt_count;
@@ -335,17 +342,25 @@ void use_triangulation_ants(CDT& cdt, std::list<effective_ant>& ants) {
   }
 }
 
-void save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants, 
-                              ant_parameters ant_params, double starting_energy,
+// Returns true if the triangulation is optimal
+// Check to find the best triangulation
+bool save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants, 
+                              ant_parameters ant_params, double& starting_energy,
                               std::list<effective_ant>& best_triangulation_ants) {
   CDT copy(cdt);
   use_triangulation_ants(copy, effective_ants);
   int steiner_counter = effective_ants.size();
+  if (count_obtuse_triangles(copy) == 0) {
+    best_triangulation_ants = effective_ants;
+    return true;
+  }
   double current_energy = ant_params.alpha * count_obtuse_triangles(copy) + ant_params.beta * steiner_counter;
   double de = current_energy - starting_energy;
   if (de < 0) {
     best_triangulation_ants = effective_ants;
+    starting_energy = current_energy;
   }
+  return false;
 }
 
 void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
@@ -365,30 +380,48 @@ void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
       CDT copy(cdt);
 
       // ImproveTriangulation(c)
+      std::cout << "1.\n" << std::endl;
       effective_ant new_ant = improve_trianglulation(copy, k, ant_params, tsp);
+      if (new_ant.sp_method == InsertionMethod::NONE) { // If it fails, the triangulation is optimal
+        break;
+      }
       new_ant.steiner_count = effective_ants.size();
       int steiner_counter = effective_ants.size();
 
-      
+      std::cout << "2.\n" << std::endl;
+
       // EvaluateTriangulation(k)
       if (evaluate_trianguation(copy, before_cycle_obt_count, new_ant.sp_method, Dt, steiner_counter, ant_params)) {
-        // effective_ant new_ant(count_obtuse_triangles(copy), steiner_counter, new_ant.sp_method, new_ant.second);
+        std::cout << "2.9999.\n" << std::endl;
         bool conflict_found = handle_conflicts(copy, effective_ants, new_ant);
+        std::cout << "2.9999 + 9999999999999999999.\n" << std::endl;
         if (!conflict_found) {
           new_ant.steiner_count += 1;
           effective_ants.push_back(new_ant);
         }
       }
+
+      std::cout << "3.\n" << std::endl;
     }
+
+    std::cout << "4.\n" << std::endl;
+
     // SaveBestTriangulation(c)
-    save_best_triangulation(cdt, effective_ants, ant_params, starting_energy, best_triangulation_ants);
+    if (save_best_triangulation(cdt, effective_ants, ant_params, starting_energy, best_triangulation_ants)) {
+      break; // Break because the triangulation is optimal
+    }
+
+    std::cout << "5.\n" << std::endl;
 
     // UpdatePheromones(c)
     update_pheromones(tsp, ant_params, Dt);
+
+    std::cout << "6.\n" << std::endl;
   }
 
   // Use the best triangulation to the starting cdt
   use_triangulation_ants(cdt, best_triangulation_ants);
+  std::cout << "Best triangulation found with obtuse triangles: " << count_obtuse_triangles(cdt) << std::endl;
 }
 
 // Accept or decline something with the given probability
@@ -640,11 +673,8 @@ void handle_methods(CDT& cdt,
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }
-      local_search(cdt, L);
     }
-    else {
-      local_search(cdt, L);
-    }
+    local_search(cdt, L);
   }
   else if (method == "sa") {
     auto it = parameters.begin();
@@ -658,11 +688,8 @@ void handle_methods(CDT& cdt,
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }
-      sim_annealing(cdt, alpha, beta, L);
     }
-    else {
-      sim_annealing(cdt, alpha, beta, L);
-    }
+    sim_annealing(cdt, alpha, beta, L);
   }
   else if (method == "ant") {
     auto it = parameters.begin();
@@ -685,11 +712,8 @@ void handle_methods(CDT& cdt,
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }
-      ant_colony_optimization(cdt, ant_params);
     }
-    else {
-      ant_colony_optimization(cdt, ant_params);
-    }
+    ant_colony_optimization(cdt, ant_params);
   }
 }
 

@@ -7,7 +7,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/opt_triangulation", // Replace with your executable path
         // "args": ["tests/instance_6.json"],
-        "args": ["–i", "input.json", "–o", "outputs/output.json"],
+        "args": ["–i", "input_ant.json", "–o", "outputs/output.json"],
         // "args": ["test_instances/instance_test_14.json"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
