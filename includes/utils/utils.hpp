@@ -10,6 +10,16 @@ typedef CDT::Point Point;
 typedef CDT::Edge Edge;
 
 namespace utils {
+  
+  struct FaceData {
+    Point p1;
+    Point p2;
+    Point p3;
+
+    FaceData(const Point& p1, const Point& p2, const Point& p3)
+      : p1(p1), p2(p2), p3(p3) {}
+  };
+
   class obt_point {
     public:
       int obt_count;
@@ -101,7 +111,7 @@ namespace utils {
   CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
 
   // Checks if the faces are the same
-  bool same_faces(CDT::Face_handle& f1, CDT::Face_handle& f2);
+  bool same_faces(FaceData f1, FaceData f2);
 }
 
 #endif // UTILS_HPP

@@ -427,34 +427,25 @@ CDT::Face_handle utils::find_matching_face(CDT& cdt, CDT::Face_handle startFace)
 }
 
 // Checks if the faces are the same
-bool utils::same_faces(CDT::Face_handle& f1, CDT::Face_handle& f2) {
-  // Points from face f1
-  Point a = f1->vertex(0)->point();
-  Point b = f1->vertex(1)->point();
-  Point c = f1->vertex(2)->point();
-
-  // Points from face f2
-  Point a1 = f2->vertex(0)->point();
-  Point b1 = f2->vertex(1)->point();
-  Point c1 = f2->vertex(2)->point();
+bool utils::same_faces(utils::FaceData f1, utils::FaceData f2) {
 
   // If a combination of the points are the same return true
-  if (equal_points(a, a1) && equal_points(b, b1) && equal_points(c, c1)) {
+  if (equal_points(f1.p1, f2.p1) && equal_points(f1.p2, f2.p2) && equal_points(f1.p3, f2.p3)) {
     return true;
   }
-  else if (equal_points(a, a1) && equal_points(b, c1) && equal_points(c, b1)) {
+  if (equal_points(f1.p1, f2.p1) && equal_points(f1.p2, f2.p3) && equal_points(f1.p3, f2.p2)) {
     return true;
   }
-  else if (equal_points(a, b1) && equal_points(b, a1) && equal_points(c, c1)) {
+  if (equal_points(f1.p1, f2.p2) && equal_points(f1.p2, f2.p1) && equal_points(f1.p3, f2.p3)) {
     return true;
   }
-  else if (equal_points(a, b1) && equal_points(b, c1) && equal_points(c, a1)) {
+  if (equal_points(f1.p1, f2.p2) && equal_points(f1.p2, f2.p3) && equal_points(f1.p3, f2.p1)) {
     return true;
   }
-  else if (equal_points(a, c1) && equal_points(b, a1) && equal_points(c, b1)) {
+  if (equal_points(f1.p1, f2.p3) && equal_points(f1.p2, f2.p1) && equal_points(f1.p3, f2.p2)) {
     return true;
   }
-  else if (equal_points(a, c1) && equal_points(b, b1) && equal_points(c, a1)) {
+  if (equal_points(f1.p1, f2.p3) && equal_points(f1.p2, f2.p2) && equal_points(f1.p3, f2.p1)) {
     return true;
   }
   return false;
