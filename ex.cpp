@@ -239,10 +239,8 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
   auto it = std::next(obtuse_faces.begin(), random_index);
   CDT::Face_handle random_face = *it;
 
-  // Choose a steienr method:
+  // Choose a steiner method:
   InsertionMethod steiner_method = choose_steiner_method(cdt, random_face, k, ant_params.xi, ant_params.psi, tsp);
-
-  // If the choosen method fails, pick the centroid method
   SteinerMethodObtPoint method_point;
   SteinerMethodObtFace method_face;
   if (steiner_method == InsertionMethod::PROJECTION) method_point = insert_projection;
@@ -250,6 +248,8 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
   else if (steiner_method == InsertionMethod::CENTROID) method_point = insert_centroid;
   else if (steiner_method == InsertionMethod::CIRCUMCENTER) method_face = insert_circumcenter;
   else if (steiner_method == InsertionMethod::MERGE_OBTUSE) method_face = merge_obtuse;
+
+  // If the choosen method fails, pick the centroid method
   if (steiner_method == InsertionMethod::CIRCUMCENTER || steiner_method == InsertionMethod::MERGE_OBTUSE) {
     CDT copy(cdt);
     obt_face temp = method_face(copy, random_face);
@@ -772,11 +772,11 @@ int main(int argc, char *argv[]) {
   std::cout << "Starting obtuse counter: " << count_obtuse_triangles(cdt) << std::endl;
 
   // Insert Steiner points
-  // CGAL::draw(cdt);
+  CGAL::draw(cdt);
   handle_methods(cdt, method, parameters, delaunay);
 
   write_output(cdt, points, method, parameters_for_output, argv[4]);
-  // CGAL::draw(cdt);
+  CGAL::draw(cdt);
   
   return 0;
 }
