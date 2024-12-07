@@ -206,16 +206,21 @@ InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k,
   std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(0.0, sum_of_probabilities);
   double random_number = dis(gen);
+  // std::cout << "P_proj: " << p_projection << " P_circ: " << p_circumcenter << " P_mid: " << p_midpoint << " P_merge: " << p_merge_obtuse << std::endl;
   if (random_number <= p_projection) {
+    // std::cout << "Einai projection" << std::endl;
     return InsertionMethod::PROJECTION;
   }
   else if (random_number <= p_projection + p_circumcenter) {
+    // std::cout << "Einai circumcenter" << std::endl;
     return InsertionMethod::CIRCUMCENTER;
   }
   else if (random_number <= p_projection + p_circumcenter + p_midpoint) {
+    // std::cout << "Einai midpoint" << std::endl;
     return InsertionMethod::MIDPOINT;
   }
   else {
+    // std::cout << "Einai merge obtuse" << std::endl;
     return InsertionMethod::MERGE_OBTUSE;
   }
 }
@@ -230,6 +235,7 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
     }
   }
   if (obtuse_faces.empty()) { // Fails because the triangluation is already optimal
+    std::cout << "INSIDE IMPROVE TRIANGULATION: I am inside here, should I though?" << std::endl;
     return effective_ant(0, 0, InsertionMethod::NONE, std::list<FaceData>());
   }
   std::random_device rd;
@@ -322,6 +328,9 @@ bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effect
     for (FaceData face1 : ant.affected_faces) {
       for (FaceData face2 : new_ant.affected_faces) {
         if (same_faces(face1, face2)) {
+          // std::cout << "Vrika Conflict" << std::endl;
+          // std::cout << "face1.p1: " << face1.p1 << " face1.p2: " << face1.p2 << " face1.p3: " << face1.p3 << std::endl;
+          // std::cout << "face2.p1: " << face2.p1 << " face2.p2: " << face2.p2 << " face2.p3: " << face2.p3 << std::endl;
           if (ant.obt_count > new_ant.obt_count) {
             effective_ants.remove(ant);
             effective_ants.push_back(new_ant);
@@ -331,6 +340,8 @@ bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effect
       }
     }
   }
+  new_ant.steiner_count += 1;
+  effective_ants.push_back(new_ant);
   return false;
 }
 
@@ -359,6 +370,7 @@ bool save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants,
                               std::list<effective_ant>& best_triangulation_ants) {
   CDT copy(cdt);
   use_triangulation_ants(copy, effective_ants);
+  std::cout << "|| For this cycle obtuse: " << count_obtuse_triangles(copy) << " | Steiner: " << effective_ants.size() << std::endl;
   if (count_obtuse_triangles(copy) == 0) {
     best_triangulation_ants = effective_ants;
     return true;
@@ -375,6 +387,8 @@ bool save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants,
 
 void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
 
+  std::cout<< "L: " << ant_params.L << " | Kappa: " << ant_params.kappa << std::endl;
+
   if (count_obtuse_triangles(cdt) == 0) return;
 
   t_sp tsp(0.5, 0.5, 0.5, 0.5, 0.5);
@@ -385,32 +399,24 @@ void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
     dt Dt(0, 0, 0, 0, 0);
     int before_cycle_obt_count = count_obtuse_triangles(cdt);
     std::list<effective_ant> effective_ants;
+
     for (int k = 1 ; k <= ant_params.kappa ; k++) { // k -> ant
 
       CDT copy(cdt);
 
-      // ImproveTriangulation(c)
+      // Improve the triangulation
       effective_ant new_ant = improve_trianglulation(copy, k, ant_params, tsp);
-      if (new_ant.obt_count == 0) { // The triangulation is optimal
+      if (new_ant.obt_count == 0) { // If the triangulation is optimal
         break;
       }
-      else if (new_ant.sp_method == InsertionMethod::NONE) { // If it fails, something went wrong
-        // error
-        std::cout << "Something went wrong, I should be here :(" << std::endl;
-        return;
-      }
       new_ant.steiner_count = effective_ants.size();
-      int steiner_counter = effective_ants.size();
 
-      // EvaluateTriangulation(k)
-      if (evaluate_trianguation(copy, before_cycle_obt_count, new_ant.sp_method, Dt, steiner_counter, ant_params)) {
-        bool conflict_found = handle_conflicts(copy, effective_ants, new_ant);
-        if (!conflict_found) {
-          new_ant.steiner_count += 1;
-          effective_ants.push_back(new_ant);
-        }
-      }
+      // Handle conflicts and Evaluate the triangulation
+      handle_conflicts(copy, effective_ants, new_ant);
+      evaluate_trianguation(copy, before_cycle_obt_count, new_ant.sp_method, Dt, effective_ants.size(), ant_params);
     }
+
+    std::cout << "Cycle: " << c << " finished with -> " << "|| effective ants: " << effective_ants.size();
 
     // SaveBestTriangulation(c)
     if (save_best_triangulation(cdt, effective_ants, ant_params, starting_energy, best_triangulation_ants)) {
@@ -423,7 +429,7 @@ void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
 
   // Use the best triangulation to the starting cdt
   use_triangulation_ants(cdt, best_triangulation_ants);
-  std::cout << "Best triangulation found with obtuse triangles: " << count_obtuse_triangles(cdt) << std::endl;
+  std::cout << "\nFinal -> Obtuse Triangles: " << count_obtuse_triangles(cdt) << " || Steiner Points: " << best_triangulation_ants.size() << std::endl;
 }
 
 // Accept or decline something with the given probability
@@ -566,6 +572,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 
 
 // Local Search for steiner insertions
+// Also the method used in the first assignment
 void local_search(CDT& cdt, int L) {
   int i;
   for (i = 0 ; i < L ; i++) {
