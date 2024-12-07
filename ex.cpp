@@ -206,21 +206,16 @@ InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k,
   std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(0.0, sum_of_probabilities);
   double random_number = dis(gen);
-  // std::cout << "P_proj: " << p_projection << " P_circ: " << p_circumcenter << " P_mid: " << p_midpoint << " P_merge: " << p_merge_obtuse << std::endl;
   if (random_number <= p_projection) {
-    // std::cout << "Einai projection" << std::endl;
     return InsertionMethod::PROJECTION;
   }
   else if (random_number <= p_projection + p_circumcenter) {
-    // std::cout << "Einai circumcenter" << std::endl;
     return InsertionMethod::CIRCUMCENTER;
   }
   else if (random_number <= p_projection + p_circumcenter + p_midpoint) {
-    // std::cout << "Einai midpoint" << std::endl;
     return InsertionMethod::MIDPOINT;
   }
   else {
-    // std::cout << "Einai merge obtuse" << std::endl;
     return InsertionMethod::MERGE_OBTUSE;
   }
 }
@@ -330,9 +325,6 @@ bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effect
     for (FaceData face1 : ant.affected_faces) {
       for (FaceData face2 : new_ant.affected_faces) {
         if (same_faces(face1, face2)) {
-          // std::cout << "Vrika Conflict" << std::endl;
-          // std::cout << "face1.p1: " << face1.p1 << " face1.p2: " << face1.p2 << " face1.p3: " << face1.p3 << std::endl;
-          // std::cout << "face2.p1: " << face2.p1 << " face2.p2: " << face2.p2 << " face2.p3: " << face2.p3 << std::endl;
           if (ant.obt_count > new_ant.obt_count) {
             effective_ants.remove(ant);
             effective_ants.push_back(new_ant);
@@ -357,14 +349,10 @@ void use_triangulation_ants(CDT& cdt, std::list<effective_ant>& ants) {
       cdt.insert_steiner_x_y(ant.insrt_pt.x(), ant.insrt_pt.y());
     }
     else if (method == InsertionMethod::CIRCUMCENTER) {
-      std::cout << "\n1.circum\n";
-      insert_circumcenter(cdt, ant.face_for_sp_method); // very likely to fail, because of face not existing
-      std::cout << "2.circum\n";
+      insert_circumcenter(cdt, ant.face_for_sp_method);
     }
     else if (method == InsertionMethod::MERGE_OBTUSE) {
-      std::cout << "1.merge\n";
-      merge_obtuse(cdt, ant.face_for_sp_method); // very likely to fail, because of face not existing
-      std::cout << "2.merge\n";
+      merge_obtuse(cdt, ant.face_for_sp_method);
     }
   }
 }
@@ -443,7 +431,7 @@ bool accept_or_decline(double prob) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::bernoulli_distribution dist(prob);
-  return dist(gen); // Generate the random value
+  return dist(gen);
 }
 
 void sim_annealing(CDT& cdt, double a, double b, int L) {
@@ -475,10 +463,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 
         if (has_obtuse_angle(f)) {
           
-          // std::cout<<"1.\n";
-
           InsertionMethod steiner_method = choose_random_steiner_method();
-          // std::cout << "steiner_method: " << static_cast<int>(steiner_method) << std::endl;
           if (steiner_method == InsertionMethod::PROJECTION || 
               steiner_method == InsertionMethod::MIDPOINT || 
               steiner_method == InsertionMethod::CENTROID) {
@@ -488,17 +473,15 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             else if (steiner_method == InsertionMethod::MIDPOINT) method = insert_mid;
             else if (steiner_method == InsertionMethod::CENTROID) method = insert_centroid;
 
-            // std::cout<<"2.\n";
-
             CDT copy(cdt);
             obt_point calc_insert_proj = method(copy, f);
             steiner_counter++;
             new_en = a * calc_insert_proj.obt_count + b * steiner_counter;
             de = new_en - cur_en;
             if (de < 0) {
-              method(cdt, f);
+              obt_point best_steiner = method(cdt, f);
+              cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
               cur_en = new_en;
-              // std::cout<<"3.1.\n";
               flag = true;
               break;
             }
@@ -506,9 +489,9 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
               double exponent = (-1*de) / T;
               double prob = std::pow(e, exponent);
               bool acc = accept_or_decline(prob);
-              // std::cout<<"3.2.\n";
               if (acc) {
-                method(cdt, f);
+                obt_point best_steiner = method(cdt, f);
+                cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
                 cur_en = new_en;
                 flag = true;
                 break;
@@ -525,22 +508,17 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             if (steiner_method == InsertionMethod::CIRCUMCENTER) method = insert_circumcenter;
             else if (steiner_method == InsertionMethod::MERGE_OBTUSE) method = merge_obtuse;
 
-            // std::cout<<"4.\n";
-            //TODO EDO EIMASTE!!!!
             CDT copy(cdt);
             FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
             obt_face temp = method(copy, face_data);
-            // std::cout<<"4.123\n";
             if (temp.obt_count == 9999) continue;
             steiner_counter++;
             new_en = a * temp.obt_count + b * steiner_counter;
             de = new_en - cur_en;
-            // std::cout<<"5.\n";
             if (de < 0) {
               FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
               method(cdt, face_data);
               cur_en = new_en;
-              // std::cout<<"5.1\n";
               flag = true;
               break;
             }
@@ -548,13 +526,10 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
               double exponent = (-1*de) / T;
               double prob = std::pow(e, exponent);
               bool acc = accept_or_decline(prob);
-              // std::cout<<"5.2\n";
               if (acc) {
-                // std::cout<<"5.2.1\n";
                 FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
                 method(cdt, face_data);
                 cur_en = new_en;
-                // std::cout<<"5.2.2\n";
                 flag = true;
                 break;
               }
@@ -574,8 +549,6 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
       T = T - (double)((double)1 / (double)L);
       std::cout << "After sa try " << tries << " -> obt_triangles: " << count_obtuse_triangles(cdt) << " | steiner_counter: " << steiner_counter << "| T: " << T << std::endl;
     }
-    
-    // }
   }
 }
 
@@ -603,8 +576,6 @@ void local_search(CDT& cdt, int L) {
     
     // Iterate the faces of the cdt
     for (CDT::Finite_faces_iterator f = cdt.finite_faces_begin(); f != cdt.finite_faces_end(); f++) {
-      
-      // CDT::Face_handle f = fit;
       
       if (!is_triangle_inside_region_boundary(f))
         continue;
@@ -800,6 +771,7 @@ int main(int argc, char *argv[]) {
   CGAL::draw(cdt);
   handle_methods(cdt, method, parameters, delaunay);
 
+  // Output the results
   write_output(cdt, points, method, parameters_for_output, argv[4]);
   CGAL::draw(cdt);
   

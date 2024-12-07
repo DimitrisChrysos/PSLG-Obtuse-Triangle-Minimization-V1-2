@@ -81,24 +81,6 @@ obt_point steiner_methods::insert_mid(CDT& cdt, CDT::Face_handle f1) {
   return ret;
 }
 
-bool is_vertex_constrained(const CDT& cdt, CDT::Vertex_handle v) {
-    auto start = cdt.incident_edges(v); // Start iterator
-    auto it = start;
-
-    if (it == nullptr) { // No incident edges
-        return false;
-    }
-
-    do {
-        if (cdt.is_constrained(*it)) {
-            return true; // Vertex is part of a constrained edge
-        }
-        ++it;
-    } while (it != start); // Loop until we return to the starting edge
-
-    return false; // No constrained edges found
-}
-
 // Insert a point at the circumcenter of the triangle
 obt_face steiner_methods::insert_circumcenter(CDT& cdt, FaceData toReplaceFace) {
 
