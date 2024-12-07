@@ -5,6 +5,32 @@ namespace utils {
   Polygon_2 region_boundary_polygon;
 }
 
+utils::ant_parameters::ant_parameters(double alpha, double beta, double xi, double psi, double lambda, double kappa, double L) {
+  this->alpha = alpha;
+  this->beta = beta;
+  this->xi = xi;
+  this->psi = psi;
+  this->lambda = lambda;
+  this->kappa = kappa;
+  this->L = L;
+}
+
+utils::t_sp::t_sp(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
+  this->projection = projection;
+  this->midpoint = midpoint;
+  this->centroid = centroid;
+  this->circumcenter = circumcenter;
+  this->merge_obtuse = merge_obtuse;
+}
+
+utils::dt::dt(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
+  this->projection = projection;
+  this->midpoint = midpoint;
+  this->centroid = centroid;
+  this->circumcenter = circumcenter;
+  this->merge_obtuse = merge_obtuse;
+}
+
 utils::obt_point::obt_point(int count, Point pt) {
   this->obt_count = count;
   this->insrt_pt = pt;
@@ -20,11 +46,7 @@ utils::obt_face::obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_han
 
 // Check if a triangle is inside the region boundary
 bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
-
   // Get the vertices of the triangle
-  // if (f1->vertex(0) == nullptr || f1->vertex(1) == nullptr || f1->vertex(2) == nullptr) {
-  //   return false;
-  // }
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
   Point p3 = f1->vertex(2)->point();
@@ -393,48 +415,6 @@ void utils::mark_points_to_remove(CDT& cdt,
   faces.push_back(f);
 }
 
-// Find a face that matches the given face
-CDT::Face_handle utils::find_matching_face(CDT& cdt, CDT::Face_handle startFace) {
-  for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
-    std::cout << ":((\n";
-    CDT::Face_handle f = fit;
-    std::cout << ":)) 1.!\n";
-    Point a = f->vertex(0)->point();
-    std::cout << ":)) 2.!\n";
-    Point b = f->vertex(1)->point();
-    std::cout << ":)) 3.!\n";
-    Point c = f->vertex(2)->point();
-    std::cout << ":)) 4.!\n";
-    Point a1 = startFace->vertex(0)->point();
-    std::cout << ":)) 5.!\n";
-    Point b1 = startFace->vertex(1)->point();
-    std::cout << ":)) 6.!\n";
-    Point c1 = startFace->vertex(2)->point();
-    std::cout << ":)) 7.!\n";
-    if (equal_points(a, a1) && equal_points(b, b1) && equal_points(c, c1)) {
-      std::cout << ":)) 7.1!\n";
-      return f;
-    }
-    else if (equal_points(a, a1) && equal_points(b, c1) && equal_points(c, b1)) {
-      return f;
-    }
-    else if (equal_points(a, b1) && equal_points(b, a1) && equal_points(c, c1)) {
-      return f;
-    }
-    else if (equal_points(a, b1) && equal_points(b, c1) && equal_points(c, a1)) {
-      return f;
-    }
-    else if (equal_points(a, c1) && equal_points(b, a1) && equal_points(c, b1)) {
-      return f;
-    }
-    else if (equal_points(a, c1) && equal_points(b, b1) && equal_points(c, a1)) {
-      return f;
-    }
-  }
-  std::cout << ":)) 8.!\n";
-  return startFace;
-}
-
 // Checks if the faces are the same
 bool utils::same_faces(utils::FaceData f1, utils::FaceData f2) {
 
@@ -496,4 +476,107 @@ CDT::Face_handle utils::get_face_from_face_data(CDT& cdt, FaceData f) {
     }
   }
   return cdt.finite_faces_begin();
+}
+
+// Store the face data
+void utils::store_face_data(CDT::Face_handle face, std::list<FaceData>& affected_faces) {
+  Point p1 = face->vertex(0)->point();
+  Point p2 = face->vertex(1)->point();
+  Point p3 = face->vertex(2)->point();
+  affected_faces.emplace_back(p1, p2, p3);
+}
+
+// Calculate the euclidean distance between two points
+double utils::eucledean_distance(Point p1, Point p2) {
+  double p1x = CGAL::to_double(p1.x());
+  double p1y = CGAL::to_double(p1.y());
+  double p2x = CGAL::to_double(p2.x());
+  double p2y = CGAL::to_double(p2.y());
+  return std::sqrt(std::pow(p1x - p2x, 2) + std::pow(p1y - p2y, 2));
+}
+
+// Return the largest edge length of a triangle
+double utils::largest_edge_length(CDT::Face_handle face) {
+  // Get the vertices of the triangle
+  Point a = face->vertex(0)->point();
+  Point b = face->vertex(1)->point();
+  Point c = face->vertex(2)->point();
+
+  // Calculate the length of the edges
+  double l0 = eucledean_distance(a, b);
+  double l1 = eucledean_distance(a, c);
+  double l2 = eucledean_distance(b, c);
+
+  // Return largest edge length 
+  if (l0 >= l1 && l0 >= l2) {
+    return l0;
+  }
+  else if (l1 >= l2) {
+    return l1;
+  }
+  else {
+    return l2;
+  }
+}
+
+// Return the triagles height from the longest side
+double utils::triangle_height_from_longest_side(CDT::Face_handle face) {
+  Point p1 = face->vertex(0)->point();
+  Point p2 = face->vertex(1)->point();
+  Point p3 = face->vertex(2)->point();
+  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE) {
+    int obt_id = 1;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p2, projection);
+  }
+  else if (CGAL::angle(p2,p3,p1) == CGAL::OBTUSE) {
+    int obt_id = 2;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p3, projection);
+  }
+  else if (CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
+    int obt_id = 0;
+    Point projection = find_perpendicular_projection(face, obt_id);
+    return eucledean_distance(p1, projection);
+  }
+  return -1;
+}
+
+// Calculate the radius-to-height ratio
+double utils::calculate_r_to_h(CDT::Face_handle face) {
+  return (double)(( (double)largest_edge_length(face) / (double)2) / (double)triangle_height_from_longest_side(face));
+}
+
+// Check if there are 2 or more adjacent obtuse faces
+bool utils::more_or_equal_to_2_adjacent_obtuse_faces(CDT& cdt, CDT::Face_handle face) {
+  int obtuse_count = 0;
+  for (int i = 0; i < 3; i++) {
+    CDT::Face_handle neigh = face->neighbor(i);
+    Edge e = get_shared_edge(cdt, face, neigh);
+
+    if (has_obtuse_angle(neigh) && are_mergable(cdt, face, neigh, e)) {
+      obtuse_count++;
+    }
+  }
+  return obtuse_count >= 2;
+}
+
+// Calculate the posibility of a steiner method
+double utils::calculate_posibility(double t, double h, double xi, double psi, double sum) {
+  return (double)( std::pow(t, xi) * std::pow(h, psi) ) / sum;
+}
+
+// Update the dt value
+double utils::update_dt(int obt_count, double dt, int steiner_counter, ant_parameters ant_params) {
+  dt = dt + ((double)1 / ( (double)1 + ant_params.alpha*(double)obt_count + ant_params.beta*(double)steiner_counter ));
+  return dt;
+}
+
+// Update the pheromones
+void utils::update_pheromones(t_sp& tsp, ant_parameters ant_params, dt Dt) {
+  tsp.projection = ((double)1 - ant_params.lambda)*tsp.projection + Dt.projection;
+  tsp.midpoint = ((double)1 - ant_params.lambda)*tsp.midpoint + Dt.midpoint;
+  tsp.centroid = ((double)1 - ant_params.lambda)*tsp.centroid + Dt.centroid;
+  tsp.circumcenter = ((double)1 - ant_params.lambda)*tsp.circumcenter + Dt.circumcenter;
+  tsp.merge_obtuse = ((double)1 - ant_params.lambda)*tsp.merge_obtuse + Dt.merge_obtuse;
 }

@@ -14,171 +14,27 @@ typedef CDT::Edge Edge;
 using namespace utils;
 using namespace steiner_methods;
 
-
-void store_face_data(CDT::Face_handle face, std::list<FaceData>& affected_faces) {
-  Point p1 = face->vertex(0)->point();
-  Point p2 = face->vertex(1)->point();
-  Point p3 = face->vertex(2)->point();
-  affected_faces.emplace_back(p1, p2, p3);
-}
-
-class ant_parameters {
-    public:
-      double alpha;
-      double beta;
-      double xi;
-      double psi;
-      double lambda;
-      double kappa;
-      double L;
-
-      ant_parameters(double alpha, double beta, double xi, double psi, double lambda, double kappa, double L) {
-        this->alpha = alpha;
-        this->beta = beta;
-        this->xi = xi;
-        this->psi = psi;
-        this->lambda = lambda;
-        this->kappa = kappa;
-        this->L = L;
-      }
-};
-
-class t_sp {
-    public:
-      double projection;
-      double midpoint;
-      double centroid;
-      double circumcenter;
-      double merge_obtuse;
-
-      t_sp(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
-        this->projection = projection;
-        this->midpoint = midpoint;
-        this->centroid = centroid;
-        this->circumcenter = circumcenter;
-        this->merge_obtuse = merge_obtuse;
-      }
-};
-
-class dt {
-    public:
-      double projection;
-      double midpoint;
-      double centroid;
-      double circumcenter;
-      double merge_obtuse;
-
-      dt(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse) {
-        this->projection = projection;
-        this->midpoint = midpoint;
-        this->centroid = centroid;
-        this->circumcenter = circumcenter;
-        this->merge_obtuse = merge_obtuse;
-      }
-};
-
-int ant_id = 0;
 class effective_ant {
-    public:
-      int id;
-      int obt_count;
-      int steiner_count;
-      InsertionMethod sp_method;
-      std::list<FaceData> affected_faces;
-      Point insrt_pt;
-      FaceData face_for_sp_method = FaceData(Point(0,0), Point(0,0), Point(0,0));
+  static int ant_id_counter;
+  public:
+    int id;
+    int obt_count;
+    int steiner_count;
+    InsertionMethod sp_method;
+    std::list<FaceData> affected_faces;
+    Point insrt_pt;
+    FaceData face_for_sp_method = FaceData(Point(0,0), Point(0,0), Point(0,0));
 
-      effective_ant(int obt_count, int steiner_count, InsertionMethod sp_method, std::list<FaceData> affected_faces)
-        : id(ant_id++), obt_count(obt_count), steiner_count(steiner_count), sp_method(sp_method), affected_faces(affected_faces) {}
+    effective_ant(int obt_count, int steiner_count, InsertionMethod sp_method, std::list<FaceData> affected_faces)
+      : id(ant_id_counter++), obt_count(obt_count), steiner_count(steiner_count), sp_method(sp_method), affected_faces(affected_faces) {}
 
-      bool operator==(const effective_ant& other) const {
-        return id == other.id;
-      }
-};
-
-void test_affected_faces(std::list<FaceData> affected_faces) {
-  for (auto face : affected_faces) {
-    std::cout << "p1: " << face.p1 << " p2: " << face.p2 << " p3: " << face.p3 << std::endl;
-  }
-}
-
-double eucledean_distance(Point p1, Point p2) {
-  double p1x = CGAL::to_double(p1.x());
-  double p1y = CGAL::to_double(p1.y());
-  double p2x = CGAL::to_double(p2.x());
-  double p2y = CGAL::to_double(p2.y());
-  return std::sqrt(std::pow(p1x - p2x, 2) + std::pow(p1y - p2y, 2));
-}
-
-double largest_edge_length(CDT::Face_handle face) {
-  // Get the vertices of the triangle
-  Point a = face->vertex(0)->point();
-  Point b = face->vertex(1)->point();
-  Point c = face->vertex(2)->point();
-
-  // Calculate the length of the edges
-  double l0 = eucledean_distance(a, b);
-  double l1 = eucledean_distance(a, c);
-  double l2 = eucledean_distance(b, c);
-
-  // Return largest edge length 
-  if (l0 >= l1 && l0 >= l2) {
-    return l0;
-  }
-  else if (l1 >= l2) {
-    return l1;
-  }
-  else {
-    return l2;
-  }
-}
-
-double triangle_height_from_longest_side(CDT::Face_handle face) {
-  Point p1 = face->vertex(0)->point();
-  Point p2 = face->vertex(1)->point();
-  Point p3 = face->vertex(2)->point();
-  if (CGAL::angle(p1,p2,p3) == CGAL::OBTUSE) {
-    int obt_id = 1;
-    Point projection = find_perpendicular_projection(face, obt_id);
-    return eucledean_distance(p2, projection);
-  }
-  else if (CGAL::angle(p2,p3,p1) == CGAL::OBTUSE) {
-    int obt_id = 2;
-    Point projection = find_perpendicular_projection(face, obt_id);
-    return eucledean_distance(p3, projection);
-  }
-  else if (CGAL::angle(p3,p1,p2) == CGAL::OBTUSE) {
-    int obt_id = 0;
-    Point projection = find_perpendicular_projection(face, obt_id);
-    return eucledean_distance(p1, projection);
-  }
-  return -1;
-}
-
-// Calculate the radius-to-height ratio
-double calculate_r_to_h(CDT::Face_handle face) {
-  return (double)(( (double)largest_edge_length(face) / (double)2) / (double)triangle_height_from_longest_side(face));
-}
-
-bool more_or_equal_to_2_adjacent_obtuse_faces(CDT& cdt, CDT::Face_handle face) {
-  int obtuse_count = 0;
-  for (int i = 0; i < 3; i++) {
-    CDT::Face_handle neigh = face->neighbor(i);
-    Edge e = get_shared_edge(cdt, face, neigh);
-
-    if (has_obtuse_angle(neigh) && are_mergable(cdt, face, neigh, e)) {
-      obtuse_count++;
+    bool operator==(const effective_ant& other) const {
+      return id == other.id;
     }
-  }
-  return obtuse_count >= 2;
-}
+};
+int effective_ant::ant_id_counter = 0;
 
-
-
-double calculate_posibility(double t, double h, double xi, double psi, double sum) {
-  return (double)( std::pow(t, xi) * std::pow(h, psi) ) / sum;
-}
-
+// Choose a Steiner method
 InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k, double xi, double psi, t_sp tsp) {
 
   // Calculate the radius-to-height ratio
@@ -220,6 +76,7 @@ InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k,
   }
 }
 
+// Improve the triangulation
 effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_params, t_sp tsp) {
 
   // Get a random face
@@ -287,16 +144,10 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
   return returned_ant;
   }
 
-  // Default return, WARNING! Should not be used!
   return effective_ant(9999, 0, InsertionMethod::NONE, std::list<FaceData>());
 }
 
-
-double update_dt(int obt_count, double dt, int steiner_counter, ant_parameters ant_params) {
-  dt = dt + ((double)1 / ( (double)1 + ant_params.alpha*(double)obt_count + ant_params.beta*(double)steiner_counter ));
-  return dt;
-}
-
+// Evaluate the triangulation
 bool evaluate_trianguation(CDT& cdt, int before_cycle_obt_count, InsertionMethod steiner_method, dt& Dt, int steiner_counter, ant_parameters ant_params) {
   int obt_count = count_obtuse_triangles(cdt);
   if (obt_count < before_cycle_obt_count) {
@@ -309,15 +160,6 @@ bool evaluate_trianguation(CDT& cdt, int before_cycle_obt_count, InsertionMethod
   }
   return false;
 }
-
-void update_pheromones(t_sp& tsp, ant_parameters ant_params, dt Dt) {
-  tsp.projection = ((double)1 - ant_params.lambda)*tsp.projection + Dt.projection;
-  tsp.midpoint = ((double)1 - ant_params.lambda)*tsp.midpoint + Dt.midpoint;
-  tsp.centroid = ((double)1 - ant_params.lambda)*tsp.centroid + Dt.centroid;
-  tsp.circumcenter = ((double)1 - ant_params.lambda)*tsp.circumcenter + Dt.circumcenter;
-  tsp.merge_obtuse = ((double)1 - ant_params.lambda)*tsp.merge_obtuse + Dt.merge_obtuse;
-}
-
 
 // Handles conflicts, returns true if it encounters a conflict
 bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effective_ant& new_ant) {
@@ -339,6 +181,7 @@ bool handle_conflicts(CDT &cdt, std::list<effective_ant>& effective_ants, effect
   return false;
 }
 
+// Use the triangulation ants to the cdt
 void use_triangulation_ants(CDT& cdt, std::list<effective_ant>& ants) {
   for (effective_ant& ant : ants) {
     InsertionMethod method = ant.sp_method;
@@ -379,6 +222,7 @@ bool save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants,
   return false;
 }
 
+// The ant colony optimization algorithm
 void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
 
   std::cout<< "L: " << ant_params.L << " | Kappa: " << ant_params.kappa << std::endl;
@@ -434,6 +278,7 @@ bool accept_or_decline(double prob) {
   return dist(gen);
 }
 
+// The simulated annealing algorithm
 void sim_annealing(CDT& cdt, double a, double b, int L) {
   int steiner_counter = 0;
   double cur_en = a * count_obtuse_triangles(cdt) + b * steiner_counter;
@@ -553,7 +398,7 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
 }
 
 
-// Local Search for steiner insertions
+// The Local Search algorithm
 // Also the method used in the first assignment
 void local_search(CDT& cdt, int L) {
   int i;
@@ -659,6 +504,7 @@ Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vect
   return region_boundary_polygon;
 }
 
+// Method to handle the algorithms and their parameters
 void handle_methods(CDT& cdt, 
                     std::string method, 
                     std::list<std::pair<std::string, double>> parameters,

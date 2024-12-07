@@ -20,6 +20,41 @@ namespace utils {
       : p1(p1), p2(p2), p3(p3) {}
   };
 
+  class ant_parameters {
+    public:
+      double alpha;
+      double beta;
+      double xi;
+      double psi;
+      double lambda;
+      double kappa;
+      double L;
+
+      ant_parameters(double alpha, double beta, double xi, double psi, double lambda, double kappa, double L);
+  };
+
+  class t_sp {
+    public:
+      double projection;
+      double midpoint;
+      double centroid;
+      double circumcenter;
+      double merge_obtuse;
+
+      t_sp(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse);
+  };
+
+  class dt {
+    public:
+      double projection;
+      double midpoint;
+      double centroid;
+      double circumcenter;
+      double merge_obtuse;
+
+      dt(double projection, double midpoint, double centroid, double circumcenter, double merge_obtuse);
+  };
+
   class obt_point {
     public:
       int obt_count;
@@ -110,9 +145,6 @@ namespace utils {
                               CDT& polygon_cdt,
                               std::list<FaceData>& faces);
 
-  // Find a face that matches the given face
-  CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
-
   // Checks if the faces are the same
   bool same_faces(FaceData f1, FaceData f2);
 
@@ -121,6 +153,33 @@ namespace utils {
 
   // Get the face from face data
   CDT::Face_handle get_face_from_face_data(CDT& cdt, FaceData f);
+
+  // Store the face data
+  void store_face_data(CDT::Face_handle face, std::list<FaceData>& affected_faces);
+
+  // Calculate the euclidean distance between two points
+  double eucledean_distance(Point p1, Point p2);
+
+  // Return the largest edge length of a triangle
+  double largest_edge_length(CDT::Face_handle face);
+
+  // Return the triagles height from the longest side
+  double triangle_height_from_longest_side(CDT::Face_handle face);
+
+  // Calculate the radius-to-height ratio
+  double calculate_r_to_h(CDT::Face_handle face);
+
+  // Check if there are 2 or more adjacent obtuse faces
+  bool more_or_equal_to_2_adjacent_obtuse_faces(CDT& cdt, CDT::Face_handle face);
+
+  // Calculate the posibility of a steiner method
+  double calculate_posibility(double t, double h, double xi, double psi, double sum);
+
+  // Update the dt value
+  double update_dt(int obt_count, double dt, int steiner_counter, ant_parameters ant_params);
+
+  // Update the pheromones
+  void update_pheromones(t_sp& tsp, ant_parameters ant_params, dt Dt);
 }
 
 #endif // UTILS_HPP
