@@ -14,7 +14,7 @@ typedef CDT::Edge Edge;
 using namespace utils;
 
 using SteinerMethodObtPoint = obt_point (*)(CDT&, CDT::Face_handle);
-using SteinerMethodObtFace = obt_face (*)(CDT&, CDT::Face_handle);
+using SteinerMethodObtFace = obt_face (*)(CDT&, FaceData);
 
 namespace steiner_methods {
     enum class InsertionMethod {
@@ -39,10 +39,10 @@ namespace steiner_methods {
     obt_point insert_mid(CDT& cdt, CDT::Face_handle f1);
 
     // Insert a point at the circumcenter of the triangle
-    obt_face insert_circumcenter(CDT& cdt, CDT::Face_handle f1);
+    obt_face insert_circumcenter(CDT& cdt, FaceData f1);
 
     // Merge triangles if possible
-    obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1);
+    obt_face merge_obtuse(CDT& cdt, FaceData f1);
 }
 
 #endif // STEINER_METHODS_HPP

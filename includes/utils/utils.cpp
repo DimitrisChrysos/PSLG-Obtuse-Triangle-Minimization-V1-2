@@ -224,17 +224,30 @@ Point utils::find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex
 }
 
 // Check if a point is part of a constraint edge
-bool utils::point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pair<Point, Point>>& false_removed_edges, Edge& constrained_edge) {
+bool utils::point_part_of_contrained_edge(CDT& cdt, Point p) {
   for (const Edge& e : cdt.finite_edges()) {
     if (cdt.is_constrained(e)) {
       Point edge_point1 = get_point_from_edge(e, 1);
       Point edge_point2 = get_point_from_edge(e, 2);
 
       if ((equal_points(edge_point1, p) || equal_points(edge_point2, p))) {
-        false_removed_edges.push_back(std::make_pair(edge_point1, edge_point2));
-        constrained_edge = e;
         return true;
       }
+    }
+  }
+  return false;
+}
+
+// Check if a vertex is part of a constraint edge
+bool utils::vertex_part_of_constrained_edge(CDT& cdt, CDT::Vertex_handle v) {
+  int counter=0;
+  for (auto it = cdt.incident_edges(v); it != nullptr; ++it) {
+    if (cdt.is_constrained(*it)) {
+      return true; // Vertex is part of a constrained edge
+    }
+    counter++;
+    if (counter > 100) {
+      return true;
     }
   }
   return false;
@@ -261,12 +274,15 @@ bool utils::are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh
     return false;
 
   // If both points of the shared_edge are part of a constrained edge return false
+  CDT::Vertex_handle v1 = get_vertex_from_edge(shared_edge, 1);
+  CDT::Vertex_handle v2 = get_vertex_from_edge(shared_edge, 2);
+  if (vertex_part_of_constrained_edge(cdt, v1) || vertex_part_of_constrained_edge(cdt, v2)) {
+    return false;
+  }
   Point p1 = get_point_from_edge(shared_edge, 1);
   Point p2 = get_point_from_edge(shared_edge, 2);
-  Edge constrained_edge;
-  std::vector<std::pair<Point, Point>> removed_edges;
-  if (point_part_of_contrained_edge(cdt, p1, removed_edges, constrained_edge) &&
-      point_part_of_contrained_edge(cdt, p2, removed_edges, constrained_edge)) {
+  if (point_part_of_contrained_edge(cdt, p1) ||
+      point_part_of_contrained_edge(cdt, p2)) {
     return false;
   }
 
@@ -358,30 +374,23 @@ void utils::mark_points_to_remove(CDT& cdt,
                                   std::vector<std::pair<Point, Point>>& edges_to_remove, 
                                   std::set<CDT::Vertex_handle>& to_remove_points, 
                                   CDT& polygon_cdt,
-                                  std::vector<CDT::Face_handle>& faces) {
+                                  std::list<FaceData>& faces) {
 
   CDT::Vertex_handle v1 = get_vertex_from_edge(e, 1);
   CDT::Vertex_handle v2 = get_vertex_from_edge(e, 2);
   Point a = v1->point();
   Point b = v2->point();
   Edge constrained_edge;
-  std::vector<std::pair<Point, Point>> removed_edges;
-  int save_size = to_remove_points.size();
-  if (!point_part_of_contrained_edge(cdt, a, removed_edges, constrained_edge)) {
-    to_remove_points.insert(v1);
+  to_remove_points.insert(v1);
+  to_remove_points.insert(v2);
+  edges_to_remove.push_back(std::make_pair(a, b));
+  for (int i = 0; i < 3; ++i) {
+    Point temp_p1 = neigh->vertex((i + 1) % 3)->point();
+    Point temp_p2 = neigh->vertex((i + 2) % 3)->point();
+    polygon_cdt.insert_constraint(temp_p1, temp_p2);
   }
-  if (!point_part_of_contrained_edge(cdt, b, removed_edges, constrained_edge)) {
-    to_remove_points.insert(v2);
-  }
-  if (save_size < to_remove_points.size()) {
-    edges_to_remove.push_back(std::make_pair(a, b));
-    for (int i = 0; i < 3; ++i) {
-      Point temp_p1 = neigh->vertex((i + 1) % 3)->point();
-      Point temp_p2 = neigh->vertex((i + 2) % 3)->point();
-      polygon_cdt.insert_constraint(temp_p1, temp_p2);
-    }
-    faces.push_back(neigh);
-  }
+  FaceData f = {neigh->vertex(0)->point(), neigh->vertex(1)->point(), neigh->vertex(2)->point()};
+  faces.push_back(f);
 }
 
 // Find a face that matches the given face
@@ -449,4 +458,42 @@ bool utils::same_faces(utils::FaceData f1, utils::FaceData f2) {
     return true;
   }
   return false;
+}
+
+bool utils::same_FaceData_to_face(FaceData f1, CDT::Face_handle f2) {
+  Point p1 = f2->vertex(0)->point();
+  Point p2 = f2->vertex(1)->point();
+  Point p3 = f2->vertex(2)->point();
+
+  // If a combination of the points are the same return true
+  if (equal_points(f1.p1, p1) && equal_points(f1.p2, p2) && equal_points(f1.p3, p3)) {
+    return true;
+  }
+  if (equal_points(f1.p1, p1) && equal_points(f1.p2, p3) && equal_points(f1.p3, p2)) {
+    return true;
+  }
+  if (equal_points(f1.p1, p2) && equal_points(f1.p2, p1) && equal_points(f1.p3, p3)) {
+    return true;
+  }
+  if (equal_points(f1.p1, p2) && equal_points(f1.p2, p3) && equal_points(f1.p3, p1)) {
+    return true;
+  }
+  if (equal_points(f1.p1, p3) && equal_points(f1.p2, p1) && equal_points(f1.p3, p2)) {
+    return true;
+  }
+  if (equal_points(f1.p1, p3) && equal_points(f1.p2, p2) && equal_points(f1.p3, p1)) {
+    return true;
+  }
+  return false;
+}
+
+// Get the face from face data
+CDT::Face_handle utils::get_face_from_face_data(CDT& cdt, FaceData f) {
+  for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin(); fit != cdt.finite_faces_end(); fit++) {
+    CDT::Face_handle face = fit;
+    if (same_FaceData_to_face(f, face)) {
+      return face;
+    }
+  }
+  return cdt.finite_faces_begin();
 }

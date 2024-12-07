@@ -63,7 +63,10 @@ namespace utils {
   Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx);
 
   // Check if a point is part of a constraint edge
-  bool point_part_of_contrained_edge(CDT& cdt, Point p, std::vector<std::pair<Point, Point>>& false_removed_edges, Edge& constrained_edge);
+  bool point_part_of_contrained_edge(CDT& cdt, Point p);
+
+  // Check if a vertex is part of a constraint edge
+  bool vertex_part_of_constrained_edge(CDT& cdt, CDT::Vertex_handle v);
 
   // Find an edge of a cdt by the points given
   void find_edge_by_points(CDT& cdt, Edge& edge, Point p1, Point p2);
@@ -105,13 +108,19 @@ namespace utils {
                               std::vector<std::pair<Point, Point>>& edges_to_remove, 
                               std::set<CDT::Vertex_handle>& to_remove_points, 
                               CDT& polygon_cdt,
-                              std::vector<CDT::Face_handle>& faces);
+                              std::list<FaceData>& faces);
 
   // Find a face that matches the given face
   CDT::Face_handle find_matching_face(CDT& cdt, CDT::Face_handle startFace);
 
   // Checks if the faces are the same
   bool same_faces(FaceData f1, FaceData f2);
+
+  // Checks if the face data is the same as the face
+  bool same_FaceData_to_face(FaceData f1, CDT::Face_handle f2);
+
+  // Get the face from face data
+  CDT::Face_handle get_face_from_face_data(CDT& cdt, FaceData f);
 }
 
 #endif // UTILS_HPP

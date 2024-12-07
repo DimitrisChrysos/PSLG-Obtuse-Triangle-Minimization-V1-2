@@ -86,7 +86,7 @@ class effective_ant {
       InsertionMethod sp_method;
       std::list<FaceData> affected_faces;
       Point insrt_pt;
-      CDT::Face_handle face_for_sp_method;
+      FaceData face_for_sp_method = FaceData(Point(0,0), Point(0,0), Point(0,0));
 
       effective_ant(int obt_count, int steiner_count, InsertionMethod sp_method, std::list<FaceData> affected_faces)
         : id(ant_id++), obt_count(obt_count), steiner_count(steiner_count), sp_method(sp_method), affected_faces(affected_faces) {}
@@ -208,19 +208,19 @@ InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k,
   double random_number = dis(gen);
   // std::cout << "P_proj: " << p_projection << " P_circ: " << p_circumcenter << " P_mid: " << p_midpoint << " P_merge: " << p_merge_obtuse << std::endl;
   if (random_number <= p_projection) {
-    std::cout << "Einai projection" << std::endl;
+    // std::cout << "Einai projection" << std::endl;
     return InsertionMethod::PROJECTION;
   }
   else if (random_number <= p_projection + p_circumcenter) {
-    std::cout << "Einai circumcenter" << std::endl;
+    // std::cout << "Einai circumcenter" << std::endl;
     return InsertionMethod::CIRCUMCENTER;
   }
   else if (random_number <= p_projection + p_circumcenter + p_midpoint) {
-    std::cout << "Einai midpoint" << std::endl;
+    // std::cout << "Einai midpoint" << std::endl;
     return InsertionMethod::MIDPOINT;
   }
   else {
-    std::cout << "Einai merge obtuse" << std::endl;
+    // std::cout << "Einai merge obtuse" << std::endl;
     return InsertionMethod::MERGE_OBTUSE;
   }
 }
@@ -235,7 +235,6 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
     }
   }
   if (obtuse_faces.empty()) { // Fails because the triangluation is already optimal
-    std::cout << "INSIDE IMPROVE TRIANGULATION: I am inside here, should I though?" << std::endl;
     return effective_ant(0, 0, InsertionMethod::NONE, std::list<FaceData>());
   }
   std::random_device rd;
@@ -258,7 +257,8 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
   // If the choosen method fails, pick the centroid method
   if (steiner_method == InsertionMethod::CIRCUMCENTER || steiner_method == InsertionMethod::MERGE_OBTUSE) {
     CDT copy(cdt);
-    obt_face temp = method_face(copy, random_face);
+    FaceData face_data(random_face->vertex(0)->point(), random_face->vertex(1)->point(), random_face->vertex(2)->point());
+    obt_face temp = method_face(copy, face_data);
     if (temp.obt_count == 9999) {
       steiner_method = InsertionMethod::CENTROID;
       method_point = insert_centroid;
@@ -280,13 +280,15 @@ effective_ant improve_trianglulation(CDT& cdt, double k, ant_parameters ant_para
   }
   else if (steiner_method == InsertionMethod::CIRCUMCENTER || 
            steiner_method == InsertionMethod::MERGE_OBTUSE) {
-    obt_face returned = method_face(cdt, random_face);
+    FaceData face_data_final(random_face->vertex(0)->point(), random_face->vertex(1)->point(), random_face->vertex(2)->point());
+    obt_face returned = method_face(cdt, face_data_final);
     std::list<FaceData> affected_faces;
     for (CDT::Face_handle face : returned.affected_faces) {
       store_face_data(face, affected_faces);
     }
     effective_ant returned_ant(count_obtuse_triangles(cdt), 0, steiner_method, affected_faces);
-    returned_ant.face_for_sp_method = returned.face;
+    FaceData face_data(returned.face->vertex(0)->point(), returned.face->vertex(1)->point(), returned.face->vertex(2)->point());
+    returned_ant.face_for_sp_method = face_data;
   return returned_ant;
   }
 
@@ -355,10 +357,14 @@ void use_triangulation_ants(CDT& cdt, std::list<effective_ant>& ants) {
       cdt.insert_steiner_x_y(ant.insrt_pt.x(), ant.insrt_pt.y());
     }
     else if (method == InsertionMethod::CIRCUMCENTER) {
+      std::cout << "\n1.circum\n";
       insert_circumcenter(cdt, ant.face_for_sp_method); // very likely to fail, because of face not existing
+      std::cout << "2.circum\n";
     }
     else if (method == InsertionMethod::MERGE_OBTUSE) {
+      std::cout << "1.merge\n";
       merge_obtuse(cdt, ant.face_for_sp_method); // very likely to fail, because of face not existing
+      std::cout << "2.merge\n";
     }
   }
 }
@@ -522,7 +528,8 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             // std::cout<<"4.\n";
             //TODO EDO EIMASTE!!!!
             CDT copy(cdt);
-            obt_face temp = method(copy, f);
+            FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
+            obt_face temp = method(copy, face_data);
             // std::cout<<"4.123\n";
             if (temp.obt_count == 9999) continue;
             steiner_counter++;
@@ -530,7 +537,8 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
             de = new_en - cur_en;
             // std::cout<<"5.\n";
             if (de < 0) {
-              method(cdt, f);
+              FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
+              method(cdt, face_data);
               cur_en = new_en;
               // std::cout<<"5.1\n";
               flag = true;
@@ -543,7 +551,8 @@ void sim_annealing(CDT& cdt, double a, double b, int L) {
               // std::cout<<"5.2\n";
               if (acc) {
                 // std::cout<<"5.2.1\n";
-                method(cdt, f);
+                FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
+                method(cdt, face_data);
                 cur_en = new_en;
                 // std::cout<<"5.2.2\n";
                 flag = true;
@@ -588,6 +597,7 @@ void local_search(CDT& cdt, int L) {
     obt_face merge_face(9999, starting_face);
     obt_face circumcenter_face(9999, starting_face);
     InsertionMethod best_method = InsertionMethod::NONE;
+    FaceData toReplaceFace(Point(0,0), Point(0,0), Point(0,0));
 
     auto start = std::chrono::high_resolution_clock::now();
     
@@ -623,16 +633,24 @@ void local_search(CDT& cdt, int L) {
         }
 
         CDT copy3(cdt);
-        obt_face temp_circ_face = insert_circumcenter(copy3, f);
+        FaceData face_data(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
+        obt_face temp_circ_face = insert_circumcenter(copy3, face_data);
         if (best_steiner.obt_count > temp_circ_face.obt_count) {
           circumcenter_face = temp_circ_face;
+          toReplaceFace.p1 = f->vertex(0)->point();
+          toReplaceFace.p2 = f->vertex(1)->point();
+          toReplaceFace.p3 = f->vertex(2)->point();
           best_method = InsertionMethod::CIRCUMCENTER;
         }
 
         CDT copy4(cdt);
-        obt_face temp_merge_face = merge_obtuse(copy4, f);
+        FaceData face_data2(f->vertex(0)->point(), f->vertex(1)->point(), f->vertex(2)->point());
+        obt_face temp_merge_face = merge_obtuse(copy4, face_data2);
         if (best_steiner.obt_count > temp_merge_face.obt_count) {
           merge_face = temp_merge_face;
+          toReplaceFace.p1 = f->vertex(0)->point();
+          toReplaceFace.p2 = f->vertex(1)->point();
+          toReplaceFace.p3 = f->vertex(2)->point();
           best_method = InsertionMethod::MERGE_OBTUSE;
         }
       }
@@ -644,10 +662,10 @@ void local_search(CDT& cdt, int L) {
       cdt.insert_steiner_x_y(best_steiner.insrt_pt.x(), best_steiner.insrt_pt.y());
     }
     else if (best_method == InsertionMethod::CIRCUMCENTER) {
-      insert_circumcenter(cdt, circumcenter_face.face);
+      insert_circumcenter(cdt, toReplaceFace);
     }
     else if (best_method == InsertionMethod::MERGE_OBTUSE) {
-      merge_obtuse(cdt, merge_face.face);
+      merge_obtuse(cdt, toReplaceFace);
     }
     std::cout << "After local search try " << i << "-> obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
     auto end = std::chrono::high_resolution_clock::now();
