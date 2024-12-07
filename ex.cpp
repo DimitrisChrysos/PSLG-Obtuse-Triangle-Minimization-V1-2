@@ -711,7 +711,7 @@ void handle_methods(CDT& cdt,
     it++;
     double L = it->second;
     if (!delaunay) {
-      local_search(cdt, 70);
+      local_search(cdt, 30);
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }
