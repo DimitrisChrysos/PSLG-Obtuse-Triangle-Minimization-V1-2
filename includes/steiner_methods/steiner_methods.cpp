@@ -30,6 +30,12 @@ obt_point steiner_methods::insert_projection(CDT& cdt, CDT::Face_handle f1) {
   Point projection = find_perpendicular_projection(f1, obt_id);
   cdt.insert_no_flip(projection);
 
+
+  // For the ants method
+    
+  //
+
+
   obt_point ret(count_obtuse_triangles(cdt), projection);
   return ret;
 }

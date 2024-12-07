@@ -208,19 +208,19 @@ InsertionMethod choose_steiner_method(CDT& cdt, CDT::Face_handle face, double k,
   double random_number = dis(gen);
   // std::cout << "P_proj: " << p_projection << " P_circ: " << p_circumcenter << " P_mid: " << p_midpoint << " P_merge: " << p_merge_obtuse << std::endl;
   if (random_number <= p_projection) {
-    // std::cout << "Einai projection" << std::endl;
+    std::cout << "Einai projection" << std::endl;
     return InsertionMethod::PROJECTION;
   }
   else if (random_number <= p_projection + p_circumcenter) {
-    // std::cout << "Einai circumcenter" << std::endl;
+    std::cout << "Einai circumcenter" << std::endl;
     return InsertionMethod::CIRCUMCENTER;
   }
   else if (random_number <= p_projection + p_circumcenter + p_midpoint) {
-    // std::cout << "Einai midpoint" << std::endl;
+    std::cout << "Einai midpoint" << std::endl;
     return InsertionMethod::MIDPOINT;
   }
   else {
-    // std::cout << "Einai merge obtuse" << std::endl;
+    std::cout << "Einai merge obtuse" << std::endl;
     return InsertionMethod::MERGE_OBTUSE;
   }
 }
@@ -693,7 +693,7 @@ void handle_methods(CDT& cdt,
     it++;
     double L = it->second;
     if (!delaunay) {
-      local_search(cdt, 30);
+      local_search(cdt, 70);
       if (count_obtuse_triangles(cdt) == 0) {
         return;
       }

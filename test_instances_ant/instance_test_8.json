@@ -1,0 +1,38 @@
+{
+    "instance_uid": "test_8",
+    "num_points": 6,
+    "points_x": [
+        192,
+        384,
+        320,
+        272,
+        192,
+        220
+    ],
+    "points_y": [
+        512,
+        512,
+        560,
+        576,
+        576,
+        550
+    ],
+    "region_boundary": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "num_constraints": 1,
+    "additional_constraints": [
+        [
+            5,
+            1
+        ]
+    ],
+    "method": "ant",
+    "parameters": {"alpha": 4, "beta": 0.4, "xi": 1.0, "psi": 3.0,
+        "lambda": 0.7, "kappa": 10, "L": 30 },
+    "delaunay": true
+}

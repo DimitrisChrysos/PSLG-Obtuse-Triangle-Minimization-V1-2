@@ -54,7 +54,7 @@
     "num_constraints": 0,
     "additional_constraints": [],
     "method": "ant",
-    "parameters": {"alpha": 2.0, "beta": 0.5, "xi": 1.0, "psi": 3.0,
-        "lambda": 0.5, "kappa": 50, "L": 50 },
+    "parameters": {"alpha": 4.0, "beta": 0.3, "xi": 1.0, "psi": 3.0,
+        "lambda": 0.5, "kappa": 10, "L": 30 },
     "delaunay": true
 }
