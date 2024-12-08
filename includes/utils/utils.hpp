@@ -112,9 +112,6 @@ namespace utils {
   // Check if a polygon is convex from the points given
   bool is_convex_polygon(const std::vector<Point>& points);
 
-  // Remove the points given from the CDT
-  void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points);
-
   // Insert a point at the center of a polygon from cdt
   Point calculate_centroid_coords(CDT& cdt, Point& p1, Point& p2, Point& p3,
                                     bool mergable_neigh1, 

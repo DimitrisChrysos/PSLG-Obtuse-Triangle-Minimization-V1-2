@@ -1,5 +1,6 @@
 #include "steiner_methods.hpp"
 
+// Choose a random Steiner method
 steiner_methods::InsertionMethod steiner_methods::choose_random_steiner_method() {
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -191,15 +192,15 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, FaceData toReplaceFace) 
       edges_to_remove.insert(e);
     }
   }
-  if (!equal_edges(a, b, intersect_point1, intersect_point2)){//} && !cdt.is_constrained(ab)) {
+  if (!equal_edges(a, b, intersect_point1, intersect_point2)){
     cdt.insert_constraint(a, b);
     edges_to_remove.insert(ab);
   }
-  if (!equal_edges(a, c, intersect_point1, intersect_point2)){// && !cdt.is_constrained(ac)) {
+  if (!equal_edges(a, c, intersect_point1, intersect_point2)){
     cdt.insert_constraint(a, c);
     edges_to_remove.insert(ac);
   }
-  if (!equal_edges(b, c, intersect_point1, intersect_point2)){// && !cdt.is_constrained(bc)) {
+  if (!equal_edges(b, c, intersect_point1, intersect_point2)){
     cdt.insert_constraint(b, c);
     edges_to_remove.insert(bc);
   }
@@ -208,7 +209,6 @@ obt_face steiner_methods::insert_circumcenter(CDT& cdt, FaceData toReplaceFace) 
   for (const auto& edge : edges_to_remove) {
     cdt.remove_constrained_edge(edge.first, edge.second);
   }
-
 
   ret.obt_count = count_obtuse_triangles(cdt);
   std::list<CDT::Face_handle> affected_faces;
@@ -236,7 +236,6 @@ obt_face steiner_methods::merge_obtuse(CDT& cdt, FaceData toReplaceFace) {
   CDT::Face_handle neigh1 = f1->neighbor(0);
   CDT::Face_handle neigh2 = f1->neighbor(1);
   CDT::Face_handle neigh3 = f1->neighbor(2);
-
 
   // Get the shared edges of the triangle
   Edge e1 = get_shared_edge(cdt, f1, neigh1);

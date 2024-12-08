@@ -46,6 +46,7 @@ utils::obt_face::obt_face(int count, CDT::Face_handle f, std::list<CDT::Face_han
 
 // Check if a triangle is inside the region boundary
 bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
+
   // Get the vertices of the triangle
   Point p1 = f1->vertex(0)->point();
   Point p2 = f1->vertex(1)->point();
@@ -61,6 +62,7 @@ bool utils::is_triangle_inside_region_boundary(CDT::Face_handle f1) {
 
 // Checks if a triangle has an obtuse angle
 bool utils::has_obtuse_angle(CDT::Face_handle face) {
+
   // Get the vertices of the triangle
   Point p1 = face->vertex(0)->point();
   Point p2 = face->vertex(1)->point();
@@ -214,6 +216,7 @@ bool utils::is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2) {
 
 // Find the projection point of the obtuse vertex onto the opposite edge
 Point utils::find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx) {
+
   // Get the vertices of the face
   Point A = f->vertex(0)->point();
   Point B = f->vertex(1)->point();
@@ -265,7 +268,7 @@ bool utils::vertex_part_of_constrained_edge(CDT& cdt, CDT::Vertex_handle v) {
   int counter=0;
   for (auto it = cdt.incident_edges(v); it != nullptr; ++it) {
     if (cdt.is_constrained(*it)) {
-      return true; // Vertex is part of a constrained edge
+      return true;
     }
     counter++;
     if (counter > 100) {
@@ -390,6 +393,7 @@ CDT::Vertex_handle utils::get_vertex_from_edge(Edge e, int vertex_number) {
   return face->vertex((index + vertex_number) % 3);
 }
 
+// Mark points to be removed
 void utils::mark_points_to_remove(CDT& cdt, 
                                   Edge e, 
                                   CDT::Face_handle neigh, 
@@ -440,6 +444,7 @@ bool utils::same_faces(utils::FaceData f1, utils::FaceData f2) {
   return false;
 }
 
+// Checks if the face data is the same as the face
 bool utils::same_FaceData_to_face(FaceData f1, CDT::Face_handle f2) {
   Point p1 = f2->vertex(0)->point();
   Point p2 = f2->vertex(1)->point();
@@ -497,6 +502,7 @@ double utils::eucledean_distance(Point p1, Point p2) {
 
 // Return the largest edge length of a triangle
 double utils::largest_edge_length(CDT::Face_handle face) {
+  
   // Get the vertices of the triangle
   Point a = face->vertex(0)->point();
   Point b = face->vertex(1)->point();

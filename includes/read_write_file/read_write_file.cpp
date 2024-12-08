@@ -1,9 +1,6 @@
 #include "read_write_file.hpp"
 #include <boost/json/src.hpp>
 #include <filesystem>
-// #include <iomanip>
-// #include <sstream>
-// #include <string>
 
 // Read JSON functions
 std::string read_write_file::get_instance_uid(boost::property_tree::ptree root) {
@@ -104,17 +101,15 @@ std::string return_frac_string(const CGAL::Epeck::FT &x) {
   mpz_init(den);
 
   // Extract the numerator and denominator using GMP functions
-  mpq_get_num(num, *gmpq_ptr);  // Get the numerator
-  mpq_get_den(den, *gmpq_ptr);  // Get the denominator
+  mpq_get_num(num, *gmpq_ptr);
+  mpq_get_den(den, *gmpq_ptr);
 
-  // // Print the numerator and denominator
-  // gmp_printf("%Zd/%Zd\n", num, den);
 
   size_t buffer_size = mpz_sizeinbase(num, 10) + mpz_sizeinbase(den, 10) + 2;
   std::string frac(buffer_size, '\0');
   int written = __gmp_snprintf(&frac[0], buffer_size, "%Zd/%Zd", num, den);
   if (written >= 0) {
-    frac.resize(written); // Trim to the actual size of the content
+    frac.resize(written);
   }
 
   mpz_clear(num);
@@ -126,7 +121,7 @@ std::string return_frac_string(const CGAL::Epeck::FT &x) {
 boost::json::object ptree_to_json(const boost::property_tree::ptree& pt) {
   boost::json::object obj;
   for (const auto& item : pt) {
-      obj[item.first] = item.second.get_value<std::string>();
+      obj[item.first] = item.second.get_value<double>();
   }
   return obj;
 }
@@ -151,8 +146,6 @@ void read_write_file::write_output(CDT& cdt,
       steiner_x_json.push_back(boost::json::value(std::to_string(x11)));
     }
     else {
-      // const auto exact_coord = CGAL::exact(x);
-      // std::string frac = exact_coord.get_num().get_str() + "/" + exact_coord.get_den().get_str();
       steiner_x_json.push_back(boost::json::value(return_frac_string(x)));
     }
   }
@@ -169,8 +162,6 @@ void read_write_file::write_output(CDT& cdt,
       steiner_y_json.push_back(boost::json::value(std::to_string(y11)));
     }
     else {
-      // const auto exact_coord = CGAL::exact(y);
-      // std::string frac = exact_coord.get_num().get_str() + "/" + exact_coord.get_den().get_str();
       steiner_y_json.push_back(boost::json::value(return_frac_string(y)));
     }
   }
@@ -181,14 +172,12 @@ void read_write_file::write_output(CDT& cdt,
   boost::json::array edges_array;
 
   for (CDT::Finite_edges_iterator e = cdt.finite_edges_begin(); e != cdt.finite_edges_end(); e++) {
-    CDT::Face_handle f1 = e->first;  // The face containing the edge
-    int edge_index = e->second;        // The local index of the edge within the face
+    CDT::Face_handle f1 = e->first;
+    int edge_index = e->second;
 
-    // Get the two vertices of the edge
     CDT::Vertex_handle v1 = f1->vertex((edge_index + 1) % 3);
     CDT::Vertex_handle v2 = f1->vertex((edge_index + 2) % 3);
 
-    // Access the coordinates of the vertices
     Point p1 = v1->point();
     Point p2 = v2->point();
 
@@ -233,9 +222,6 @@ void read_write_file::write_output(CDT& cdt,
 
     // Add the edge pair to the edges_array
     edges_array.push_back(edge_pair);
-
-
-
   }
   root1["edges"] = edges_array;
 
@@ -245,16 +231,7 @@ void read_write_file::write_output(CDT& cdt,
   // Add method to root object
   root1["method"] = method;
 
-  // Convert the list of <string, double> pairs to a JSON array
-  // boost::json::object parameters_json;
-  // for (const std::pair<std::string, double>& parameter : parameters) {
-  //   parameters_json[parameter.first] = parameter.second;
-  // }
-
-  // // Add parameters to the root object
-  // root1["parameters"] = parameters_json;
-  
-  // Assuming parameters_for_output is a boost::property_tree::ptree
+  // Add parameters to root object  
   boost::json::object parameters_json = ptree_to_json(parameters_for_output);
 
   // Add the JSON object to the root object

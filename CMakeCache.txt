@@ -304,15 +304,6 @@ boost_headers_DIR:PATH=/usr/local/lib/cmake/boost_headers-1.82.0
 boost_system_DIR:PATH=/usr/local/lib/cmake/boost_system-1.82.0
 
 //Value Computed by CMake
-exec_BINARY_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
-
-//Value Computed by CMake
-exec_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-exec_SOURCE_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
-
-//Value Computed by CMake
 opt_triangulation_BINARY_DIR:STATIC=/home/dimitris/Documents/project emiris/project2
 
 //Value Computed by CMake

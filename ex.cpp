@@ -14,6 +14,7 @@ typedef CDT::Edge Edge;
 using namespace utils;
 using namespace steiner_methods;
 
+// An ant is stored using the following class
 class effective_ant {
   static int ant_id_counter;
   public:
@@ -200,14 +201,13 @@ void use_triangulation_ants(CDT& cdt, std::list<effective_ant>& ants) {
   }
 }
 
-// Returns true if the triangulation is optimal
-// Check to find the best triangulation
+// Check to find the best triangulation, returns true if the triangulation is optimal
 bool save_best_triangulation(CDT& cdt, std::list<effective_ant>& effective_ants, 
                               ant_parameters ant_params, double& starting_energy,
                               std::list<effective_ant>& best_triangulation_ants) {
   CDT copy(cdt);
   use_triangulation_ants(copy, effective_ants);
-  std::cout << "|| For this cycle obtuse: " << count_obtuse_triangles(copy) << " | Steiner: " << effective_ants.size() << std::endl;
+  std::cout << "|| obtuse: " << count_obtuse_triangles(copy) << " | Steiner: " << effective_ants.size() << std::endl;
   if (count_obtuse_triangles(copy) == 0) {
     best_triangulation_ants = effective_ants;
     return true;
@@ -227,7 +227,10 @@ void ant_colony_optimization(CDT& cdt, ant_parameters ant_params) {
 
   std::cout<< "L: " << ant_params.L << " | Kappa: " << ant_params.kappa << std::endl;
 
-  if (count_obtuse_triangles(cdt) == 0) return;
+  if (count_obtuse_triangles(cdt) == 0) {
+    std::cout << "\nFinal -> Obtuse Triangles: 0 || Steiner Points: 0" << std::endl; 
+    return;
+  }
 
   t_sp tsp(0.5, 0.5, 0.5, 0.5, 0.5);
   std::list<effective_ant> best_triangulation_ants;
@@ -493,7 +496,6 @@ void local_search(CDT& cdt, int L) {
   }
   std::cout << "After " << i << " Steiner Insertions | obt_triangles: " << count_obtuse_triangles(cdt) << std::endl;
 }
-
 
 // Create the region_boundary_polygon polygon
 Polygon_2 make_region_boundary_polygon(std::list<int> region_boundary, std::vector<Point> points) {

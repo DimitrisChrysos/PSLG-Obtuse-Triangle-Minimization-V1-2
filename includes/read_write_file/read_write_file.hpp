@@ -6,7 +6,6 @@
 #include <boost/json.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-// #include <gmp.h>
 
 typedef CGAL::Constrained_triangulation_plus_2<custom_cdt_class::Custom_Constrained_Delaunay_triangulation_2<K, CGAL:: Default, Itag>> CDT;
 typedef CGAL::Polygon_2<K> Polygon_2;
