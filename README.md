@@ -1,12 +1,11 @@
 - Περιγραφή του προγράμματος:
     - Πιστεύουμε πως το πρόγραμμα μας υλοποιεί όλες τις απαιτήσεις της εργασίας που μας ζητήθηκαν μέσω της εκφώνησης, των φροντιστηρίων και των συζητήσεων στο eclass.
     - Το ex.cpp είναι το αρχείο με την main που καλεί τις απαραίτητες συναρτήσεις για την υλοποίηση της εργασίας μας.
-    - Αρχικά διαβάζουμε το input αρχείο
+    - Αρχικά διαβάζουμε κάποιο json αρχείο ως input
     - Κατασκευάζουμε το cdt με τις οδηγίες που μας δίνονται
-    - Κατασκευάζουμε βοηθητικές δομές, χρήσιμες στην υλοποίηση ελέγχων κυρτότητας και άλλων συνθηκών.
-    - Δοκιμάζουμε να κάνουμε, αν γίνονται και είναι χρήσιμα, τα απαραίτητα flips.
+    - Διαλέγουμε τη μέθοδο (ή τις μεθόδους) που θα χρησιμοποιηθούν και τις παραμέτρους τους, από το αρχείο που διαβάστηκε
     - Βάζουμε τα απαραίτητα steiner points για να μηδενίσουμε όσο γίνεται τα αμβλυγώνια τρίγωνα.
-    - Δημιουργούμε τα αρχείο output.
+    - Δημιουργούμε το output αρχείο json.
 
 
 
@@ -14,42 +13,34 @@
 1) Αρχείο ex.cpp στο βασικό directory:
     1) Εκτελεί την παραπάνω συνοπτική περιγραφή που αναφέρθηκε.
     2) Χρησιμοποιεί της συναρτήσεις:
-        - void make_flips(CDT& cdt), κάνει αν γίνονται και είναι χρήσιμα τα flips
-        - void steiner_insertion(CDT& cdt), δοκιμάζει για όλα τα τρίγωνα, 5 μεθόδους για εισαγωγή σημείων steiner και τελικά διαλέγει τη πιο αποδοτική μέθοδο για το τρίγωνο με το οποίο μειώνονται περισσότερο τα συνολικά αμβλυγώνια
-        - Συγκεκριμένα οι μέθοδοι που χρησιμοποιούνται είναι οι:
-            1. obt_point insert_projection(CDT& cdt, CDT::Face_handle f1), βάζει σημείο στο τέλος της καθέτου από την αμβλεία γωνία του τριγώνου προς την απέναντη πλευρά.
-            2. obt_point insert_mid(CDT& cdt, CDT::Face_handle f1), βάζει σημείο στην μέση της μεγαλύτερης ακμής του τριγώνου.
-            3. obt_point insert_centroid(CDT& cdt, CDT::Face_handle f1), βάζει σημείο στο centroid του τριγώνου.
-            4. obt_point insert_circumcenter(CDT& cdt, CDT::Face_handle f1), βάζει σημείο στο circumcenter του τριγώνου.
-            5. obt_face merge_obtuse(CDT& cdt, CDT::Face_handle f1), δοκιμάζει να κάνει merge το τρίγωνό και με τους γείτονες τους αν πληρούν τις απαραίτητες συνθήκες και βάζει ένα σημείο στο κέντρου του πολυγώνου που δημιουργείται.
+        - handle_methods(), ανάλογα τις παραμέτρους επιλέγει τη μέθοδο και το τροόπο που θα χρησιμοποιηθεί:
+            1) local_search()
+            2) sim_annealing()
+            3) ant_colony_optimization()
+            - Κάθε μέθοδος χρησιμοποιεί βοηθητικές συναρτήσεις και δομές
+        - write_output(), δημιουργεί το output json αρχείο
 2) Κατάλογος includes:
     1) Υποκατάλογος custom_cdt_class:
         1. Αρχείο custom_cdt_class.hpp, περιέχει την custom κλάση που δημιουργήθηκε για τις ανάγκες των μεθόδων:
-            - insert_no_flip, όπως δόθηκε στις συζητήσεις του eclass
-            - insert_steiner_x_y, αποθηκεύει σε ένα vertex στο cdt τις συντεταγμένες των steiner points που εισάγουμε
-            - my_is_flippable, συμβάλει στον έλεγχο για το αν μία ακμή έχει τη δυνατότητα να γίνει flipped
+            - insert_no_flip()
+            - insert_steiner_x_y(), αποθηκεύει σε ένα vertex στο cdt τις συντεταγμένες των steiner points που εισάγουμε
+            - my_is_flippable(), συμβάλει στον έλεγχο για το αν μία ακμή έχει τη δυνατότητα να γίνει flipped
+            - remove_no_flip()
             - Ορίζει κάποια typedef για τις ανάγκες όλων των αρχείων της εργασίας
         2. Αρχείο custom_cdt_class.cpp, βοηθητικό για την μεταγλώττιση
     2) Υποκατάλογος read_write_file:
-        1. Αρχείο read_write_file.hpp, περιέχει όλες τις βοηθητικές συναρτήσεις για την ανάγνωση του αρχείου json και για τη δημιουργία του αρχείο output.json
-        2. Αρχείο read_write_file.cpp, βοηθητικό για την μεταγλώττιση
-    3) Υποκατάλογος utils:
-        1. Αρχείο utils.hpp, περιέχει όλες τις βοηθητικές συναρτήσεις των μεθόδων που χρησιμοποιούμε, και δύο βοηθητικές κλάσεις πιο συγκεκριμένα:
-            - class obt_point, χρησιμοποιείται ως return type, για τις διάφορες μεθόδους insertion των steiner points. Επιστρέφει τις συντεταγμένες του σημείου που εισάχθηκε, καθώς και τον αριθμό των αμβλυγωνίων που έμειναν στη τριγωνοποίηση   
-            - class obt_face, χρησιμοποιείται ως return type, για τη μέθοδο merge. Επιστρέφει το face πάνω στο οποίο εφαρμόστηκε αρχικά η μέθοδος, καθώς και τον αριθμό των αμβλυγωνίων που έμμειναν στη τριγωνοποίηση
-            - bool is_triangle_inside_region_boundary(CDT::Face_handle f1), ελέγχει αν το τρίγωνο που δίνεται είναι μέσα στο region boundary
-            - bool has_obtuse_angle(CDT::Face_handle face), ελέγχει αν το τρίγωνο που δόθηκε έχει κάποια αμβλεία γωνία.
-            - Edge get_shared_edge(CDT &cdt, CDT::Face_handle f1, CDT::Face_handle neigh), επιστρέφει τη κοινή ακμή που έχουν δύο γειτονικά τρίγωνα
-            - int count_obtuse_triangles(CDT cdt), επιστρέφει πόσα αμβλυγώνια τρίγωνα έχει το cdt
-            - int find_obtuse_vertex_id(CDT::Face_handle face), επιστρέφει το id του obtuse vertex του τριγώνου
-            - bool is_convex(CDT& cdt, CDT::Face_handle f1, CDT::Face_handle f2), ελέγχει ένα τετράπλευρο που φτιάχνεται μέσω δύο γειτονικών τριγώνων είναι κυρτό
-            - Point find_perpendicular_projection(CDT::Face_handle f, int obtuse_vertex_idx), επιστρέφει το projection point μίας αμβλείας γωνίας
-            - bool point_part_of_contrained_edge(CDT& cdt, Point p), ελέγχει αν ένα point ανήκει, σε ένα από τα δύο points, που αποτελούν μία οποιαδήποτε constrained ακμή
-            - bool are_mergable(CDT& cdt, CDT::Face_handle face, CDT::Face_handle neigh, Edge& shared_edge), επιστρέφει αν δύο τρίγωνα μπορούν να γίνουν merge
-            - bool is_convex_polygon(const std::vector<Point>& points), επιστρέφει αν ένα πολύγωνο που φτιάχνεται από τα σημεία που δίνονται είναι κυρτό
-            - bool test_the_flip(CDT& cdt, Point v1, Point v2), ελέγχει αν μία ακμή γίνεται και είναι έχει νόημα να γίνει flip
-            - void remove_points(CDT& cdt, std::set<CDT::Vertex_handle>& to_remove_points, std::vector<Point>& removed_points), αφαιρεί τα σημεία που δίνονται ως όρισμα από το cdt
-        2. Αρχείο utils.cpp, βοηθητικό για την μεταγλώττιση
+        1. Αρχείο read_write_file.hpp, περιέχει τη δήλωση όλων των βοηθητικών συναρτήσεων για την ανάγνωση του αρχείου json και για τη δημιουργία του output  αρχείο json
+        2. Αρχείο read_write_file.cpp, περιέχει την υλοποίηση όλων των βοηθητικών συναρτήσεων για την ανάγνωση του αρχείου json και για τη δημιουργία του output  αρχείο json
+    3) Υποκατάλογος steiner_methods:
+        1. Αρχείο steiner_methods.hpp περιέχει τη δήλωση των 5 μεθόδων steiner και μίας βοηθητικής
+        2. Αρχείο steiner_methods.cpp περιέχει την υλοποίηση των 5 μεθόδων steiner και μίας βοηθητικής
+    4) Υποκατάλογος utils:
+        1. Αρχείο utils.hpp περιέχει τη δήλωση των περισσότερων βοηθητικών μεθόδων και κλάσεων
+        2. Αρχείο utils.hpp περιέχει την υλοποίηση των περισσότερων βοηθητικών μεθόδων και κλάσεων
+3) Κατάλογος outputs:
+    - Περιέχει και για τις τρεις μεθόδους (ls, sa, ant) τα outputs των test που μας δόθηκαν
+4) Κατάλογοι test:
+    - Περιέχουν τα test που μας δόθηκαν για τις τρεις μεθόδους
 
 
 
@@ -60,10 +51,20 @@
 
 
 - Οδηγίες χρήσης του προγράμματος:
-    1) Στο αρχείο ex.cpp του βασικού καταλόγου, στην αρχή της main συνάρτησης:
-        - Διαλέγουμε ποιο αρχείο θέλουμε για input βάζοντας στη συνάρτηση: pt::read_json("input.json", root)
-        - Έχουμε βάλει τρεις συναρτήσεις read_json με τις δύο commented out, που αντιστοιχούν στα test_instances που δόθηκαν
-    2) Τρέχουμε σε ένα terminal την εντολή ./polyg
+    1) Για το example τρέχουμε:
+        - ls: ./opt_triangulation -i input_ls.json -o outputs/output_ls.json
+        - sa: ./opt_triangulation -i input_sa.json -o outputs/output_sa.json
+        - ant: ./opt_triangulation -i input_ant.json -o outputs/output_ant.json
+    2) Για τα tests:
+        - ls: ./opt_triangulation -i tests_ls/instance_1.json -o outputs/tests_ls/output1.json
+        - sa: ./opt_triangulation -i tests_sa/instance_1.json -o outputs/tests_sa/output1.json
+        - ant: ./opt_triangulation -i tests_ant/instance_1.json -o outputs/tests_ant/output1.json
+        - Αντίστοιχα αλλάζουμε του αριθμούς 1, για όποιο test θέλουμε
+    3) Για τα test_instances:
+        - ls: ./opt_triangulation -i test_instances_ls/instance_test_1.json -o outputs/test_instances_ls/output1.json
+        - sa: ./opt_triangulation -i test_instances_sa/instance_test_1.json -o outputs/test_instances_sa/output1.json
+        - ant: ./opt_triangulation -i test_instances_ant/instance_test_1.json -o outputs/test_instances_ant/output1.json
+        - Αντίστοιχα αλλάζουμε του αριθμούς 1, για όποιο test θέλουμε
 
 
 
@@ -71,6 +72,19 @@
 1) Ονοματεπώνυμο: Αναστάσιος Μουμουλίδης - ΑΜ: 1115202100108
 2) Ονοματεπώνυμο: Δημήτριος Χρυσός - ΑΜ: 1115202100275
     
+
+
+- Επιλογή παραμέτρων:
+    1) Η επιλογή των παραμέτρων, έγινε για κάθε input json αρχείο και μέθοδο ξεχωριστά
+    2) Η επιλογή έγινε με βάση δικές μας δοκιμές και τα αποτελέσματα που βγάζαμε
+
+
+
+- Σύγκριση μεθόδων:
+    1) Με βάση τα αρχεία output που αναφερθήκαμε προηγουμένως, είναι φανερό ότι η πιο αποτελεσματική μέθοδος είναι η local search, μετά η simulated annealing και μετά η ant colony optimization
+    2) Επίσης παρατηρείται ότι η χρήση της παραμέτρου, "delaunay": false, βοηθάει μερικές φορές κυρίως τις μεθόδους sa και ants αλλά χωρίς σταθερά αποτελέσματα για κάθε input
+
+
 
 - github repo link: https://github.com/DimitrisChrysos/project-emiris.git
 
